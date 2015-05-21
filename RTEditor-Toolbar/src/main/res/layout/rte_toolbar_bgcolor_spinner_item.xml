@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2014 Emanuel Moecklin
+ 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rte_spinnerPreferredItemHeight"
+    android:descendantFocusability="blocksDescendants" >
+
+    <LinearLayout
+        android:id="@+id/chip_pacemaker"
+	    android:layout_height="@dimen/rte_spinnerPreferredItemHeight"
+	    android:layout_width="match_parent"
+        android:orientation="horizontal" >
+
+        <View
+            android:id="@+id/spinner_color"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="left|center_vertical"
+            android:layout_marginLeft="15dip" 
+            android:layout_marginRight="15dip"/>
+
+	    <TextView
+		    android:id="@+id/spinner_name"
+	    	android:layout_width="match_parent"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="left|center_vertical"
+		    android:layout_marginLeft="0dip"
+		    android:layout_marginRight="15dip"
+		    android:singleLine="true"
+		    android:ellipsize="end"
+		    style="?attr/rte_ToolbarSpinnerItem"/>
+        
+    </LinearLayout>
+
+</FrameLayout>

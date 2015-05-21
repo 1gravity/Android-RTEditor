@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.onegravity.rteditor.media.crop.CropImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_x="0dip"
+        android:layout_y="0dip"
+        android:layout_weight="1"
+        android:background="#55000000" />
+
+</LinearLayout>

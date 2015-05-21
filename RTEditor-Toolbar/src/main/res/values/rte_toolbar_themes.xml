@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2014 Emanuel Moecklin
+ 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- LIGHT THEME -->
+
+    <!--
+        Light base application theme, dependent on API level.
+        This theme is replaced by ThemeLight from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="RTE_BaseThemeLight" parent="Theme.AppCompat.Light" />
+
+    <style name="RTE_ThemeLight" parent="@style/RTE_BaseThemeLight">
+        <item name="md_dark_theme">false</item>
+
+        <item name="rte_ToolbarButton">@style/RTE_ToolbarButton</item>
+        <item name="rte_ToolbarSpinner">@style/RTE_ToolbarSpinnerLight</item>
+        <item name="rte_ToolbarSpinnerItem">@style/RTE_ToolbarSpinnerItem</item>
+        <item name="rte_ToolbarSpinnerSelectedColor">@color/rte_spinner_selected_color_light</item>
+        <item name="rte_VerticalDivider">@style/RTE_VerticalDivider</item>
+        
+        <item name="rte_icToolbarBold">@drawable/selector_ic_toolbar_bold_light</item>
+        <item name="rte_icToolbarItalic">@drawable/selector_ic_toolbar_italic_light</item>
+        <item name="rte_icToolbarUnderline">@drawable/selector_ic_toolbar_underline_light</item>
+        <item name="rte_icToolbarStrikethrough">@drawable/selector_ic_toolbar_strikethrough_light</item>
+        <item name="rte_icToolbarSuperscript">@drawable/selector_ic_toolbar_superscript_light</item>
+        <item name="rte_icToolbarSubscript">@drawable/selector_ic_toolbar_subscript_light</item>
+        <item name="rte_icToolbarAlignLeft">@drawable/selector_ic_toolbar_align_left_light</item>
+        <item name="rte_icToolbarAlignCenter">@drawable/selector_ic_toolbar_align_center_light</item>
+        <item name="rte_icToolbarAlignRight">@drawable/selector_ic_toolbar_align_right_light</item>
+        <item name="rte_icToolbarIncIndent">@drawable/selector_ic_toolbar_inc_indent_light</item>
+        <item name="rte_icToolbarDecIntent">@drawable/selector_ic_toolbar_dec_indent_light</item>
+        <item name="rte_icToolbarBullet">@drawable/selector_ic_toolbar_bullet_light</item>
+        <item name="rte_icToolbarNumber">@drawable/selector_ic_toolbar_number_light</item>
+        <item name="rte_icToolbarFontSize">@drawable/selector_ic_toolbar_fontsize_light</item>
+        <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_light</item>
+        <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_light</item>
+        <item name="rte_icToolbarLink">@drawable/selector_ic_toolbar_link_light</item>
+        <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
+        <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
+        <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_light</item>
+        <item name="rte_icToolbarRedo">@drawable/selector_ic_toolbar_redo_light</item>
+        <item name="rte_icToolbarClear">@drawable/selector_ic_toolbar_clear_light</item>
+		
+		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_light</item>
+		<item name="rte_icMenuSave">@drawable/ic_menu_save_light</item>
+        <item name="rte_icMenuRotateLeft">@drawable/ic_menu_rotate_left_light</item>
+		<item name="rte_icMenuRotateRight">@drawable/ic_menu_rotate_right_light</item>
+    </style>
+
+    <!-- DARK THEME -->
+
+    <!--
+        Dark base application ttheme, dependent on API level.
+        This theme is replaced by ThemeLight from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="RTE_BaseThemeDark" parent="Theme.AppCompat" />
+
+    <style name="RTE_ThemeDark" parent="@style/RTE_BaseThemeDark">
+        <item name="md_dark_theme">true</item>
+
+        <item name="rte_ToolbarButton">@style/RTE_ToolbarButton</item>
+        <item name="rte_ToolbarSpinner">@style/RTE_ToolbarSpinnerDark</item>
+        <item name="rte_ToolbarSpinnerItem">@style/RTE_ToolbarSpinnerItem</item>
+        <item name="rte_ToolbarSpinnerSelectedColor">@color/rte_spinner_selected_color_dark</item>
+        <item name="rte_VerticalDivider">@style/RTE_VerticalDivider</item>
+        
+        <item name="rte_icToolbarBold">@drawable/selector_ic_toolbar_bold_dark</item>
+        <item name="rte_icToolbarItalic">@drawable/selector_ic_toolbar_italic_dark</item>
+        <item name="rte_icToolbarUnderline">@drawable/selector_ic_toolbar_underline_dark</item>
+        <item name="rte_icToolbarStrikethrough">@drawable/selector_ic_toolbar_strikethrough_dark</item>
+        <item name="rte_icToolbarSuperscript">@drawable/selector_ic_toolbar_superscript_dark</item>
+        <item name="rte_icToolbarSubscript">@drawable/selector_ic_toolbar_subscript_dark</item>
+        <item name="rte_icToolbarAlignLeft">@drawable/selector_ic_toolbar_align_left_dark</item>
+        <item name="rte_icToolbarAlignCenter">@drawable/selector_ic_toolbar_align_center_dark</item>
+        <item name="rte_icToolbarAlignRight">@drawable/selector_ic_toolbar_align_right_dark</item>
+        <item name="rte_icToolbarIncIndent">@drawable/selector_ic_toolbar_inc_indent_dark</item>
+        <item name="rte_icToolbarDecIntent">@drawable/selector_ic_toolbar_dec_indent_dark</item>
+        <item name="rte_icToolbarBullet">@drawable/selector_ic_toolbar_bullet_dark</item>
+        <item name="rte_icToolbarNumber">@drawable/selector_ic_toolbar_number_dark</item>
+        <item name="rte_icToolbarFontSize">@drawable/selector_ic_toolbar_fontsize_dark</item>
+        <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_dark</item>
+        <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_dark</item>
+        <item name="rte_icToolbarLink">@drawable/selector_ic_toolbar_link_dark</item>
+        <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_dark</item>
+        <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_dark</item>
+        <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_dark</item>
+        <item name="rte_icToolbarRedo">@drawable/selector_ic_toolbar_redo_dark</item>
+        <item name="rte_icToolbarClear">@drawable/selector_ic_toolbar_clear_dark</item>
+        
+		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_dark</item>
+		<item name="rte_icMenuSave">@drawable/ic_menu_save_dark</item>
+        <item name="rte_icMenuRotateLeft">@drawable/ic_menu_rotate_left_dark</item>
+		<item name="rte_icMenuRotateRight">@drawable/ic_menu_rotate_right_dark</item>
+    </style>
+
+</resources>

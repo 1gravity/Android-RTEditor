@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:onegravity="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="5dip"
+    android:layout_marginLeft="20dip"
+    android:layout_marginRight="20dip"
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/exactA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:digits="0123456789ABCDEF"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="textCapCharacters|textNoSuggestions"
+        android:lines="1"
+        android:maxLength="3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/exactR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:digits="0123456789ABCDEF"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="textCapCharacters|textNoSuggestions"
+        android:lines="1"
+        android:maxLength="3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/exactG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:digits="0123456789ABCDEF"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="textCapCharacters|textNoSuggestions"
+        android:lines="1"
+        android:maxLength="3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/exactB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:digits="0123456789ABCDEF"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="textCapCharacters|textNoSuggestions"
+        android:lines="1"
+        android:maxLength="3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>

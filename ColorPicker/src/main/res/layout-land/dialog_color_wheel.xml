@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:onegravity="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+	android:gravity="center"
+	android:layout_gravity="center"
+    android:orientation="horizontal">
+		
+	<com.larswerkman.holocolorpicker.ColorWheelView
+	    android:id="@+id/picker"
+	    onegravity:color_wheel_enabled="true"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"/>
+	
+	<com.larswerkman.holocolorpicker.ValueBar
+	    android:id="@+id/valuebar"
+	    android:layout_marginRight="5dp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    onegravity:bar_orientation_horizontal="false"/>
+	
+	<com.larswerkman.holocolorpicker.SaturationBar
+	    android:id="@+id/saturationbar"
+	    android:layout_marginRight="5dp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    onegravity:bar_orientation_horizontal="false"/>
+		
+	<com.larswerkman.holocolorpicker.OpacityBar
+	    android:id="@+id/opacitybar"
+	    android:layout_marginRight="10dp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    onegravity:bar_orientation_horizontal="false"/>
+	
+</LinearLayout>
