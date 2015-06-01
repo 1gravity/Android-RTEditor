@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+		android:id="@+id/load"
+		android:icon="?attr/rte_icMenuLoad"
+		android:title="@string/menu_load"
+        app:showAsAction="ifRoom|withText"
+        android:orderInCategory="1"
+        android:alphabeticShortcut="l"/>
+    
+    <item
+		android:id="@+id/save"
+		android:icon="?attr/rte_icMenuSave"
+		android:title="@string/menu_save"
+        app:showAsAction="ifRoom|withText"
+        android:orderInCategory="2"
+        android:alphabeticShortcut="s"/>
+    
+    <item
+		android:id="@+id/theme"
+		android:title="@string/menu_dark_theme"
+        app:showAsAction="never"
+        android:orderInCategory="3"
+        android:alphabeticShortcut="t"/>
+    
+    <item
+		android:id="@+id/split_toolbar"
+		android:title="@string/menu_split_toolbar"
+        app:showAsAction="never"
+        android:orderInCategory="4"
+        android:alphabeticShortcut="c"/>
+    
+</menu>
