@@ -1,6 +1,6 @@
 # Android-RTEditor
 
-[![Images](http://www.1gravity.com/messagecompose.png)]
+[![Images](http://www.1gravity.com/images/richtexteditor.png)]
 
 The Android RTEditor is a rich text editor component for Android that can be used as a drop in for EditText.
 
