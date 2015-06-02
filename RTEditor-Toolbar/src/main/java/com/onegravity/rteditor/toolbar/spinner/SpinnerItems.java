@@ -24,18 +24,19 @@ import java.util.List;
  * It's used to populate the SpinnerItemAdapter.
  */
 public class SpinnerItems<T extends SpinnerItem> {
- 
+
     private List<T> mItems = new ArrayList<T>();
     private int mSelectedItem = -1;
 
     /**
-     * Constructor for default values (no entries, no selected entries) 
+     * Constructor for default values (no entries, no selected entries)
      */
-    public SpinnerItems() {}
+    public SpinnerItems() {
+    }
 
     /**
-     * @param items		 The list of SpinnerItem objects to display in the spinner
-     * @param selectedItem	 The index of the selected item or -1 if none has been selected yet
+     * @param items        The list of SpinnerItem objects to display in the spinner
+     * @param selectedItem The index of the selected item or -1 if none has been selected yet
      */
     public SpinnerItems(List<T> items, int selectedItem) {
         mItems = items;
@@ -43,36 +44,36 @@ public class SpinnerItems<T extends SpinnerItem> {
     }
 
     public synchronized void add(T item) {
-    	getItemsInternal().add(item);
-	}
+        getItemsInternal().add(item);
+    }
 
     public synchronized void clear() {
-    	getItemsInternal().clear();
-	}
+        getItemsInternal().clear();
+    }
 
     public synchronized void setItems(List<T> items) {
-		mItems = items;
-	}
+        mItems = items;
+    }
 
-	public synchronized List<T> getItems() {
-		return getItemsInternal();
-	}
+    public synchronized List<T> getItems() {
+        return getItemsInternal();
+    }
 
-	public synchronized int size() {
-		return getItemsInternal().size();
-	}
+    public synchronized int size() {
+        return getItemsInternal().size();
+    }
 
-	public void setSelectedItem(int selectedItem) {
-		mSelectedItem = selectedItem;
-	}
+    public void setSelectedItem(int selectedItem) {
+        mSelectedItem = selectedItem;
+    }
 
-	public int getSelectedItem() {
-		return mSelectedItem;
-	}
+    public int getSelectedItem() {
+        return mSelectedItem;
+    }
 
-	// lazy initialization
-	private synchronized List<T> getItemsInternal() {
-    	if (mItems==null) mItems = new ArrayList<T>();
-    	return mItems;
-	}
+    // lazy initialization
+    private synchronized List<T> getItemsInternal() {
+        if (mItems == null) mItems = new ArrayList<T>();
+        return mItems;
+    }
 }

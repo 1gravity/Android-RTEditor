@@ -26,39 +26,40 @@ import android.widget.ImageButton;
  * It adds a checked state.
  */
 public class RTToolbarImageButton extends ImageButton {
-	private static final int[] CHECKED_STATE_SET = { R.attr.state_checked };
+    private static final int[] CHECKED_STATE_SET = {R.attr.state_checked};
 
-	private boolean mChecked;
+    private boolean mChecked;
 
-	public RTToolbarImageButton(Context context) {
-		this(context, null);
-	}
+    public RTToolbarImageButton(Context context) {
+        this(context, null);
+    }
 
-	public RTToolbarImageButton(Context context, AttributeSet attrs) {
-		this(context, attrs, R.attr.rte_ToolbarButton);
-	}
+    public RTToolbarImageButton(Context context, AttributeSet attrs) {
+        this(context, attrs, R.attr.rte_ToolbarButton);
+    }
 
-	public RTToolbarImageButton(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ToolbarButton, defStyle, 0);
-		mChecked = a.getBoolean(R.styleable.ToolbarButton_checked, false);
-		a.recycle();
-	}
+    public RTToolbarImageButton(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ToolbarButton, defStyle, 0);
+        mChecked = a.getBoolean(R.styleable.ToolbarButton_checked, false);
+        a.recycle();
+    }
 
-	public boolean isChecked() {
-		return mChecked;
-	}
+    public boolean isChecked() {
+        return mChecked;
+    }
 
-	public void setChecked(boolean checked) {
-		if (mChecked != checked) {
-			mChecked = checked;
-			refreshDrawableState();
-		}
-	}
-	@Override
-	public int[] onCreateDrawableState(int extraSpace) {
-		final int[] drawableState = super.onCreateDrawableState(extraSpace + CHECKED_STATE_SET.length);
-		if (mChecked) mergeDrawableStates(drawableState, CHECKED_STATE_SET);
-		return drawableState;
-	}
+    public void setChecked(boolean checked) {
+        if (mChecked != checked) {
+            mChecked = checked;
+            refreshDrawableState();
+        }
+    }
+
+    @Override
+    public int[] onCreateDrawableState(int extraSpace) {
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + CHECKED_STATE_SET.length);
+        if (mChecked) mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+        return drawableState;
+    }
 }

@@ -20,47 +20,47 @@ import android.view.View;
 
 /**
  * An abstract spinner item for the color spinners.
- * 
+ *
  * @see FontColorSpinnerItem
  * @see BGColorSpinnerItem
  */
 public abstract class ColorSpinnerItem extends SpinnerItem {
-	protected int mColor;
-	private final boolean mIsEmpty;
-	private final boolean mIsCustom;
+    protected int mColor;
+    private final boolean mIsEmpty;
+    private final boolean mIsCustom;
 
-	/**
-	 * @param color This item's color
-	 * @param title This item's title
-	 * @param isEmpty True if we have the empty color entry (to remove any color setting)
-	 * @param isCustom True if we have the custom color entry opening the color wheel
-	 */
-	public ColorSpinnerItem(int color, String title, boolean isEmpty, boolean isCustom) {
-		super(title);
-		mColor = 0xff000000 | color;
-		mIsEmpty = isEmpty;
-		mIsCustom = isCustom;
-	}
+    /**
+     * @param color    This item's color
+     * @param title    This item's title
+     * @param isEmpty  True if we have the empty color entry (to remove any color setting)
+     * @param isCustom True if we have the custom color entry opening the color wheel
+     */
+    public ColorSpinnerItem(int color, String title, boolean isEmpty, boolean isCustom) {
+        super(title);
+        mColor = 0xff000000 | color;
+        mIsEmpty = isEmpty;
+        mIsCustom = isCustom;
+    }
 
-	public int getColor() {
-		return mColor;
-	}
+    public int getColor() {
+        return mColor;
+    }
 
-	public void setColor(int color) {
-		mColor = color;
-	}
+    public void setColor(int color) {
+        mColor = color;
+    }
 
-	@Override
-	void formatColorView(View view) {
-		super.formatColorView(view);
-		view.setBackgroundColor(mIsEmpty ? 0x00000000 : mColor);
-	}
+    @Override
+    void formatColorView(View view) {
+        super.formatColorView(view);
+        view.setBackgroundColor(mIsEmpty ? 0x00000000 : mColor);
+    }
 
-	public boolean isEmpty() {
-		return mIsEmpty;
-	}
+    public boolean isEmpty() {
+        return mIsEmpty;
+    }
 
-	public boolean isCustom() {
-		return mIsCustom;
-	}
+    public boolean isCustom() {
+        return mIsCustom;
+    }
 }

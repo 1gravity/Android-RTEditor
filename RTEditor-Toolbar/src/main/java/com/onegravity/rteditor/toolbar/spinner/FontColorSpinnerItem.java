@@ -23,23 +23,23 @@ import android.widget.TextView;
  */
 public class FontColorSpinnerItem extends ColorSpinnerItem {
 
-	/**
-	 * @param color This item's color
-	 * @param title This item's title
-	 * @param isEmpty True if we have the empty color entry (to remove any color setting)
-	 * @param isCustom True if we have the custom color entry opening the color wheel
-	 */
-	public FontColorSpinnerItem(int color, String title, boolean isEmpty, boolean isCustom) {
-		super(color, title, isEmpty, isCustom);
-	}
+    /**
+     * @param color    This item's color
+     * @param title    This item's title
+     * @param isEmpty  True if we have the empty color entry (to remove any color setting)
+     * @param isCustom True if we have the custom color entry opening the color wheel
+     */
+    public FontColorSpinnerItem(int color, String title, boolean isEmpty, boolean isCustom) {
+        super(color, title, isEmpty, isCustom);
+    }
 
-	@Override
-	void formatNameView(TextView view) {
-		super.formatNameView(view);
+    @Override
+    void formatNameView(TextView view) {
+        super.formatNameView(view);
 
-		if (!isCustom()) {
-			view.setTextColor(mColor);
-		}
-	}
-	
+        if (!isCustom()) {
+            view.setTextColor(mColor);
+        }
+    }
+
 }
