@@ -32,8 +32,9 @@ It also includes the following <b>paragraph formatting</b> options:
 <div align="right">Right alignment</div>
 </ul>
 
-and [links](http://www.1gravity.com)<br>
-and images: [![Images](http://www.1gravity.com/smiley.jpg)](https://www.1gravity.com)
+- [Links](http://www.1gravity.com)<br>
+- Images: [![Images](http://www.1gravity.com/smiley.jpg)](https://www.1gravity.com)
+- Undo/Redo
 
 
 The 3 main components
