@@ -36,6 +36,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':EventBus')
+    compile 'de.greenrobot:eventbus:2.4.0'
     compile project(':MaterialDialog')
 }
