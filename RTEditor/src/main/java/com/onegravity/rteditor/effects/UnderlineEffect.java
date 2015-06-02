@@ -22,7 +22,7 @@ import android.text.style.UnderlineSpan;
  * Underlined text
  */
 public class UnderlineEffect extends SimpleBooleanEffect<UnderlineSpan> {
-	public UnderlineEffect() {
-		super(UnderlineSpan.class);
-	}
+    public UnderlineEffect() {
+        super(UnderlineSpan.class);
+    }
 }

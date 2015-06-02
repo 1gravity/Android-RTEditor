@@ -22,7 +22,7 @@ import android.text.style.SubscriptSpan;
  * Subscript text
  */
 public class SubscriptEffect extends SimpleBooleanEffect<SubscriptSpan> {
-	public SubscriptEffect() {
-		super(SubscriptSpan.class);
-	}
+    public SubscriptEffect() {
+        super(SubscriptSpan.class);
+    }
 }

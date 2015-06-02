@@ -31,36 +31,36 @@ import com.onegravity.rteditor.utils.Selection;
  */
 public class LinkEffect extends Effect<String> {
 
-	@Override
-	public List<String> valuesInSelection(RTEditText editor, int spanType) {
-		Selection expandedSelection = getExpandedSelection(editor, spanType);
+    @Override
+    public List<String> valuesInSelection(RTEditText editor, int spanType) {
+        Selection expandedSelection = getExpandedSelection(editor, spanType);
 
-		List<String> result = new ArrayList<String>();
-		LinkSpan[] spans = getSpans(editor.getText(), expandedSelection);
-		for (LinkSpan span : spans) {
-			result.add(span.getURL());
-		}
-		return result;
-	}
+        List<String> result = new ArrayList<String>();
+        LinkSpan[] spans = getSpans(editor.getText(), expandedSelection);
+        for (LinkSpan span : spans) {
+            result.add(span.getURL());
+        }
+        return result;
+    }
 
-	@Override
-	public void applyToSelection(RTEditText editor, String url) {
-		Selection selection = new Selection(editor);
-		Spannable str = editor.getText();
+    @Override
+    public void applyToSelection(RTEditText editor, String url) {
+        Selection selection = new Selection(editor);
+        Spannable str = editor.getText();
 
-		for (LinkSpan span : getSpans(str, selection)) {
-			str.removeSpan(span);
-		}
+        for (LinkSpan span : getSpans(str, selection)) {
+            str.removeSpan(span);
+        }
 
-		if (url != null) {
-			// if url is Null then the link won't be set meaning existing links will be removed
-			str.setSpan(new LinkSpan(url), selection.start(), selection.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		}
-	}
+        if (url != null) {
+            // if url is Null then the link won't be set meaning existing links will be removed
+            str.setSpan(new LinkSpan(url), selection.start(), selection.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+    }
 
-	@Override
-	public LinkSpan[] getSpans(Spannable str, Selection selection) {
-		return str.getSpans(selection.start(), selection.end(), LinkSpan.class);
-	}
+    @Override
+    public LinkSpan[] getSpans(Spannable str, Selection selection) {
+        return str.getSpans(selection.start(), selection.end(), LinkSpan.class);
+    }
 
 }

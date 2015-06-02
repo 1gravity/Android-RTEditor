@@ -23,56 +23,56 @@ import android.widget.EditText;
 /**
  * A Selection stands for selected text from a start to an end point. Don't mix
  * it up with android.text.Selection which has a completely different purpose.
- * 
+ * <p>
  * It offers convenience methods to unify two Selections and the like.
  */
 public class Selection implements Serializable {
-	private static final long serialVersionUID = 8415527424030047664L;
-	
-	// all indices start with 0
-	private int mStart;		// index of the first character
-	private int mEnd;		// index of the first character after the selection
-	
-	public Selection(int start, int end) {
-		mStart = start;
-		mEnd = end;
+    private static final long serialVersionUID = 8415527424030047664L;
 
-		if (mStart > mEnd) {
-			int temp = mEnd;
-			mEnd = mStart;
-			mStart = temp;
-		}
-	}
+    // all indices start with 0
+    private int mStart;        // index of the first character
+    private int mEnd;        // index of the first character after the selection
 
-	public Selection(EditText editor) {
-		this(editor.getSelectionStart(), editor.getSelectionEnd());
-	}
+    public Selection(int start, int end) {
+        mStart = start;
+        mEnd = end;
 
-	public int start() {
-		return mStart;
-	}
-	
-	public int end() {
-		return mEnd;
-	}
+        if (mStart > mEnd) {
+            int temp = mEnd;
+            mEnd = mStart;
+            mStart = temp;
+        }
+    }
 
-	public boolean isEmpty() {
-		return mStart == mEnd;
-	}
+    public Selection(EditText editor) {
+        this(editor.getSelectionStart(), editor.getSelectionEnd());
+    }
 
-	public Selection expandSelection(int offsetLeft, int offsetRight) {
-		int newStart = Math.max(0, mStart - offsetLeft);
-		int newEnd = mEnd + offsetRight;
-		return new Selection(newStart, newEnd);
-	}
+    public int start() {
+        return mStart;
+    }
 
-	public void union(Selection other) {
-		mStart = Math.min(mStart, other.mStart);
-		mEnd = Math.max(mEnd, other.mEnd);
-	}
-	
-	@Override
-	public String toString() {
-		return "[" + mStart + ", " + mEnd + "]";
-	}
+    public int end() {
+        return mEnd;
+    }
+
+    public boolean isEmpty() {
+        return mStart == mEnd;
+    }
+
+    public Selection expandSelection(int offsetLeft, int offsetRight) {
+        int newStart = Math.max(0, mStart - offsetLeft);
+        int newEnd = mEnd + offsetRight;
+        return new Selection(newStart, newEnd);
+    }
+
+    public void union(Selection other) {
+        mStart = Math.min(mStart, other.mStart);
+        mEnd = Math.max(mEnd, other.mEnd);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + mStart + ", " + mEnd + "]";
+    }
 }

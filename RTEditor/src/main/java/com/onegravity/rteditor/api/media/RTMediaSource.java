@@ -21,7 +21,7 @@ import java.io.InputStream;
 /**
  * The RTMediaSource is used when a media is picked and inserted into the rich
  * text editor.
- * 
+ * <p>
  * It contains meta information (name, mime type) and gives access to the
  * underlying InputStream through which the RTMediaFactory can create a Media
  * object which is then inserted into the editor. The creation of the Media
@@ -33,32 +33,33 @@ import java.io.InputStream;
  * storage scenario while keeping the "ugly stuff" under the hood.
  */
 public class RTMediaSource {
-	private final RTMediaType mMediaType;
-	private final InputStream mIn;;
-	private final String mName;
-	private final String mMimeType;
+    private final RTMediaType mMediaType;
+    private final InputStream mIn;
+    ;
+    private final String mName;
+    private final String mMimeType;
 
-	public RTMediaSource(RTMediaType mediaType, InputStream in, String name, String mimeType) {
-		mMediaType = mediaType;
-		mIn = in;	
-		mName = name;	
-		mMimeType = mimeType;	
-	}
+    public RTMediaSource(RTMediaType mediaType, InputStream in, String name, String mimeType) {
+        mMediaType = mediaType;
+        mIn = in;
+        mName = name;
+        mMimeType = mimeType;
+    }
 
-	public RTMediaType getMediaType() {
-		return mMediaType;
-	}
+    public RTMediaType getMediaType() {
+        return mMediaType;
+    }
 
-	public InputStream getInputStream() {
-		return mIn;
-	}
+    public InputStream getInputStream() {
+        return mIn;
+    }
 
-	public String getName() {
-		return mName;
-	}
+    public String getName() {
+        return mName;
+    }
 
-	public String getMimeType() {
-		return mMimeType;
-	}
+    public String getMimeType() {
+        return mMimeType;
+    }
 
 }

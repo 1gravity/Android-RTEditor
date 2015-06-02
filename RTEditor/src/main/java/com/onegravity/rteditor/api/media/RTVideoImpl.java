@@ -20,38 +20,38 @@ package com.onegravity.rteditor.api.media;
  * This is a basic implementation of the RTVideo interface.
  */
 public class RTVideoImpl extends RTMediaImpl implements RTVideo {
-	private static final long serialVersionUID = 5966458878874846554L;
+    private static final long serialVersionUID = 5966458878874846554L;
 
-	private String mVideoPreviewImage;
+    private String mVideoPreviewImage;
 
-	public RTVideoImpl(String filePath) {
-		super(filePath);
-	}
+    public RTVideoImpl(String filePath) {
+        super(filePath);
+    }
 
-	@Override
-	public void remove() {
-		super.remove();
-		removeFile(mVideoPreviewImage);
-	}
+    @Override
+    public void remove() {
+        super.remove();
+        removeFile(mVideoPreviewImage);
+    }
 
-	@Override
-	public String getVideoPreviewImage() {
-		return mVideoPreviewImage;
-	}
+    @Override
+    public String getVideoPreviewImage() {
+        return mVideoPreviewImage;
+    }
 
-	@Override
-	public void setVideoPreviewImage(String videoPreviewImage) {
-		mVideoPreviewImage = videoPreviewImage;
-	}
+    @Override
+    public void setVideoPreviewImage(String videoPreviewImage) {
+        mVideoPreviewImage = videoPreviewImage;
+    }
 
-	@Override
-	public int getHeight() {
-		return getHeight(mVideoPreviewImage);
-	}
+    @Override
+    public int getHeight() {
+        return getHeight(mVideoPreviewImage);
+    }
 
-	@Override
-	public int getWidth() {
-		return getWidth(mVideoPreviewImage);
-	}
+    @Override
+    public int getWidth() {
+        return getWidth(mVideoPreviewImage);
+    }
 
 }

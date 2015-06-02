@@ -16,60 +16,60 @@
 
 package com.onegravity.rteditor.api.media;
 
-import java.io.Serializable;
-
 import com.onegravity.rteditor.api.format.RTFormat;
+
+import java.io.Serializable;
 
 /**
  * This is the base Interface describing a rich text media object. Currently
  * only absolute file path are supported for embedded media objects (images,
  * audio files, videos).
- * 
+ * <p>
  * Note that every RTMedia object has to be Serializable.
  */
 public abstract interface RTMedia extends Serializable {
 
-	/**
-	 * Returns the file path of the media file (e.g. /data/.../image.png). This
-	 * has to be an absolute file path (no content://... or file://... ).
-	 */
-	public String getFilePath(RTFormat format);
+    /**
+     * Returns the file path of the media file (e.g. /data/.../image.png). This
+     * has to be an absolute file path (no content://... or file://... ).
+     */
+    public String getFilePath(RTFormat format);
 
-	/**
-	 * Returns the file name (e.g. image.png)
-	 */
-	public String getFileName();
+    /**
+     * Returns the file name (e.g. image.png)
+     */
+    public String getFileName();
 
-	/**
-	 * Returns the file extension (e.g. png)
-	 */
-	public String getFileExtension();
+    /**
+     * Returns the file extension (e.g. png)
+     */
+    public String getFileExtension();
 
-	/**
-	 * @return True if the media file exists, False otherwise
-	 */
-	public boolean exists();
+    /**
+     * @return True if the media file exists, False otherwise
+     */
+    public boolean exists();
 
-	/**
-	 * Remove / delete the media file. This is used if the user removes the
-	 * object in the editor or if the content of the editor is dismissed (not
-	 * saved).
-	 */
-	public void remove();
+    /**
+     * Remove / delete the media file. This is used if the user removes the
+     * object in the editor or if the content of the editor is dismissed (not
+     * saved).
+     */
+    public void remove();
 
-	/**
-	 * @return The width of the media
-	 */
-	public int getWidth();
+    /**
+     * @return The width of the media
+     */
+    public int getWidth();
 
-	/**
-	 * @return The height of the media
-	 */
-	public int getHeight();
+    /**
+     * @return The height of the media
+     */
+    public int getHeight();
 
-	/**
-	 * @return The size of the media in bytes
-	 */
-	public long getSize();
+    /**
+     * @return The size of the media in bytes
+     */
+    public long getSize();
 
 }

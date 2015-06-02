@@ -16,9 +16,6 @@
 
 package com.onegravity.rteditor.effects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -26,51 +23,54 @@ import android.text.style.BackgroundColorSpan;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Background color
  */
 public class BackgroundColorEffect extends Effect<Integer> {
 
-	@Override
-	public List<Integer> valuesInSelection(RTEditText editor, int spanType) {
-		Selection expandedSelection = getExpandedSelection(editor, spanType);
+    @Override
+    public List<Integer> valuesInSelection(RTEditText editor, int spanType) {
+        Selection expandedSelection = getExpandedSelection(editor, spanType);
 
-		List<Integer> result = new ArrayList<Integer>();
-		for (BackgroundColorSpan span : getSpans(editor.getText(), expandedSelection)) {
-			result.add(span.getBackgroundColor());
-		}
-		return result;
-	}
+        List<Integer> result = new ArrayList<Integer>();
+        for (BackgroundColorSpan span : getSpans(editor.getText(), expandedSelection)) {
+            result.add(span.getBackgroundColor());
+        }
+        return result;
+    }
 
-	/**
-	 * @param color If the color is Null then the background color will be removed
-	 */
-	public void applyToSelection(RTEditText editor, Integer color) {
-		Selection selection = new Selection(editor);
-		Spannable str = editor.getText();
+    /**
+     * @param color If the color is Null then the background color will be removed
+     */
+    public void applyToSelection(RTEditText editor, Integer color) {
+        Selection selection = new Selection(editor);
+        Spannable str = editor.getText();
 
-		for (BackgroundColorSpan span : getSpans(str, selection)) {
-			int spanStart = str.getSpanStart(span);
-			if (spanStart < selection.start()) {
-				str.setSpan(new BackgroundColorSpan(span.getBackgroundColor()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-			int spanEnd = str.getSpanEnd(span);
-			if (spanEnd > selection.end()) {
-				str.setSpan(new BackgroundColorSpan(span.getBackgroundColor()), selection.end()+1, spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-			}
-			str.removeSpan(span);
-		}
+        for (BackgroundColorSpan span : getSpans(str, selection)) {
+            int spanStart = str.getSpanStart(span);
+            if (spanStart < selection.start()) {
+                str.setSpan(new BackgroundColorSpan(span.getBackgroundColor()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            int spanEnd = str.getSpanEnd(span);
+            if (spanEnd > selection.end()) {
+                str.setSpan(new BackgroundColorSpan(span.getBackgroundColor()), selection.end() + 1, spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            }
+            str.removeSpan(span);
+        }
 
-		if (color != null) {
-			// if the style is enabled add it to the selection (add the leading and trailing spans too if there are any)
-			str.setSpan(new BackgroundColorSpan(color), selection.start(), selection.end(),
-						selection.start()==selection.end() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-		}
-	}
-	
-	@Override
-	protected BackgroundColorSpan[] getSpans(Spannable str, Selection selection) {
-		return str.getSpans(selection.start(), selection.end(), BackgroundColorSpan.class);
-	}
-	
+        if (color != null) {
+            // if the style is enabled add it to the selection (add the leading and trailing spans too if there are any)
+            str.setSpan(new BackgroundColorSpan(color), selection.start(), selection.end(),
+                    selection.start() == selection.end() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        }
+    }
+
+    @Override
+    protected BackgroundColorSpan[] getSpans(Spannable str, Selection selection) {
+        return str.getSpans(selection.start(), selection.end(), BackgroundColorSpan.class);
+    }
+
 }

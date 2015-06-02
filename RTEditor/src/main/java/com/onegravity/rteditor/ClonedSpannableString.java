@@ -16,24 +16,24 @@
 
 package com.onegravity.rteditor;
 
-import java.lang.reflect.Array;
-
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.CharacterStyle;
 import android.text.style.ParagraphStyle;
 
+import java.lang.reflect.Array;
+
 /**
  * Clones the Spannable part of an editor by copying the text, all
  * CharacterStyle, and all ParagraphStyle spans to a new Spannable object
  * (used for undo/redo).
- * 
+ * <p>
  * The code is partly taken from the non-public class
  * android.text.SpannableStringInternal.
  */
 public class ClonedSpannableString extends SpannableString {
 
-	private Object[] mSpans;
+    private Object[] mSpans;
     private int[] mSpanData;
     private int mSpanCount;
 
@@ -43,37 +43,37 @@ public class ClonedSpannableString extends SpannableString {
     private static final int COLUMNS = 3;
 
     public ClonedSpannableString(Spanned source) {
-    	this((CharSequence)source);
-	}
-    
+        this((CharSequence) source);
+    }
+
     public ClonedSpannableString(CharSequence source) {
-		super(source.toString());	// the toString is important to prevent the super class from copying the spans
-		init(source, 0, source.length());
-	}
-	
+        super(source.toString());    // the toString is important to prevent the super class from copying the spans
+        init(source, 0, source.length());
+    }
+
     private void init(CharSequence source, int start, int end) {
         int initial = 20;
         mSpans = new Object[initial];
         mSpanData = new int[initial * 3];
 
         if (source instanceof Spanned) {
-	        Spanned sp = (Spanned) source;
-	        for (Object span : sp.getSpans(start, end, Object.class)) {
-				if (span instanceof CharacterStyle || span instanceof ParagraphStyle) {
-	                int st = sp.getSpanStart(span);
-	                int en = sp.getSpanEnd(span);
-	                int fl = sp.getSpanFlags(span);
+            Spanned sp = (Spanned) source;
+            for (Object span : sp.getSpans(start, end, Object.class)) {
+                if (span instanceof CharacterStyle || span instanceof ParagraphStyle) {
+                    int st = sp.getSpanStart(span);
+                    int en = sp.getSpanEnd(span);
+                    int fl = sp.getSpanFlags(span);
 
-	                if (st < start) st = start;
-	                if (en > end) en = end;
+                    if (st < start) st = start;
+                    if (en > end) en = end;
 
-	                setSpan(span, st - start, en - start, fl);
-				}
-			}
+                    setSpan(span, st - start, en - start, fl);
+                }
+            }
         }
     }
 
-	// ****************************************** SpannableString Methods *******************************************
+    // ****************************************** SpannableString Methods *******************************************
 
     @Override
     public void setSpan(Object what, int start, int end, int flags) {
@@ -108,7 +108,7 @@ public class ClonedSpannableString extends SpannableString {
 
                 System.arraycopy(spans, i + 1, spans, i, c);
                 System.arraycopy(data, (i + 1) * COLUMNS,
-                                 data, i * COLUMNS, c * COLUMNS);
+                        data, i * COLUMNS, c * COLUMNS);
 
                 mSpanCount--;
                 return;
@@ -155,11 +155,11 @@ public class ClonedSpannableString extends SpannableString {
             }
         }
 
-        return 0; 
+        return 0;
     }
 
     @SuppressWarnings("unchecked")
-	public <T> T[] getSpans(int queryStart, int queryEnd, Class<T> kind) {
+    public <T> T[] getSpans(int queryStart, int queryEnd, Class<T> kind) {
         int count = 0;
 
         int spanCount = mSpanCount;
@@ -239,7 +239,7 @@ public class ClonedSpannableString extends SpannableString {
         return (T[]) nret;
     }
 
-    @SuppressWarnings( "rawtypes" )
+    @SuppressWarnings("rawtypes")
     public int nextSpanTransition(int start, int limit, Class kind) {
         int count = mSpanCount;
         Object[] spans = mSpans;

@@ -16,7 +16,6 @@
 
 package com.onegravity.rteditor.converter;
 
-
 /*
  * This is a helper class for converting from Spanned to HTML and back.
  * It's the accumulated paragraph styles (all SingleParagraphStyle of a paragraph together)

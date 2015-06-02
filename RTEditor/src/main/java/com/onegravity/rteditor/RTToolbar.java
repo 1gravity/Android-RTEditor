@@ -25,94 +25,100 @@ import com.onegravity.rteditor.effects.Effect;
 
 /**
  * An interface describing a rich text toolbar.
- * 
+ * <p>
  * There are methods to set/clear effects (like bold on/off) and
  * there are callback methods to let the listener know if the user
- * selected some effect on the toolbar.   
+ * selected some effect on the toolbar.
  */
 public interface RTToolbar {
 
     /*
-	 * Listener interface to listen to toolbar events like bold
+     * Listener interface to listen to toolbar events like bold
 	 * selected/unselected.
 	 * The methods should be fairly self-explaining.
 	 */
-	public interface RTToolbarListener {
-		public <T> void onEffectSelected(Effect<T> effect, T value);
-		public void onUndo();
-		public void onRedo();
-		public void onClearFormatting();
-		public void onCreateLink();
-		public void onPickImage();
-		public void onCaptureImage();
-	}
+    public interface RTToolbarListener {
+        public <T> void onEffectSelected(Effect<T> effect, T value);
 
-	/**
-	 * Set this toolbar's listener.
-	 * There can be only one since this should be the RTManager and there's only
-	 * one of those (per layout).
-	 */
-	public void setToolbarListener(RTToolbarListener listener);
-	
-	/**
-	 * Remove this toolbar's listener.
-	 */
-	public void removeToolbarListener();
+        public void onUndo();
 
-	/**
-	 * We can have more than one toolbar identified by this unique Id
-	 * (unique per layout).
-	 * It can be implemented e.g. by using a static counter.
-	 */
-	public int getId();
+        public void onRedo();
 
-	/**
-	 * This is merely a way to store the container in which the toolbar is shown
-	 * since we might need to hide/show the toolbar which happens by
-	 * hiding/showing the container.
-	 * 
-	 * @param toolbarContainer
-	 *            The ViewGroup that contains this RTToolbar.
-	 */
-	public void setToolbarContainer(ViewGroup toolbarContainer);
+        public void onClearFormatting();
 
-	/**
-	 * @return The ViewGroup that contains this RTToolbar.
-	 */
+        public void onCreateLink();
+
+        public void onPickImage();
+
+        public void onCaptureImage();
+    }
+
+    /**
+     * Set this toolbar's listener.
+     * There can be only one since this should be the RTManager and there's only
+     * one of those (per layout).
+     */
+    public void setToolbarListener(RTToolbarListener listener);
+
+    /**
+     * Remove this toolbar's listener.
+     */
+    public void removeToolbarListener();
+
+    /**
+     * We can have more than one toolbar identified by this unique Id
+     * (unique per layout).
+     * It can be implemented e.g. by using a static counter.
+     */
+    public int getId();
+
+    /**
+     * This is merely a way to store the container in which the toolbar is shown
+     * since we might need to hide/show the toolbar which happens by
+     * hiding/showing the container.
+     *
+     * @param toolbarContainer The ViewGroup that contains this RTToolbar.
+     */
+    public void setToolbarContainer(ViewGroup toolbarContainer);
+
+    /**
+     * @return The ViewGroup that contains this RTToolbar.
+     */
     public ViewGroup getToolbarContainer();
 
-	public void setBold(boolean enabled);
+    public void setBold(boolean enabled);
 
-	public void setItalic(boolean enabled);
+    public void setItalic(boolean enabled);
 
-	public void setUnderline(boolean enabled);
+    public void setUnderline(boolean enabled);
 
-	public void setStrikethrough(boolean enabled);
+    public void setStrikethrough(boolean enabled);
 
-	public void setSuperscript(boolean enabled);
+    public void setSuperscript(boolean enabled);
 
-	public void setSubscript(boolean enabled);
+    public void setSubscript(boolean enabled);
 
-	public void setBullet(boolean enabled);
+    public void setBullet(boolean enabled);
 
-	public void setNumber(boolean enabled);
+    public void setNumber(boolean enabled);
 
-	public void setAlignment(Layout.Alignment alignment);
+    public void setAlignment(Layout.Alignment alignment);
 
-	public void setAlignments(List<Layout.Alignment> alignments);
+    public void setAlignments(List<Layout.Alignment> alignments);
 
-	/**
-	 * Set the text size.
-	 * @param pxSize the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
-	 */
-	public void setFontSize(int size);
+    /**
+     * Set the text size.
+     *
+     * @param pxSize the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
+     */
+    public void setFontSize(int size);
 
-	public void setFontColor(int color);
+    public void setFontColor(int color);
 
-	public void setBGColor(int color);
+    public void setBGColor(int color);
 
-	public void removeFontColor();
+    public void removeFontColor();
 
-	public void removeBGColor();
+    public void removeBGColor();
 
 }

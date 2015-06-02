@@ -23,12 +23,12 @@ import com.onegravity.rteditor.api.media.RTImage;
  */
 public class ImageSpan extends MediaSpan {
 
-	public ImageSpan(RTImage image, boolean isSaved) {
-		super(image, isSaved);
-	}
+    public ImageSpan(RTImage image, boolean isSaved) {
+        super(image, isSaved);
+    }
 
-	public RTImage getImage() {
-		return (RTImage) mMedia;
-	}
+    public RTImage getImage() {
+        return (RTImage) mMedia;
+    }
 
 }

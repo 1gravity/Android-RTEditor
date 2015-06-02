@@ -31,67 +31,64 @@ import com.onegravity.rteditor.utils.Selection;
  * ItalicEffect (text is either italic or not)
  */
 public class SimpleBooleanEffect<T> extends Effect<Boolean> {
-	protected Class<T> mClazz;
+    protected Class<T> mClazz;
 
-	public SimpleBooleanEffect(Class<T> clazz) {
-		mClazz = clazz;
-	}
+    public SimpleBooleanEffect(Class<T> clazz) {
+        mClazz = clazz;
+    }
 
-	@Override
-	public List<Boolean> valuesInSelection(RTEditText editor, int spanType) {
-		Selection expandedSelection = getExpandedSelection(editor, spanType);
+    @Override
+    public List<Boolean> valuesInSelection(RTEditText editor, int spanType) {
+        Selection expandedSelection = getExpandedSelection(editor, spanType);
 
-		List<Boolean> result = new ArrayList<Boolean>();
-		Object[] spans = getSpans(editor.getText(), expandedSelection);
-		for (int i = 0; i<spans.length; i++) {
-			result.add(true);
-		}
-		return result;
-	}
-	
-	@Override
-	public void applyToSelection(RTEditText editor, Boolean enable) {
-		Selection selection = new Selection(editor);
-		Spannable str = editor.getText();
+        List<Boolean> result = new ArrayList<Boolean>();
+        Object[] spans = getSpans(editor.getText(), expandedSelection);
+        for (int i = 0; i < spans.length; i++) {
+            result.add(true);
+        }
+        return result;
+    }
 
-		// we expand the selection to "catch" identical leading and trailing styles
-		Selection expandedSelection = selection.expandSelection(1, 1);
+    @Override
+    public void applyToSelection(RTEditText editor, Boolean enable) {
+        Selection selection = new Selection(editor);
+        Spannable str = editor.getText();
 
-		// remove all identical spans we find within the expandedSelection
-		// and find the start resp. the end if the leading and trailing spans
-		Range proAndEpi = getProAndEpilogue(str, selection, expandedSelection);
+        // we expand the selection to "catch" identical leading and trailing styles
+        Selection expandedSelection = selection.expandSelection(1, 1);
 
-		try {
-			if (enable) {
-				// if the style is enabled add it to the selection (add the leading and trailing spans too if there are any)
-				int start = Math.min(proAndEpi.start, selection.start());
-				int end = Math.max(proAndEpi.end, selection.end());
-				str.setSpan(mClazz.newInstance(), start, end,
-							start == end ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-			}
-			else {
-				if (proAndEpi.start < selection.start()) {
-					// if there was a leading span we have to set it again as it was removed above
-					str.setSpan(mClazz.newInstance(), proAndEpi.start, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				}
-				
-				if (proAndEpi.end > selection.end()) {
-					// if there was a trailing span we have to set it again as it was removed above
-					str.setSpan(mClazz.newInstance(), selection.end(), proAndEpi.end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-				}
-			}
-		}
-		catch (IllegalAccessException e) {
-			Log.e(getClass().getSimpleName(), "Exception instantiating " + getClass().getSimpleName(), e);
-		}
-		catch (InstantiationException e) {
-			Log.e(getClass().getSimpleName(), "Exception instantiating " + getClass().getSimpleName(), e);
-		}
-	}
+        // remove all identical spans we find within the expandedSelection
+        // and find the start resp. the end if the leading and trailing spans
+        Range proAndEpi = getProAndEpilogue(str, selection, expandedSelection);
 
-	@Override
-	protected Object[] getSpans(Spannable str, Selection selection) {
-		return str.getSpans(selection.start(), selection.end(), mClazz);
-	}
+        try {
+            if (enable) {
+                // if the style is enabled add it to the selection (add the leading and trailing spans too if there are any)
+                int start = Math.min(proAndEpi.start, selection.start());
+                int end = Math.max(proAndEpi.end, selection.end());
+                str.setSpan(mClazz.newInstance(), start, end,
+                        start == end ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            } else {
+                if (proAndEpi.start < selection.start()) {
+                    // if there was a leading span we have to set it again as it was removed above
+                    str.setSpan(mClazz.newInstance(), proAndEpi.start, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+                if (proAndEpi.end > selection.end()) {
+                    // if there was a trailing span we have to set it again as it was removed above
+                    str.setSpan(mClazz.newInstance(), selection.end(), proAndEpi.end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            Log.e(getClass().getSimpleName(), "Exception instantiating " + getClass().getSimpleName(), e);
+        } catch (InstantiationException e) {
+            Log.e(getClass().getSimpleName(), "Exception instantiating " + getClass().getSimpleName(), e);
+        }
+    }
+
+    @Override
+    protected Object[] getSpans(Spannable str, Selection selection) {
+        return str.getSpans(selection.start(), selection.end(), mClazz);
+    }
 
 }

@@ -33,19 +33,19 @@ import com.onegravity.rteditor.media.choose.processor.MediaProcessor.MediaProces
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 
 abstract class MediaChooserManager implements MediaProcessorListener {
-	
-	public interface MediaChooserListener {
-		/**
-		 * Handle any error condition if at all, when you receive this callback
-		 */
-		public void onError(String reason);
-	}
-	
-	transient protected MonitoredActivity mActivity;
-	transient protected RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
 
-	// the type of chooser (see MediaChooserActivity.REQUEST_PICK_PICTURE etc.)
-	transient protected MediaAction mMediaAction;
+    public interface MediaChooserListener {
+        /**
+         * Handle any error condition if at all, when you receive this callback
+         */
+        public void onError(String reason);
+    }
+
+    transient protected MonitoredActivity mActivity;
+    transient protected RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+
+    // the type of chooser (see MediaChooserActivity.REQUEST_PICK_PICTURE etc.)
+    transient protected MediaAction mMediaAction;
 
     transient private MediaChooserListener mListener;
 
@@ -54,14 +54,14 @@ abstract class MediaChooserManager implements MediaProcessorListener {
     private String mOriginalFile;
 
     MediaChooserManager(MonitoredActivity activity, MediaAction mediaAction,
-    					RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
-    					MediaChooserListener listener, Bundle savedInstanceState) {
+                        RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        MediaChooserListener listener, Bundle savedInstanceState) {
         mActivity = activity;
         mMediaFactory = mediaFactory;
         mMediaAction = mediaAction;
-    	mListener = listener;
+        mListener = listener;
 
-    	if (savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mOriginalFile = savedInstanceState.getString("mOriginalFile");
         }
     }
@@ -69,12 +69,11 @@ abstract class MediaChooserManager implements MediaProcessorListener {
     void onSaveInstanceState(Bundle outState) {
         outState.putString("mOriginalFile", mOriginalFile);
     }
-    
+
     /**
      * Call this method, to start the chooser, i.e, The camera app or the gallery depending upon the type
-     * 
-     * @param False if it's not possible to choose a media (e.g. when no sdcard is available to take a picture) 
-     * 
+     *
+     * @param False if it's not possible to choose a media (e.g. when no sdcard is available to take a picture)
      * @throws IllegalArgumentException
      */
     abstract boolean chooseMedia() throws IllegalArgumentException;
@@ -83,7 +82,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
      * Call this method to process the result from within your onActivityResult
      * method. You don't need to do any processing at all. Just pass in the
      * request code and the data, and everything else will be taken care of.
-     * 
+     *
      * @param mediaAction
      * @param data
      */
@@ -93,7 +92,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
     /* MediaChooserListener */
     public void onError(String reason) {
         if (mListener != null) {
-        	mListener.onError(reason);
+            mListener.onError(reason);
         }
     }
 
@@ -103,27 +102,26 @@ abstract class MediaChooserManager implements MediaProcessorListener {
             mActivity.startActivityForResult(intent, mMediaAction.requestCode());
         }
     }
-    
+
     protected void startBackgroundJob(MediaProcessor processor) {
-    	mActivity.startBackgroundJob(R.string.rte_processing_image, processor);
+        mActivity.startBackgroundJob(R.string.rte_processing_image, processor);
     }
 
     protected String getOriginalFile() {
-    	return mOriginalFile;
+        return mOriginalFile;
     }
-    
+
     protected void setOriginalFile(String originalFile) {
-    	mOriginalFile = originalFile;
+        mOriginalFile = originalFile;
     }
-    
+
     protected String determineOriginalFile(Intent data) {
-    	mOriginalFile = null;
+        mOriginalFile = null;
         if (data != null && data.getDataString() != null) {
             try {
-            	mOriginalFile = MediaUtils.determineOriginalFile(RTApi.getApplicationContext(), data.getData());
-            }
-            catch (IllegalArgumentException e) {
-            	onError(e.getMessage());
+                mOriginalFile = MediaUtils.determineOriginalFile(RTApi.getApplicationContext(), data.getData());
+            } catch (IllegalArgumentException e) {
+                onError(e.getMessage());
             }
         }
         return mOriginalFile;

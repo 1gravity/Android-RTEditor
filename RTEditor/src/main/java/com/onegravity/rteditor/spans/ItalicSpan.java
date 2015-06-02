@@ -25,16 +25,16 @@ import android.text.style.StyleSpan;
  */
 public class ItalicSpan extends StyleSpan {
 
-	public ItalicSpan() {
-		super(Typeface.ITALIC);
-	}
+    public ItalicSpan() {
+        super(Typeface.ITALIC);
+    }
 
-	public ItalicSpan(int style) {
-		super(Typeface.ITALIC);
-	}
-	
-	public ItalicSpan(Parcel src) {
-		super(src);
-	}
+    public ItalicSpan(int style) {
+        super(Typeface.ITALIC);
+    }
+
+    public ItalicSpan(Parcel src) {
+        super(src);
+    }
 
 }

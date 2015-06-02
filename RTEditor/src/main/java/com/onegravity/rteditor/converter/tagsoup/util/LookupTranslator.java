@@ -24,8 +24,8 @@ import java.util.HashMap;
 /**
  * Translates a value using a lookup table.
  *
- * @since 3.0
  * @version $Id: LookupTranslator.java 1470822 2013-04-23 06:00:41Z bayard $
+ * @since 3.0
  */
 public class LookupTranslator extends CharSequenceTranslator {
 
@@ -35,10 +35,10 @@ public class LookupTranslator extends CharSequenceTranslator {
 
     /**
      * Define the lookup table to be used in translation
-     *
-     * Note that, as of Lang 3.1, the key to the lookup table is converted to a 
-     * java.lang.String, while the value remains as a java.lang.CharSequence. 
-     * This is because we need the key to support hashCode and equals(Object), 
+     * <p/>
+     * Note that, as of Lang 3.1, the key to the lookup table is converted to a
+     * java.lang.String, while the value remains as a java.lang.CharSequence.
+     * This is because we need the key to support hashCode and equals(Object),
      * allowing it to be the key for a HashMap. See LANG-882.
      *
      * @param lookup CharSequence[][] table of size [*][2]

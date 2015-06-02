@@ -39,35 +39,35 @@ import com.onegravity.rteditor.utils.Constants.MediaAction;
 
 class ImageChooserManager extends MediaChooserManager implements ImageProcessorListener {
 
-	public interface ImageChooserListener extends MediaChooserListener {
-		/**
-		 * Callback method to inform the caller that an image file has been processed
-		 */
-	    public void onImageChosen(RTImage image);
-	}
-	
-	private static final String CAPTURED_IMAGE_TEMPLATE = "CAPTURED_IMAGE.jpeg";
-    
+    public interface ImageChooserListener extends MediaChooserListener {
+        /**
+         * Callback method to inform the caller that an image file has been processed
+         */
+        public void onImageChosen(RTImage image);
+    }
+
+    private static final String CAPTURED_IMAGE_TEMPLATE = "CAPTURED_IMAGE.jpeg";
+
     private ImageChooserListener mListener;
 
     ImageChooserManager(MonitoredActivity activity, MediaAction mediaAction,
-    					RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
-    					ImageChooserListener listener, Bundle savedInstanceState) {
-        
-    	super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
+                        RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        ImageChooserListener listener, Bundle savedInstanceState) {
 
-    	mListener = listener;
+        super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
+
+        mListener = listener;
     }
 
     @SuppressWarnings("incomplete-switch")
-	@Override
+    @Override
     boolean chooseMedia() throws IllegalArgumentException {
         if (mListener == null) {
             throw new IllegalArgumentException("ImageChooserListener cannot be null");
         }
         switch (mMediaAction) {
             case PICK_PICTURE:
-            	return pickPicture();
+                return pickPicture();
             case CAPTURE_PICTURE:
                 return takePicture();
         }
@@ -76,59 +76,57 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
 
     private boolean pickPicture() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null)
-   							.addCategory(Intent.CATEGORY_OPENABLE)
-   							.setType("image/*");
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("image/*");
         String title = mActivity.getString(R.string.rte_pick_image);
         startActivity(Intent.createChooser(intent, title));
         return true;
     }
 
     private boolean takePicture() {
-		try {
-	        // Create an image file name (must be in "public area" or the camera app might not be able to access the file)
-			File imagePath = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES);
-			File imageFile = MediaUtils.createUniqueFile(imagePath, CAPTURED_IMAGE_TEMPLATE, false);
-			imagePath.mkdirs();
-			if (imagePath.exists() && imageFile.createNewFile()) {
-		        setOriginalFile( imageFile.getAbsolutePath() );
-		        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-		        					.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile( imageFile ));
-		        startActivity(intent);
-			}
-			else {
-	            Toast.makeText(mActivity, "Can't take picture without an sdcard", Toast.LENGTH_SHORT).show();
-	            return false;
-			}
-		}
-		catch (Exception e) {
-			Log.e(getClass().getSimpleName(), e.getMessage(), e);
-		}
+        try {
+            // Create an image file name (must be in "public area" or the camera app might not be able to access the file)
+            File imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File imageFile = MediaUtils.createUniqueFile(imagePath, CAPTURED_IMAGE_TEMPLATE, false);
+            imagePath.mkdirs();
+            if (imagePath.exists() && imageFile.createNewFile()) {
+                setOriginalFile(imageFile.getAbsolutePath());
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        .putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
+                startActivity(intent);
+            } else {
+                Toast.makeText(mActivity, "Can't take picture without an sdcard", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), e.getMessage(), e);
+        }
         return true;
     }
-    
+
     @SuppressWarnings("incomplete-switch")
-	@Override
+    @Override
     void processMedia(MediaAction mediaAction, Intent data) {
         switch (mediaAction) {
 
-        case PICK_PICTURE: {
-    		String originalFile = determineOriginalFile(data);
-    		if (originalFile != null) {
-        		ImageProcessor processor = new ImageProcessor(originalFile, mMediaFactory, this);
-        		startBackgroundJob( processor );
-    		}
-            break;
-        }
-        
-        case CAPTURE_PICTURE: {
-    		String originalFile = getOriginalFile();
-        	if (originalFile != null) {
-        		ImageProcessor processor = new ImageProcessor(originalFile, mMediaFactory, this);
-        		startBackgroundJob( processor );
-        	}
-            break;
-        }
-        
+            case PICK_PICTURE: {
+                String originalFile = determineOriginalFile(data);
+                if (originalFile != null) {
+                    ImageProcessor processor = new ImageProcessor(originalFile, mMediaFactory, this);
+                    startBackgroundJob(processor);
+                }
+                break;
+            }
+
+            case CAPTURE_PICTURE: {
+                String originalFile = getOriginalFile();
+                if (originalFile != null) {
+                    ImageProcessor processor = new ImageProcessor(originalFile, mMediaFactory, this);
+                    startBackgroundJob(processor);
+                }
+                break;
+            }
+
         }
     }
 

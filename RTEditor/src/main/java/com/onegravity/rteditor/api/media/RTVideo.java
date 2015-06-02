@@ -18,13 +18,13 @@ package com.onegravity.rteditor.api.media;
 
 /**
  * Each embedded video must implement this interface.
- * 
+ * <p>
  * Embedding videos isn't supported yet.
  */
 public interface RTVideo extends RTMedia {
 
-	public String getVideoPreviewImage();
+    public String getVideoPreviewImage();
 
-	public void setVideoPreviewImage(String videoPreviewImage);
+    public void setVideoPreviewImage(String videoPreviewImage);
 
 }

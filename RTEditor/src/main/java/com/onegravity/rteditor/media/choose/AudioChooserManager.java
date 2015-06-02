@@ -29,29 +29,31 @@ import com.onegravity.rteditor.utils.Constants.MediaAction;
 
 class AudioChooserManager extends MediaChooserManager implements AudioProcessorListener {
 
-	public interface AudioChooserListener extends MediaChooserListener {
-		/**
-		 * Callback method to inform the caller that an audio file has been processed
-		 */
-		public void onAudioChosen(RTAudio audio);
-	}
-	
-	AudioChooserManager(MonitoredActivity activity,
-						MediaAction mediaAction, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
-						AudioChooserListener listener, Bundle savedInstanceState) {
-    	super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
-	}
+    public interface AudioChooserListener extends MediaChooserListener {
+        /**
+         * Callback method to inform the caller that an audio file has been processed
+         */
+        public void onAudioChosen(RTAudio audio);
+    }
 
-    @Override
-    boolean chooseMedia() throws IllegalArgumentException {
-    	return false;
+    AudioChooserManager(MonitoredActivity activity,
+                        MediaAction mediaAction, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        AudioChooserListener listener, Bundle savedInstanceState) {
+        super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
     }
 
     @Override
-    void processMedia(MediaAction mediaAction, Intent data) {}
+    boolean chooseMedia() throws IllegalArgumentException {
+        return false;
+    }
+
+    @Override
+    void processMedia(MediaAction mediaAction, Intent data) {
+    }
 
     @Override
     /* AudioChooserListener */
-    public void onAudioProcessed(RTAudio Audio) {}
+    public void onAudioProcessed(RTAudio Audio) {
+    }
 
 }

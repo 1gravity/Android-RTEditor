@@ -16,26 +16,26 @@
 
 package com.onegravity.rteditor.api.media;
 
-import java.io.File;
-
-import org.apache.commons.io.FilenameUtils;
-
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.util.Log;
 
 import com.onegravity.rteditor.api.format.RTFormat;
 
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+
 /**
  * This is a basic implementation of the RTMedia interface.
  */
 public abstract class RTMediaImpl implements RTMedia {
-	private static final long serialVersionUID = 5098840799124458004L;
+    private static final long serialVersionUID = 5098840799124458004L;
 
-	private String mFilePath;
-    
+    private String mFilePath;
+
     public RTMediaImpl(String filePath) {
-    	mFilePath = filePath;
+        mFilePath = filePath;
     }
 
     @Override
@@ -45,47 +45,47 @@ public abstract class RTMediaImpl implements RTMedia {
 
     @Override
     public String getFileExtension() {
-    	return FilenameUtils.getExtension(mFilePath);
+        return FilenameUtils.getExtension(mFilePath);
     }
-    
+
     @Override
     public String getFileName() {
-    	return FilenameUtils.getName(mFilePath);
+        return FilenameUtils.getName(mFilePath);
     }
 
     @Override
     public boolean exists() {
-    	return mFilePath != null && new File(mFilePath).exists();
+        return mFilePath != null && new File(mFilePath).exists();
     }
-    
+
     @Override
     public void remove() {
-    	removeFile(mFilePath);
+        removeFile(mFilePath);
     }
-    
+
     @Override
     public long getSize() {
-    	if (mFilePath != null) {
-    		File file = new File(mFilePath);
-    		return file.length();
-    	}
-    	return 0;
+        if (mFilePath != null) {
+            File file = new File(mFilePath);
+            return file.length();
+        }
+        return 0;
     }
-    
-	@Override
-	public int getWidth() {
-		return getWidth( getFilePath(RTFormat.SPANNED) );
-	}
 
-	@Override
-	public int getHeight() {
-		return getHeight( getFilePath(RTFormat.SPANNED) );
-	}  
+    @Override
+    public int getWidth() {
+        return getWidth(getFilePath(RTFormat.SPANNED));
+    }
 
-	/**
-	 * This returns the file path passed into the constructor without
-	 * any modifications (unlike getFilePath(RTFormat) that might alter it).
-	 */
+    @Override
+    public int getHeight() {
+        return getHeight(getFilePath(RTFormat.SPANNED));
+    }
+
+    /**
+     * This returns the file path passed into the constructor without
+     * any modifications (unlike getFilePath(RTFormat) that might alter it).
+     */
     protected String getFilePath() {
         return mFilePath;
     }
@@ -99,47 +99,45 @@ public abstract class RTMediaImpl implements RTMedia {
     }
 
     protected void removeFile(String path) {
-    	if (path != null) {
-        	File file = new File(path);
-        	file.delete();
-    	}
+        if (path != null) {
+            File file = new File(path);
+            file.delete();
+        }
     }
 
-	protected int getWidth(String filePath){
+    protected int getWidth(String filePath) {
         int width = 0;
         try {
             ExifInterface exif = new ExifInterface(filePath);
             String w = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
-            width = w.equals("0") ? getDimension(filePath, true) : Integer.parseInt( w );
-        }
-        catch (Exception e) {
-        	Log.e(getClass().getSimpleName(), e.getMessage(), e);
+            width = w.equals("0") ? getDimension(filePath, true) : Integer.parseInt(w);
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), e.getMessage(), e);
         }
         return width;
     }
-    
-    protected int getHeight(String filePath){
+
+    protected int getHeight(String filePath) {
         int height = 0;
         try {
             ExifInterface exif = new ExifInterface(filePath);
             String h = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
-            height = h.equals("0") ? getDimension(filePath, false) : Integer.parseInt( h );
-        }
-        catch (Exception e) {
-        	Log.e(getClass().getSimpleName(), e.getMessage(), e);
+            height = h.equals("0") ? getDimension(filePath, false) : Integer.parseInt(h);
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), e.getMessage(), e);
         }
         return height;
     }
 
     private int getDimension(String path, boolean width) {
-		// options.inJustDecodeBounds = true to get the out parameters without allocating the memory for the Bitmap 
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		options.outWidth = 0;
-		options.outHeight = 0;
-		options.inSampleSize = 1;
-		BitmapFactory.decodeFile(path, options);
-		return width ? options.outWidth : options.outHeight;
+        // options.inJustDecodeBounds = true to get the out parameters without allocating the memory for the Bitmap
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        options.outWidth = 0;
+        options.outHeight = 0;
+        options.inSampleSize = 1;
+        BitmapFactory.decodeFile(path, options);
+        return width ? options.outWidth : options.outHeight;
     }
 
 }

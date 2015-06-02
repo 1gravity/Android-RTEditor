@@ -29,25 +29,24 @@ import com.onegravity.rteditor.converter.ConverterTextToHtml;
  */
 public final class RTPlainText extends RTText {
 
-	public RTPlainText(CharSequence text) {
-		super(RTFormat.PLAIN_TEXT, text);
-	}
+    public RTPlainText(CharSequence text) {
+        super(RTFormat.PLAIN_TEXT, text);
+    }
 
-	@Override
-	public String getText() {
-		CharSequence text = super.getText();
-		return text != null ? text.toString() : "";
-	}
+    @Override
+    public String getText() {
+        CharSequence text = super.getText();
+        return text != null ? text.toString() : "";
+    }
 
-	@Override
-	public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
-		if (destFormat instanceof RTFormat.Html) {
-			return ConverterTextToHtml.convert(this);
-		}
-		else if (destFormat instanceof RTFormat.Spanned) {
-			return new RTSpanned(new SpannedString(getText()));
-		}
+    @Override
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+        if (destFormat instanceof RTFormat.Html) {
+            return ConverterTextToHtml.convert(this);
+        } else if (destFormat instanceof RTFormat.Spanned) {
+            return new RTSpanned(new SpannedString(getText()));
+        }
 
-		return super.convertTo(destFormat, mediaFactory);
-	}
+        return super.convertTo(destFormat, mediaFactory);
+    }
 }

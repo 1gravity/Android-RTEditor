@@ -18,15 +18,15 @@ package com.onegravity.rteditor.api.format;
 
 /**
  * The RTFormat class defines the format of an RTText.
- * 
+ * <p>
  * It's not an enum because we need to be able to extend the pre-defined formats
  * (HTML, PLAIN_TEXT, SPANNED).
- * 
+ * <p>
  * Extending the formats allows us to add custom conversions
  * (RTText.convertTo(RTFormat, RTMediaFactory)) and to add logic in custom
  * RTMedia implementations (RTMedia.getFilePath(RTFormat)) without breaking the
  * rest of the code.
- * 
+ * <p>
  * We could e.g. return cid:picture.jpg for a html link to an image (<a
  * href="cid:picture.jpg">) if the output format is a mime message and the image
  * will be sent in an email. We could return database://picture.jpg if the
@@ -38,31 +38,34 @@ package com.onegravity.rteditor.api.format;
  */
 public abstract class RTFormat {
 
-	/*
-	 * These are the instances of the pre-defined rich text formats
-	 * (the actual "enum").
-	 */
-	public static final Spanned SPANNED = new Spanned();
-	public static final PlainText PLAIN_TEXT = new PlainText();
-	public static final Html HTML = new Html();
+    /*
+     * These are the instances of the pre-defined rich text formats
+     * (the actual "enum").
+     */
+    public static final Spanned SPANNED = new Spanned();
+    public static final PlainText PLAIN_TEXT = new PlainText();
+    public static final Html HTML = new Html();
 
-	/**
-	 * Spanned is the text format used by the editor itself. It's used by the
-	 * RTSpanned that keeps its content as an android.text.Spanned
-	 */
-	public static class Spanned extends RTFormat {}
+    /**
+     * Spanned is the text format used by the editor itself. It's used by the
+     * RTSpanned that keeps its content as an android.text.Spanned
+     */
+    public static class Spanned extends RTFormat {
+    }
 
-	/**
-	 * PlainText is the plain text format. It's used by the RTPlainText that
-	 * keeps its content as unformatted text.
-	 */
-	public static class PlainText extends RTFormat {}
+    /**
+     * PlainText is the plain text format. It's used by the RTPlainText that
+     * keeps its content as unformatted text.
+     */
+    public static class PlainText extends RTFormat {
+    }
 
-	/**
-	 * Html is the html text format. It's used by the RTHtmlText that keeps its
-	 * content as formatted html and can be used as storage format, in emails or
-	 * be rendered as html page.
-	 */
-	public static class Html extends RTFormat {}
+    /**
+     * Html is the html text format. It's used by the RTHtmlText that keeps its
+     * content as formatted html and can be used as storage format, in emails or
+     * be rendered as html page.
+     */
+    public static class Html extends RTFormat {
+    }
 
 }

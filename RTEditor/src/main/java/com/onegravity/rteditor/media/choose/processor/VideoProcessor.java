@@ -16,26 +16,26 @@
 
 package com.onegravity.rteditor.media.choose.processor;
 
-import java.io.IOException;
-
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import java.io.IOException;
+
 public class VideoProcessor extends MediaProcessor {
 
-	public interface VideoProcessorListener extends MediaProcessorListener {
-		public void onVideoProcessed(RTVideo video);
-	}
-	
-	public VideoProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, VideoProcessorListener listener) {
+    public interface VideoProcessorListener extends MediaProcessorListener {
+        public void onVideoProcessed(RTVideo video);
+    }
+
+    public VideoProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, VideoProcessorListener listener) {
         super(originalFile, mediaFactory, listener);
     }
 
-	@Override
-	protected void processMedia() throws IOException, Exception {
-		// TODO
-	}
+    @Override
+    protected void processMedia() throws IOException, Exception {
+        // TODO
+    }
 
 }

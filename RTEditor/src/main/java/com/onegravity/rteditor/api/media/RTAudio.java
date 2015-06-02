@@ -18,12 +18,12 @@ package com.onegravity.rteditor.api.media;
 
 /**
  * Each embedded audio file must implement this interface.
- * 
+ * <p>
  * Embedding audio files aren't supported yet.
  */
 public interface RTAudio extends RTMedia {
 
-	public String getAudioPreviewImage();
+    public String getAudioPreviewImage();
 
     public void setAudioPreviewImage(String audioPreviewImage);
 

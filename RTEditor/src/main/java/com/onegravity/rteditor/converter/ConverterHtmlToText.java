@@ -16,13 +16,6 @@
 
 package com.onegravity.rteditor.converter;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-
-import org.xml.sax.XMLReader;
-
 import android.text.Annotation;
 import android.text.Editable;
 import android.text.Html;
@@ -34,42 +27,49 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import org.xml.sax.XMLReader;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
 /**
  * Converts html to plain text
  */
 public class ConverterHtmlToText {
 
-	/**
+    /**
      * When generating previews, Spannable objects that can't be converted into a String are
      * represented as 0xfffc. When displayed, these show up as undisplayed squares. These constants
      * define the object character and the replacement character.
      */
-    private static final char PREVIEW_OBJECT_CHARACTER = (char)0xfffc;
-    private static final char PREVIEW_OBJECT_REPLACEMENT = (char)0x20;  // space
+    private static final char PREVIEW_OBJECT_CHARACTER = (char) 0xfffc;
+    private static final char PREVIEW_OBJECT_REPLACEMENT = (char) 0x20;  // space
 
     /**
      * toHtml() converts non-breaking spaces into the UTF-8 non-breaking space, which doesn't get
      * rendered properly in some clients. Replace it with a simple space.
      */
-    private static final char NBSP_CHARACTER = (char)0x00a0;    // utf-8 non-breaking space
-    private static final char NBSP_REPLACEMENT = (char)0x20;    // space
+    private static final char NBSP_CHARACTER = (char) 0x00a0;    // utf-8 non-breaking space
+    private static final char NBSP_REPLACEMENT = (char) 0x20;    // space
 
-	public static RTPlainText convert(RTHtml<? extends RTImage, ? extends RTAudio, ? extends RTVideo> input) {
+    public static RTPlainText convert(RTHtml<? extends RTImage, ? extends RTAudio, ? extends RTVideo> input) {
         String result = Html.fromHtml(input.getText(), null, new HtmlToTextTagHandler())
-       		.toString()
-       		.replace(PREVIEW_OBJECT_CHARACTER, PREVIEW_OBJECT_REPLACEMENT)
-       		.replace(NBSP_CHARACTER, NBSP_REPLACEMENT);
+                .toString()
+                .replace(PREVIEW_OBJECT_CHARACTER, PREVIEW_OBJECT_REPLACEMENT)
+                .replace(NBSP_CHARACTER, NBSP_REPLACEMENT);
         return new RTPlainText(result);
     }
 
-	public static String convert(String text) {
+    public static String convert(String text) {
         return Html.fromHtml(text, null, new HtmlToTextTagHandler())
-       		.toString()
-       		.replace(PREVIEW_OBJECT_CHARACTER, PREVIEW_OBJECT_REPLACEMENT)
-       		.replace(NBSP_CHARACTER, NBSP_REPLACEMENT);
+                .toString()
+                .replace(PREVIEW_OBJECT_CHARACTER, PREVIEW_OBJECT_REPLACEMENT)
+                .replace(NBSP_CHARACTER, NBSP_REPLACEMENT);
     }
 
-	/**
+    /**
      * Custom tag handler to use when converting HTML messages to text. It currently handles text
      * representations of HTML tags that Android's built-in parser doesn't understand and hides code
      * contained in STYLE and SCRIPT blocks.
@@ -77,6 +77,7 @@ public class ConverterHtmlToText {
     private static class HtmlToTextTagHandler implements Html.TagHandler {
         // List of tags whose content should be ignored.
         private static final Set<String> TAGS_WITH_IGNORED_CONTENT;
+
         static {
             Set<String> set = new HashSet<String>();
             set.add("style");
@@ -93,8 +94,7 @@ public class ConverterHtmlToText {
                 // In the case of an <hr>, replace it with a bunch of underscores. This is roughly
                 // the behaviour of Outlook in Rich Text mode.
                 output.append("_____________________________________________\n");
-            }
-            else if (TAGS_WITH_IGNORED_CONTENT.contains(tag)) {
+            } else if (TAGS_WITH_IGNORED_CONTENT.contains(tag)) {
                 handleIgnoredTag(opening, output);
             }
         }
@@ -107,14 +107,15 @@ public class ConverterHtmlToText {
          * and value as above. We don't really need to be checking these values since Html.fromHtml()
          * doesn't use Annotation spans, but we should do it now to be safe in case they do start using
          * it in the future.
+         *
          * @param opening If this is an opening tag or not.
-         * @param output Spannable string that we're working with.
+         * @param output  Spannable string that we're working with.
          */
         private void handleIgnoredTag(boolean opening, Editable output) {
             int len = output.length();
             if (opening) {
                 output.setSpan(new Annotation(IGNORED_ANNOTATION_KEY, IGNORED_ANNOTATION_VALUE), len,
-                               len, Spanned.SPAN_MARK_MARK);
+                        len, Spanned.SPAN_MARK_MARK);
             } else {
                 Object start = getOpeningAnnotation(output);
                 if (start != null) {
@@ -130,6 +131,7 @@ public class ConverterHtmlToText {
 
         /**
          * Fetch the matching opening Annotation object and verify that it's the one added by us.
+         *
          * @param output Spannable string we're working with.
          * @return Starting Annotation object.
          */

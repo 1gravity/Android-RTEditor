@@ -16,9 +16,6 @@
 
 package com.onegravity.rteditor.media.choose.processor;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
@@ -26,13 +23,16 @@ import com.onegravity.rteditor.api.media.RTMediaSource;
 import com.onegravity.rteditor.api.media.RTMediaType;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class ImageProcessor extends MediaProcessor {
 
-	public interface ImageProcessorListener extends MediaProcessorListener {
-		public void onImageProcessed(RTImage image);
-	}
-	
-	private ImageProcessorListener mListener;
+    public interface ImageProcessorListener extends MediaProcessorListener {
+        public void onImageProcessed(RTImage image);
+    }
+
+    private ImageProcessorListener mListener;
 
     public ImageProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, ImageProcessorListener listener) {
         super(originalFile, mediaFactory, listener);
@@ -46,9 +46,8 @@ public class ImageProcessor extends MediaProcessor {
             if (mListener != null) {
                 mListener.onError("No file found to process");
             }
-        }
-        else {
-        	RTMediaSource source = new RTMediaSource(RTMediaType.IMAGE, in, getOriginalFile(), getMimeType());
+        } else {
+            RTMediaSource source = new RTMediaSource(RTMediaType.IMAGE, in, getOriginalFile(), getMimeType());
             RTImage image = mMediaFactory.createImage(source);
             if (image != null && mListener != null) {
                 mListener.onImageProcessed(image);

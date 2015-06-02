@@ -25,47 +25,51 @@ import com.onegravity.rteditor.api.media.RTVideo;
 
 /**
  * The MediaFactory creates Media objects.
- * 
+ * <p>
  * By overriding this class (and possibly the Media classes) different storage
  * scenarios can be implemented.
- * 
+ *
  * @see RTMediaFactoryImpl
  */
 public interface RTMediaFactory<I extends RTImage, A extends RTAudio, V extends RTVideo> extends Serializable {
 
-	/**
-	 * Use case 1: Inserting media objects into the rich text editor.
-	 * 
-	 * In this case media objects are picked by the user to insert them into the
-	 * editor. The media objects need to be copied to a dedicated media storage
-	 * area because the app needs access to them even if the source object isn't
-	 * available any more (deleted or no access any more).
-	 */
-	public I createImage(RTMediaSource mediaSource);
-	public A createAudio(RTMediaSource mediaSource);
-	public V createVideo(RTMediaSource mediaSource);
+    /**
+     * Use case 1: Inserting media objects into the rich text editor.
+     * <p>
+     * In this case media objects are picked by the user to insert them into the
+     * editor. The media objects need to be copied to a dedicated media storage
+     * area because the app needs access to them even if the source object isn't
+     * available any more (deleted or no access any more).
+     */
+    public I createImage(RTMediaSource mediaSource);
 
-	/**
-	 * Use case 2: Load a rich text with referenced media objects into the rich
-	 * text editor.
-	 * 
-	 * In this case media objects are loaded from the media storage area when
-	 * rich text is parsed and converted to a Spanned text. Media objects are
-	 * somehow referenced in the rich text. These reference need to be
-	 * translated into an absolute file path to be used in an ImageSpan.
-	 *  
-	 * E.g for editing purposes we would use an absolute path like
-	 *    /data/data/com.package/files/image.png
-	 * and we'd store the text in a html file with references like
-	 *    href="xmedia://image.png"
-	 * 
-	 * This allows us to save text in a storage independent format e.g. if we
-	 * want to switch between internal or external storage (copying the media
-	 * files) or if we want to use more than one storage area depending on the
-	 * use case (e.g. ContentProvider vs. SQLite database). 
-	 */
-	public I createImage(String path);
-	public A createAudio(String path);
-	public V createVideo(String path);
+    public A createAudio(RTMediaSource mediaSource);
+
+    public V createVideo(RTMediaSource mediaSource);
+
+    /**
+     * Use case 2: Load a rich text with referenced media objects into the rich
+     * text editor.
+     * <p>
+     * In this case media objects are loaded from the media storage area when
+     * rich text is parsed and converted to a Spanned text. Media objects are
+     * somehow referenced in the rich text. These reference need to be
+     * translated into an absolute file path to be used in an ImageSpan.
+     * <p>
+     * E.g for editing purposes we would use an absolute path like
+     * /data/data/com.package/files/image.png
+     * and we'd store the text in a html file with references like
+     * href="xmedia://image.png"
+     * <p>
+     * This allows us to save text in a storage independent format e.g. if we
+     * want to switch between internal or external storage (copying the media
+     * files) or if we want to use more than one storage area depending on the
+     * use case (e.g. ContentProvider vs. SQLite database).
+     */
+    public I createImage(String path);
+
+    public A createAudio(String path);
+
+    public V createVideo(String path);
 
 }

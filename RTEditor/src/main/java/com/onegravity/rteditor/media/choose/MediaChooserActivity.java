@@ -36,158 +36,150 @@ import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 
 public class MediaChooserActivity extends MonitoredActivity implements
-	ImageChooserListener,
-	AudioChooserListener,
-	VideoChooserListener {
-	
+        ImageChooserListener,
+        AudioChooserListener,
+        VideoChooserListener {
+
     private static final String PREFIX = MediaChooserActivity.class.getSimpleName();
 
     public static final String EXTRA_MEDIA_ACTION = PREFIX + "EXTRA_MEDIA_ACTION";
     public static final String EXTRA_MEDIA_FACTORY = PREFIX + "EXTRA_MEDIA_FACTORY";
 
-	private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
-	private MediaAction mMediaAction;
+    private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+    private MediaAction mMediaAction;
 
-	transient private MediaChooserManager mMediaChooserMgr;
+    transient private MediaChooserManager mMediaChooserMgr;
 
-	private RTMedia mSelectedMedia;
-	
-	// ****************************************** Lifecycle Methods *******************************************
+    private RTMedia mSelectedMedia;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    // ****************************************** Lifecycle Methods *******************************************
 
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			String mediaAction = extras.getString(EXTRA_MEDIA_ACTION);
-			mMediaAction = mediaAction == null ? null : MediaAction.valueOf(mediaAction);
-	        mMediaFactory = (RTMediaFactory<RTImage, RTAudio, RTVideo>) extras.getSerializable(EXTRA_MEDIA_FACTORY);
-		}
-				
-		if (mMediaAction != null) {
-			// retrieve parameters
-			if (savedInstanceState != null) {
-		        mSelectedMedia = (RTMedia) savedInstanceState.getSerializable("mSelectedMedia");
-			}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-			// dispatch the work to be done
-			switch (mMediaAction) {
-			
-			case PICK_PICTURE:
-			case CAPTURE_PICTURE:
-				mMediaChooserMgr = new ImageChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
-				break;
-			
-			case PICK_VIDEO:
-			case CAPTURE_VIDEO:
-				mMediaChooserMgr = new VideoChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
-				break;
-			
-			case PICK_AUDIO:
-			case CAPTURE_AUDIO:
-				mMediaChooserMgr = new AudioChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
-				break;
-			}
-			
-			if (mMediaChooserMgr == null) {
-				finish();
-			}
-			else if (! mMediaChooserMgr.chooseMedia()) {
-				finish();
-			}
-		}
-		else {
-			finish();
-		}
-	}
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String mediaAction = extras.getString(EXTRA_MEDIA_ACTION);
+            mMediaAction = mediaAction == null ? null : MediaAction.valueOf(mediaAction);
+            mMediaFactory = (RTMediaFactory<RTImage, RTAudio, RTVideo>) extras.getSerializable(EXTRA_MEDIA_FACTORY);
+        }
 
-	@Override
+        if (mMediaAction != null) {
+            // retrieve parameters
+            if (savedInstanceState != null) {
+                mSelectedMedia = (RTMedia) savedInstanceState.getSerializable("mSelectedMedia");
+            }
+
+            // dispatch the work to be done
+            switch (mMediaAction) {
+
+                case PICK_PICTURE:
+                case CAPTURE_PICTURE:
+                    mMediaChooserMgr = new ImageChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
+                    break;
+
+                case PICK_VIDEO:
+                case CAPTURE_VIDEO:
+                    mMediaChooserMgr = new VideoChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
+                    break;
+
+                case PICK_AUDIO:
+                case CAPTURE_AUDIO:
+                    mMediaChooserMgr = new AudioChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
+                    break;
+            }
+
+            if (mMediaChooserMgr == null) {
+                finish();
+            } else if (!mMediaChooserMgr.chooseMedia()) {
+                finish();
+            }
+        } else {
+            finish();
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         if (mSelectedMedia != null) {
-        	outState.putSerializable("mSelectedMedia", mSelectedMedia);
+            outState.putSerializable("mSelectedMedia", mSelectedMedia);
         }
     }
-	
+
     // ****************************************** Listener Methods *******************************************
 
-	@Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-        	
-        	if (requestCode == MediaAction.PICK_PICTURE.requestCode() && data != null) {
-    			mMediaChooserMgr.processMedia(MediaAction.PICK_PICTURE, data);
-        	}
-        	
-        	else if (requestCode == MediaAction.CAPTURE_PICTURE.requestCode()) {
-        		mMediaChooserMgr.processMedia(MediaAction.CAPTURE_PICTURE, data);	// data may be null here
-        	}
-        	
-        	else if (requestCode == Constants.CROP_IMAGE) {
-        		String path = data.getStringExtra(CropImageActivity.IMAGE_DESTINATION_FILE);
+
+            if (requestCode == MediaAction.PICK_PICTURE.requestCode() && data != null) {
+                mMediaChooserMgr.processMedia(MediaAction.PICK_PICTURE, data);
+            } else if (requestCode == MediaAction.CAPTURE_PICTURE.requestCode()) {
+                mMediaChooserMgr.processMedia(MediaAction.CAPTURE_PICTURE, data);    // data may be null here
+            } else if (requestCode == Constants.CROP_IMAGE) {
+                String path = data.getStringExtra(CropImageActivity.IMAGE_DESTINATION_FILE);
                 if (path != null && mSelectedMedia instanceof RTImage) {
-            		Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-        			setResult(RESULT_OK, resultIntent);
-        			finish();
+                    Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
                 }
-        	}
-        
-        }
-        else {
-			setResult(RESULT_CANCELED);
-			finish();
+            }
+
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
-	@Override
-	/* ImageChooserListener */
-	public void onImageChosen(RTImage image) {
-		mSelectedMedia = image;
+    @Override
+    /* ImageChooserListener */
+    public void onImageChosen(RTImage image) {
+        mSelectedMedia = image;
 
         if (mMediaAction == MediaAction.CAPTURE_PICTURE) {
             String filePath = image.getFilePath(RTFormat.SPANNED);
 
             Intent intent = new Intent(this, CropImageActivity.class)
 
-            	// tell CropImage activity to look for image to crop 
-            	.putExtra(CropImageActivity.IMAGE_SOURCE_FILE, filePath)
-            	.putExtra(CropImageActivity.IMAGE_DESTINATION_FILE, filePath)
+                    // tell CropImage activity to look for image to crop
+                    .putExtra(CropImageActivity.IMAGE_SOURCE_FILE, filePath)
+                    .putExtra(CropImageActivity.IMAGE_DESTINATION_FILE, filePath)
 
-            	// allow CropImage activity to re-scale image
-            	.putExtra(CropImageActivity.SCALE, true)
-            	.putExtra(CropImageActivity.SCALE_UP_IF_NEEDED, false)
+                            // allow CropImage activity to re-scale image
+                    .putExtra(CropImageActivity.SCALE, true)
+                    .putExtra(CropImageActivity.SCALE_UP_IF_NEEDED, false)
 
-            	// no fixed aspect ratio
-            	.putExtra(CropImageActivity.ASPECT_X, 0)
-            	.putExtra(CropImageActivity.ASPECT_Y, 0);
+                            // no fixed aspect ratio
+                    .putExtra(CropImageActivity.ASPECT_X, 0)
+                    .putExtra(CropImageActivity.ASPECT_Y, 0);
 
             // start activity CropImageActivity
             startActivityForResult(intent, Constants.CROP_IMAGE);
+        } else {
+            Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
+            setResult(RESULT_OK, resultIntent);
+            finish();
         }
-        else {
-       		Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-   			setResult(RESULT_OK, resultIntent);
-   			finish();
-        }
-	}
-    
-	@Override
+    }
+
+    @Override
 	/* AudioChooserListener */
-	public void onAudioChosen(RTAudio audio) {
-		mSelectedMedia = audio;
-	}
+    public void onAudioChosen(RTAudio audio) {
+        mSelectedMedia = audio;
+    }
 
-	@Override
+    @Override
 	/* VideoChooserListener */
-	public void onVideoChosen(RTVideo video) {
-		mSelectedMedia = video;
-	}
+    public void onVideoChosen(RTVideo video) {
+        mSelectedMedia = video;
+    }
 
-	@Override
+    @Override
 	/* MediaChooserListener */
-	public void onError(String reason) {
-		Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
-	}
+    public void onError(String reason) {
+        Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
+    }
 
 }

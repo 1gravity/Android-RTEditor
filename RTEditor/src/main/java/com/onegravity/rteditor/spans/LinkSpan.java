@@ -25,20 +25,20 @@ import android.view.View;
  * That View is the RTEditText which implements the LinkSpanListener interface.
  */
 public class LinkSpan extends URLSpan {
-	
-	public interface LinkSpanListener {
-		public void onClick(LinkSpan linkSpan);
-	}
-	
-	public LinkSpan(String url) {
-		super(url);
-	}
-	
-	@Override
-	public void onClick(View view) {
-		if (view instanceof LinkSpanListener) {
-			((LinkSpanListener)view).onClick(this);
-		}
-	}
-	
+
+    public interface LinkSpanListener {
+        public void onClick(LinkSpan linkSpan);
+    }
+
+    public LinkSpan(String url) {
+        super(url);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view instanceof LinkSpanListener) {
+            ((LinkSpanListener) view).onClick(this);
+        }
+    }
+
 }

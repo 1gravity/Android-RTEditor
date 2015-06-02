@@ -16,8 +16,6 @@
 
 package com.onegravity.rteditor.media.choose;
 
-import java.io.File;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,30 +35,32 @@ import com.onegravity.rteditor.media.choose.processor.VideoProcessor;
 import com.onegravity.rteditor.media.choose.processor.VideoProcessor.VideoProcessorListener;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 
+import java.io.File;
+
 class VideoChooserManager extends MediaChooserManager implements VideoProcessorListener {
 
-	public interface VideoChooserListener extends MediaChooserListener {
-		/**
-		 * Callback method to inform the caller that a video file has been processed
-		 */
-		public void onVideoChosen(RTVideo video);
-	}
-	
-	private static final String CAPTURED_VIDEO_TEMPLATE = "CAPTURED_VIDEO.mp4";
+    public interface VideoChooserListener extends MediaChooserListener {
+        /**
+         * Callback method to inform the caller that a video file has been processed
+         */
+        public void onVideoChosen(RTVideo video);
+    }
+
+    private static final String CAPTURED_VIDEO_TEMPLATE = "CAPTURED_VIDEO.mp4";
 
     private VideoChooserListener mListener;
 
     VideoChooserManager(MonitoredActivity activity, MediaAction mediaAction,
-    					RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
-    					VideoChooserListener listener, Bundle savedInstanceState) {
+                        RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        VideoChooserListener listener, Bundle savedInstanceState) {
 
-    	super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
+        super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
 
-		mListener = listener;
+        mListener = listener;
     }
 
     @SuppressWarnings("incomplete-switch")
-	@Override
+    @Override
     boolean chooseMedia() throws IllegalArgumentException {
         if (mListener == null) {
             throw new IllegalArgumentException("VideoChooserListener cannot be null");
@@ -69,69 +69,67 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
             case CAPTURE_VIDEO:
                 return captureVideo();
             case PICK_VIDEO:
-            	return pickVideo();
+                return pickVideo();
         }
         return false;
     }
 
     private boolean pickVideo() {
         Intent intent = new Intent(Intent.ACTION_PICK)
-        					.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        					.setType("video/*");
+                .setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                .setType("video/*");
         String title = mActivity.getString(R.string.rte_pick_video);
         startActivity(Intent.createChooser(intent, title));
         return true;
     }
-    
+
     private boolean captureVideo() {
-		try {
-			File videoPath = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES);
-			File videoFile = MediaUtils.createUniqueFile(videoPath, CAPTURED_VIDEO_TEMPLATE, false);
-			videoPath.mkdirs();
-	
-			if (videoPath.exists() && videoPath.createNewFile()) {
-		        setOriginalFile( videoFile.getAbsolutePath() );
-		        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-		        	.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile( new File( getOriginalFile() ) ));
-		        startActivity(intent);
-			}
-			else {
-	            Toast.makeText(mActivity, "Can't take picture without an sdcard", Toast.LENGTH_SHORT).show();
-	            return false;
-			}
-		}
-		catch (Exception e) {
-			Log.e(getClass().getSimpleName(), e.getMessage(), e);
-		}
+        try {
+            File videoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File videoFile = MediaUtils.createUniqueFile(videoPath, CAPTURED_VIDEO_TEMPLATE, false);
+            videoPath.mkdirs();
+
+            if (videoPath.exists() && videoPath.createNewFile()) {
+                setOriginalFile(videoFile.getAbsolutePath());
+                Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                        .putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getOriginalFile())));
+                startActivity(intent);
+            } else {
+                Toast.makeText(mActivity, "Can't take picture without an sdcard", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), e.getMessage(), e);
+        }
 
         return true;
     }
 
     @SuppressWarnings("incomplete-switch")
-	@Override
+    @Override
     void processMedia(MediaAction mediaAction, Intent data) {
         switch (mediaAction) {
-        case PICK_VIDEO:
-            processPickedVideo(data);
-            break;
-        case CAPTURE_VIDEO:
-            processCameraVideo(data);
-            break;
+            case PICK_VIDEO:
+                processPickedVideo(data);
+                break;
+            case CAPTURE_VIDEO:
+                processCameraVideo(data);
+                break;
         }
     }
 
-	private void processPickedVideo(Intent data) {
-		String originalFile = determineOriginalFile(data);
-    	if (originalFile != null) {
-    		startBackgroundJob( new VideoProcessor(originalFile, mMediaFactory, this) );
-    	}
+    private void processPickedVideo(Intent data) {
+        String originalFile = determineOriginalFile(data);
+        if (originalFile != null) {
+            startBackgroundJob(new VideoProcessor(originalFile, mMediaFactory, this));
+        }
     }
 
     private void processCameraVideo(Intent intent) {
-		String originalFile = getOriginalFile();
-    	if (originalFile != null) {
-    		startBackgroundJob( new VideoProcessor(originalFile, mMediaFactory,  this) );
-    	}
+        String originalFile = getOriginalFile();
+        if (originalFile != null) {
+            startBackgroundJob(new VideoProcessor(originalFile, mMediaFactory, this));
+        }
     }
 
     @Override

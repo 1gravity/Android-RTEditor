@@ -26,25 +26,24 @@ import com.onegravity.rteditor.utils.Paragraph;
  * that will be processed later (added to or removed from a Spannable)
  */
 public class ParagraphSpan {
-	final private Object mWhat;
-	final private Paragraph mParagraph;
-	final private boolean mRemove;
+    final private Object mWhat;
+    final private Paragraph mParagraph;
+    final private boolean mRemove;
 
-	public ParagraphSpan(Object what, Paragraph paragraph, boolean remove) {
-		mWhat = what;
-		mParagraph = paragraph;
-		mRemove = remove;
-	}
+    public ParagraphSpan(Object what, Paragraph paragraph, boolean remove) {
+        mWhat = what;
+        mParagraph = paragraph;
+        mRemove = remove;
+    }
 
-	public void process(Spannable str) {
-		if (mRemove) {
-			str.removeSpan(mWhat);
-		}
-		else {
-			int start = mParagraph.start();
-			int end = mParagraph.end();
-			int flags = mParagraph.isEmpty() || mParagraph.isLast() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
-			str.setSpan(mWhat, start, end, flags);
-		}
-	}
+    public void process(Spannable str) {
+        if (mRemove) {
+            str.removeSpan(mWhat);
+        } else {
+            int start = mParagraph.start();
+            int end = mParagraph.end();
+            int flags = mParagraph.isEmpty() || mParagraph.isLast() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
+            str.setSpan(mWhat, start, end, flags);
+        }
+    }
 }

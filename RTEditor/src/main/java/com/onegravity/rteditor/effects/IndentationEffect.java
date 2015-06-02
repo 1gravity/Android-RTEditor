@@ -29,55 +29,55 @@ import com.onegravity.rteditor.utils.Selection;
 
 /**
  * Text indentation.
- * 
+ * <p>
  * LeadingMarginSpans are always applied to whole paragraphs and each paragraphs gets its "own" LeadingMarginSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
  * Each call to applyToSelection will again make sure that each paragraph has again its own LeadingMarginSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
- * 
- * The Boolean parameter is used to increment, decrement the indentation   
+ * <p>
+ * The Boolean parameter is used to increment, decrement the indentation
  */
 public class IndentationEffect extends LeadingMarginEffect {
 
-	@Override
-	public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean increment) {
-		final Spannable str = editor.getText();
-		 
-		List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+    @Override
+    public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean increment) {
+        final Spannable str = editor.getText();
 
-		for (Paragraph paragraph : editor.getParagraphs()) {
-			int indentation = 0;
+        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
 
-			// find existing indentations/spans for this paragraph
-			Object[] existingSpans = getCleanSpans(str, paragraph);
-			boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
-			if (hasExistingSpans) {
-				for (Object span : existingSpans) {
-					spans2Process.add( new ParagraphSpan(span, paragraph, true) );
-					indentation += ((IntendationSpan)span).getLeadingMargin();
-				}
-			}
-			
-			// if the paragraph is selected inc/dec the existing indentation
-			int incIndentation = increment == null ? 0 : (increment.booleanValue() ? 1 : -1) * getLeadingMargingIncrement();
-			indentation += paragraph.isSelected(selectedParagraphs) ? incIndentation : 0;
-			
-			// if indentation>0 then apply a new span
-			if (indentation > 0) {
-				IntendationSpan leadingMarginSpan = new IntendationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast()); 
-				spans2Process.add( new ParagraphSpan(leadingMarginSpan, paragraph, false) );
-			}
-		}
+        for (Paragraph paragraph : editor.getParagraphs()) {
+            int indentation = 0;
 
-		// add or remove spans
-		for (final ParagraphSpan spanDef : spans2Process) {
-			spanDef.process(str);
-		}
-	}
+            // find existing indentations/spans for this paragraph
+            Object[] existingSpans = getCleanSpans(str, paragraph);
+            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
+            if (hasExistingSpans) {
+                for (Object span : existingSpans) {
+                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
+                    indentation += ((IntendationSpan) span).getLeadingMargin();
+                }
+            }
 
-	@Override
-	protected IntendationSpan[] getSpans(Spannable str, Selection selection) {
-		return str.getSpans(selection.start(), selection.end(), IntendationSpan.class);
-	}
-	
+            // if the paragraph is selected inc/dec the existing indentation
+            int incIndentation = increment == null ? 0 : (increment.booleanValue() ? 1 : -1) * getLeadingMargingIncrement();
+            indentation += paragraph.isSelected(selectedParagraphs) ? incIndentation : 0;
+
+            // if indentation>0 then apply a new span
+            if (indentation > 0) {
+                IntendationSpan leadingMarginSpan = new IntendationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                spans2Process.add(new ParagraphSpan(leadingMarginSpan, paragraph, false));
+            }
+        }
+
+        // add or remove spans
+        for (final ParagraphSpan spanDef : spans2Process) {
+            spanDef.process(str);
+        }
+    }
+
+    @Override
+    protected IntendationSpan[] getSpans(Spannable str, Selection selection) {
+        return str.getSpans(selection.start(), selection.end(), IntendationSpan.class);
+    }
+
 }

@@ -16,76 +16,77 @@
 
 package com.onegravity.rteditor.utils;
 
+import android.text.Spanned;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.text.Spanned;
-
 /**
  * This class finds the Paragraphs in a Spanned text.
- * 
+ * <p>
  * We need this for all paragraph formatting. While it's optimized for
- * performance should still be used with caution.
+ * performance, it should still be used with caution.
  */
 public class RTLayout implements Serializable {
-	private static final long serialVersionUID = 2210969820444215580L;
+    private static final long serialVersionUID = 2210969820444215580L;
 
     private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\\r\\n|\\r|\\n");
 
-	private int mNrOfLines = 0;
-	private ArrayList<Paragraph> mParagraphs = new ArrayList<Paragraph>();;
-	
-	public RTLayout(Spanned spanned) {
-	    if (spanned != null) {
-	    	String s = spanned.toString();
-	    	
-	    	// remove the trailing line feeds
-	    	int len = s.length();
-	    	char c = len > 0 ? s.charAt(len - 1) : '-';
-	    	while (len > 0 && (c == '\n' || c == '\r')) {
-	    		len--;
-	    		if (len > 0) c = s.charAt(len - 1);
-	    	}
+    private int mNrOfLines = 0;
+    private ArrayList<Paragraph> mParagraphs = new ArrayList<Paragraph>();
+    ;
 
-	    	// now find the line breaks and the according lines / paragraphs
-	    	mNrOfLines = 1;
-	    	Matcher m = LINEBREAK_PATTERN.matcher(s.substring(0, len));
-	    	int groupStart = 0; 
-	    	while (m.find()) {
-				mParagraphs.add( new Paragraph(groupStart, m.end(), mNrOfLines == 1, false) );	// the line feeds are part of the paragraph
-	        	groupStart = m.end();
-	        	mNrOfLines++;
-	    	}
-	    	if (groupStart < len) {
-				mParagraphs.add( new Paragraph(groupStart, len, mNrOfLines == 1, true) );
-	    	}
-	    }
-	}
+    public RTLayout(Spanned spanned) {
+        if (spanned != null) {
+            String s = spanned.toString();
 
-	public List<Paragraph> getParagraphs() {
-		return mParagraphs;
-	}
-	
-	public int getLineForOffset(int offset) {
-	    int lineNr = 0;
-		while(lineNr < mNrOfLines && offset >= mParagraphs.get(lineNr).end()) {
-			lineNr++;
-		}
-		return Math.min(Math.max(0, lineNr), mParagraphs.size() - 1);
-	}
-	
-	public int getLineStart(int line) {
-		return mNrOfLines == 0 || line < 0 ? 0 :
-			   line<mNrOfLines ? mParagraphs.get(line).start() :
-			   mParagraphs.get(mNrOfLines-1).end()-1;
-	}
-	
-	public int getLineEnd(int line) {
-		return mNrOfLines == 0 || line < 0 ? 0 :
-			   line<mNrOfLines ? mParagraphs.get(line).end() :
-			   mParagraphs.get(mNrOfLines-1).end()-1;
-	}
+            // remove the trailing line feeds
+            int len = s.length();
+            char c = len > 0 ? s.charAt(len - 1) : '-';
+            while (len > 0 && (c == '\n' || c == '\r')) {
+                len--;
+                if (len > 0) c = s.charAt(len - 1);
+            }
+
+            // now find the line breaks and the according lines / paragraphs
+            mNrOfLines = 1;
+            Matcher m = LINEBREAK_PATTERN.matcher(s.substring(0, len));
+            int groupStart = 0;
+            while (m.find()) {
+                mParagraphs.add(new Paragraph(groupStart, m.end(), mNrOfLines == 1, false));    // the line feeds are part of the paragraph
+                groupStart = m.end();
+                mNrOfLines++;
+            }
+            if (groupStart < len) {
+                mParagraphs.add(new Paragraph(groupStart, len, mNrOfLines == 1, true));
+            }
+        }
+    }
+
+    public List<Paragraph> getParagraphs() {
+        return mParagraphs;
+    }
+
+    public int getLineForOffset(int offset) {
+        int lineNr = 0;
+        while (lineNr < mNrOfLines && offset >= mParagraphs.get(lineNr).end()) {
+            lineNr++;
+        }
+        return Math.min(Math.max(0, lineNr), mParagraphs.size() - 1);
+    }
+
+    public int getLineStart(int line) {
+        return mNrOfLines == 0 || line < 0 ? 0 :
+                line < mNrOfLines ? mParagraphs.get(line).start() :
+                        mParagraphs.get(mNrOfLines - 1).end() - 1;
+    }
+
+    public int getLineEnd(int line) {
+        return mNrOfLines == 0 || line < 0 ? 0 :
+                line < mNrOfLines ? mParagraphs.get(line).end() :
+                        mParagraphs.get(mNrOfLines - 1).end() - 1;
+    }
 }

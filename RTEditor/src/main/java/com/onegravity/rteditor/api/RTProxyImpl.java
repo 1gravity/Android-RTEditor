@@ -29,90 +29,90 @@ import android.widget.Toast;
 
 /**
  * A standard implementation for the RTProxy interface.
- * 
+ * <p>
  * It's using a SoftReference for the Activity object to reduce the risk of
  * memory leaks. You're welcome to extend the class and provide your own
  * implementation.
  */
 public class RTProxyImpl implements RTProxy {
 
-	final private SoftReference<Activity> mActivity;
+    final private SoftReference<Activity> mActivity;
 
-	public RTProxyImpl(Activity activity) {
-		mActivity = new SoftReference<Activity>(activity);
-	}
+    public RTProxyImpl(Activity activity) {
+        mActivity = new SoftReference<Activity>(activity);
+    }
 
-	@Override
+    @Override
+    /* @inheritDoc */
+    public void startActivityForResult(Intent intent, int requestCode) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.startActivityForResult(intent, requestCode);
+        }
+    }
+
+    @Override
 	/* @inheritDoc */
-	public void startActivityForResult(Intent intent, int requestCode) {
-		Activity activity = getActivity();
-		if (activity != null) {
-			activity.startActivityForResult(intent, requestCode);
-		}
-	}
+    public void runOnUiThread(Runnable action) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(action);
+        }
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public void runOnUiThread(Runnable action) {
-		Activity activity = getActivity();
-		if (activity != null) {
-			activity.runOnUiThread(action);
-		}
-	}
+    public Toast makeText(int resId, int duration) {
+        return Toast.makeText(RTApi.getApplicationContext(), resId, duration);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public Toast makeText(int resId, int duration) {
-		return Toast.makeText(RTApi.getApplicationContext(), resId, duration);
-	}
+    public Toast makeText(CharSequence text, int duration) {
+        return Toast.makeText(RTApi.getApplicationContext(), text, duration);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public Toast makeText(CharSequence text, int duration) {
-		return Toast.makeText(RTApi.getApplicationContext(), text, duration);
-	}
+    public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            FragmentManager fragmentMgr = activity.getFragmentManager();
+            FragmentTransaction ft = fragmentMgr.beginTransaction();
+            DialogFragment oldFragment = (DialogFragment) fragmentMgr
+                    .findFragmentByTag(fragmentTag);
+            if (oldFragment == null) {
+                fragment.show(ft, fragmentTag);
+            }
+        }
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
-		Activity activity = getActivity();
-		if (activity != null) {
-			FragmentManager fragmentMgr = activity.getFragmentManager();
-			FragmentTransaction ft = fragmentMgr.beginTransaction();
-			DialogFragment oldFragment = (DialogFragment) fragmentMgr
-					.findFragmentByTag(fragmentTag);
-			if (oldFragment == null) {
-				fragment.show(ft, fragmentTag);
-			}
-		}
-	}
+    public void removeFragment(String fragmentTag) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            FragmentManager fragmentMgr = activity.getFragmentManager();
+            Fragment fragment = fragmentMgr.findFragmentByTag(fragmentTag);
+            fragmentMgr.beginTransaction().remove(fragment).commit();
+        }
+    }
 
-	@Override
-	/* @inheritDoc */
-	public void removeFragment(String fragmentTag) {
-		Activity activity = getActivity();
-		if (activity != null) {
-			FragmentManager fragmentMgr = activity.getFragmentManager();
-			Fragment fragment = fragmentMgr.findFragmentByTag(fragmentTag);
-			fragmentMgr.beginTransaction().remove(fragment).commit();
-		}
-	}
+    private static class IncorrectInitializationException extends
+            AndroidRuntimeException {
+        private static final long serialVersionUID = 327389536289485672L;
 
-	private static class IncorrectInitializationException extends
-			AndroidRuntimeException {
-		private static final long serialVersionUID = 327389536289485672L;
+        public IncorrectInitializationException(String msg) {
+            super(msg);
+        }
+    }
 
-		public IncorrectInitializationException(String msg) {
-			super(msg);
-		}
-	}
-
-	private Activity getActivity() {
-		if (mActivity == null && mActivity.get() == null) {
-			throw new IncorrectInitializationException(
-					"The RTApi was't initialized correctly or the Activity was released by Android (SoftReference)");
-		}
-		return mActivity.get();
-	}
+    private Activity getActivity() {
+        if (mActivity == null && mActivity.get() == null) {
+            throw new IncorrectInitializationException(
+                    "The RTApi was't initialized correctly or the Activity was released by Android (SoftReference)");
+        }
+        return mActivity.get();
+    }
 
 }

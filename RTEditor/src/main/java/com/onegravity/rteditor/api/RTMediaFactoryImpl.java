@@ -44,91 +44,89 @@ import com.onegravity.rteditor.utils.Helper;
  * file system (as in Context.getExternalFilesDir(String).
  */
 public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVideo> {
-	private static final long serialVersionUID = 6970361368051595063L;
+    private static final long serialVersionUID = 6970361368051595063L;
 
-	private File mStoragePath;
+    private File mStoragePath;
 
-	public RTMediaFactoryImpl(Context context) {
-		this(context, true);	// use external storage as default
-	}
+    public RTMediaFactoryImpl(Context context) {
+        this(context, true);    // use external storage as default
+    }
 
-	public RTMediaFactoryImpl(Context context, boolean externalStorage) {
-		mStoragePath = externalStorage ?
-						context.getExternalFilesDir(null) :
-						context.getFilesDir();
-	}
+    public RTMediaFactoryImpl(Context context, boolean externalStorage) {
+        mStoragePath = externalStorage ?
+                context.getExternalFilesDir(null) :
+                context.getFilesDir();
+    }
 
-	/**
-	 * Returns the absolute file path for a certain RTMediaType.
-	 * 
-	 * The media type specific path as provided by RTMediaType is appended to
-	 * the storage path (e.g. <storage area>/images for image files).
-	 */
-	protected String getAbsolutePath(RTMediaType mediaType) {
-		File mediaPath = new File(mStoragePath.getAbsolutePath(), mediaType.mediaPath());
-		if (!mediaPath.exists()) {
-			mediaPath.mkdirs();
-		}
-		return mediaPath.getAbsolutePath();
-	}
+    /**
+     * Returns the absolute file path for a certain RTMediaType.
+     * <p>
+     * The media type specific path as provided by RTMediaType is appended to
+     * the storage path (e.g. <storage area>/images for image files).
+     */
+    protected String getAbsolutePath(RTMediaType mediaType) {
+        File mediaPath = new File(mStoragePath.getAbsolutePath(), mediaType.mediaPath());
+        if (!mediaPath.exists()) {
+            mediaPath.mkdirs();
+        }
+        return mediaPath.getAbsolutePath();
+    }
 
 	/*
-	 * Use case 1: Inserting media objects into the rich text editor.
+     * Use case 1: Inserting media objects into the rich text editor.
 	 * 
 	 * This default implementation copies all files into the dedicated media
 	 * storage area.
 	 */
-	
-	@Override
+
+    @Override
 	/* @inheritDoc */
-	public RTImage createImage(RTMediaSource mediaSource) {
-		File targetFile = loadMedia(mediaSource);
-		return targetFile == null ? null :
-			   new RTImageImpl( targetFile.getAbsolutePath());
-	}
+    public RTImage createImage(RTMediaSource mediaSource) {
+        File targetFile = loadMedia(mediaSource);
+        return targetFile == null ? null :
+                new RTImageImpl(targetFile.getAbsolutePath());
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTAudio createAudio(RTMediaSource mediaSource) {
-		File targetFile = loadMedia(mediaSource);
-		return targetFile == null ? null :
-			   new RTAudioImpl( targetFile.getAbsolutePath());
-	}
+    public RTAudio createAudio(RTMediaSource mediaSource) {
+        File targetFile = loadMedia(mediaSource);
+        return targetFile == null ? null :
+                new RTAudioImpl(targetFile.getAbsolutePath());
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTVideo createVideo(RTMediaSource mediaSource) {
-		File targetFile = loadMedia(mediaSource);
-		return targetFile == null ? null :
-			   new RTVideoImpl( targetFile.getAbsolutePath());
-	}
+    public RTVideo createVideo(RTMediaSource mediaSource) {
+        File targetFile = loadMedia(mediaSource);
+        return targetFile == null ? null :
+                new RTVideoImpl(targetFile.getAbsolutePath());
+    }
 
-	private File loadMedia(RTMediaSource mediaSource) {
-		File targetPath = new File( getAbsolutePath(mediaSource.getMediaType()) );
-		File targetFile = MediaUtils.createUniqueFile(targetPath,
-													  mediaSource.getName(),
-													  mediaSource.getMimeType(),
-													  false);
-		
-		copyFile(mediaSource.getInputStream(), targetFile);
-		
-		return targetFile;
-	}
+    private File loadMedia(RTMediaSource mediaSource) {
+        File targetPath = new File(getAbsolutePath(mediaSource.getMediaType()));
+        File targetFile = MediaUtils.createUniqueFile(targetPath,
+                mediaSource.getName(),
+                mediaSource.getMimeType(),
+                false);
 
-	private void copyFile(InputStream in, File targetFile) {
-		OutputStream out = null;
-		try {
-			out = new FileOutputStream(targetFile);
-			IOUtils.copy(in, out);
-		}
-		catch (IOException ioe) {
-			Log.e(getClass().getSimpleName(), ioe.getMessage(), ioe);
-		}
-		finally {
-			Helper.closeQuietly(out);
-			Helper.closeQuietly(in);
-		}
-	}
+        copyFile(mediaSource.getInputStream(), targetFile);
+
+        return targetFile;
+    }
+
+    private void copyFile(InputStream in, File targetFile) {
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(targetFile);
+            IOUtils.copy(in, out);
+        } catch (IOException ioe) {
+            Log.e(getClass().getSimpleName(), ioe.getMessage(), ioe);
+        } finally {
+            Helper.closeQuietly(out);
+            Helper.closeQuietly(in);
+        }
+    }
 
 	/*
 	 * Use case 2: Load a rich text with referenced media objects into the rich
@@ -139,22 +137,22 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
 	 * accessed directly by the rich text editor (via ImageSpan).  
 	 */
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTImage createImage(String path) {
-		return new RTImageImpl(path);
-	}
+    public RTImage createImage(String path) {
+        return new RTImageImpl(path);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTAudio createAudio(String path) {
-		return new RTAudioImpl(path);
-	}
+    public RTAudio createAudio(String path) {
+        return new RTAudioImpl(path);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTVideo createVideo(String path) {
-		return new RTVideoImpl(path);
-	}
+    public RTVideo createVideo(String path) {
+        return new RTVideoImpl(path);
+    }
 
 }

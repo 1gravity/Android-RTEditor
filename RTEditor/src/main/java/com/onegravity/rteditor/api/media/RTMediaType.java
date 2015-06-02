@@ -18,7 +18,7 @@ package com.onegravity.rteditor.api.media;
 
 /**
  * The RTMediaType defines the specific type of a Media (image, video, audio, ...).
- * 
+ * <p>
  * It's used by the RTMediaFactory to append a media type specific folder to the
  * file path where media files are stored. Images will be stored in <media file
  * path>/images/ while videos are stored in <media file path>/videos/. If no
@@ -26,17 +26,17 @@ package com.onegravity.rteditor.api.media;
  * that ignores the media specific path.
  */
 public enum RTMediaType {
-	IMAGE("images"),
-	VIDEO("videos"),
-	AUDIO("audios");
+    IMAGE("images"),
+    VIDEO("videos"),
+    AUDIO("audios");
 
-	private String mMediaPath;
+    private String mMediaPath;
 
-	RTMediaType(String mediaPath) {
-		mMediaPath = mediaPath;
-	}
+    RTMediaType(String mediaPath) {
+        mMediaPath = mediaPath;
+    }
 
-	public String mediaPath() {
-		return mMediaPath;
-	}
+    public String mediaPath() {
+        return mMediaPath;
+    }
 }

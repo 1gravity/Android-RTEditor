@@ -19,4 +19,5 @@ package com.onegravity.rteditor.api.media;
 /**
  * Each embedded image must implement this interface
  */
-public interface RTImage extends RTMedia {}
+public interface RTImage extends RTMedia {
+}

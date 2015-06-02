@@ -29,55 +29,54 @@ import com.onegravity.rteditor.effects.Effects;
 
 /**
  * RTText representing rich text in android.text.Spanned format.
- * 
+ * <p>
  * Use this class if the source text is immutable and RTEditable if the source
  * text is mutable (from an RTEditText).
  */
 
 /**
  * RTText representing rich text in android.text.Spanned format.
- * 
+ *
  * Use this class if the source text is an RTEditText.
  * This allows to pre-process the text before converting it (e.g. to eliminate
  * certain spans and to clean up the paragraph formatting).
- * 
+ *
  * @see RTSpanned
  */
 public final class RTEditable extends RTSpanned {
 
-	private RTEditText mEditor;
-	
-	public RTEditable(RTEditText editor) {
-		super(editor.getText());
-		mEditor = editor;
-	}
-	
-	@Override
-	public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
-		if (destFormat instanceof RTFormat.Html) {
-			clean();
-			return new ConverterSpannedToHtml().convert(mEditor.getText(), (RTFormat.Html) destFormat);
-		}
-		else if (destFormat instanceof RTFormat.PlainText) {
-			clean();
-			RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(mEditor.getText(), RTFormat.HTML);
-			RTText rtText = rtHtml.convertTo(RTFormat.PLAIN_TEXT, mediaFactory);
-			return new RTPlainText( rtText.getText() );
-		}
+    private RTEditText mEditor;
 
-		return super.convertTo(destFormat, mediaFactory);
-	}
-	
-	private void clean() {
-		Editable text = mEditor.getText();
-		BaseInputConnection.removeComposingSpans( text );
-		
+    public RTEditable(RTEditText editor) {
+        super(editor.getText());
+        mEditor = editor;
+    }
+
+    @Override
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+        if (destFormat instanceof RTFormat.Html) {
+            clean();
+            return new ConverterSpannedToHtml().convert(mEditor.getText(), (RTFormat.Html) destFormat);
+        } else if (destFormat instanceof RTFormat.PlainText) {
+            clean();
+            RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(mEditor.getText(), RTFormat.HTML);
+            RTText rtText = rtHtml.convertTo(RTFormat.PLAIN_TEXT, mediaFactory);
+            return new RTPlainText(rtText.getText());
+        }
+
+        return super.convertTo(destFormat, mediaFactory);
+    }
+
+    private void clean() {
+        Editable text = mEditor.getText();
+        BaseInputConnection.removeComposingSpans(text);
+
 		/* 
 		  Cleanup ParagraphStyles to:
 		  - make sure spans are applied to whole paragraphs
 		  - remove obsolete spans
 		  - Note: the sequence is important
-		*/ 
-		Effects.cleanupParagraphs(mEditor);
-	}
+		*/
+        Effects.cleanupParagraphs(mEditor);
+    }
 }

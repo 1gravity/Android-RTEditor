@@ -22,7 +22,7 @@ import android.text.style.SuperscriptSpan;
  * Superscript text
  */
 public class SuperscriptEffect extends SimpleBooleanEffect<SuperscriptSpan> {
-	public SuperscriptEffect() {
-		super(SuperscriptSpan.class);
-	}
+    public SuperscriptEffect() {
+        super(SuperscriptSpan.class);
+    }
 }

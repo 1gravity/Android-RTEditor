@@ -22,7 +22,7 @@ import com.onegravity.rteditor.spans.ItalicSpan;
  * Italic text
  */
 public class ItalicEffect extends SimpleBooleanEffect<ItalicSpan> {
-	public ItalicEffect() {
-		super(ItalicSpan.class);
-	}
+    public ItalicEffect() {
+        super(ItalicSpan.class);
+    }
 }

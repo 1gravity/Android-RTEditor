@@ -24,10 +24,10 @@ import android.text.style.LeadingMarginSpan;
 
 /**
  * Paragraph numbering.
- * 
+ * <p>
  * Android seems to add the leading margin for an empty paragraph to the previous paragraph
  * (]0, 4][4, 4] --> the leading margin of the second span is added to the ]0, 4] paragraph regardless of the Spanned.flags)
- * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one   
+ * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one
  */
 public class NumberSpan implements LeadingMarginSpan {
     private final int mNr;
@@ -35,36 +35,36 @@ public class NumberSpan implements LeadingMarginSpan {
     private final boolean mIgnoreSpan;
 
     private float mTextSize = 10f;
-	private float mWidth;
+    private float mWidth;
 
     public NumberSpan(int nr, int gapWidth, boolean isEmpty, boolean isFirst, boolean isLast) {
-    	mNr = nr;
+        mNr = nr;
         mGapWidth = gapWidth;
         mIgnoreSpan = isEmpty && isLast && !isFirst;
     }
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return mIgnoreSpan ? 0 : Math.max(Math.round(mWidth+2), mGapWidth);
+        return mIgnoreSpan ? 0 : Math.max(Math.round(mWidth + 2), mGapWidth);
     }
 
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom,
                                   CharSequence text, int start, int end, boolean first, Layout l) {
-    	
-    	Spanned spanned = (Spanned) text;
+
+        Spanned spanned = (Spanned) text;
         if (!mIgnoreSpan && spanned.getSpanStart(this) == start) {
-        	// set paint
+            // set paint
             Paint.Style oldStyle = p.getStyle();
             float oldTextSize = p.getTextSize();
             p.setStyle(Paint.Style.FILL);
-        	mTextSize = baseline - top;
-        	p.setTextSize(mTextSize);
-        	mWidth = p.measureText(mNr + ".");
-        	
-        	// draw the number
+            mTextSize = baseline - top;
+            p.setTextSize(mTextSize);
+            mWidth = p.measureText(mNr + ".");
+
+            // draw the number
             c.drawText(mNr + ".", x, baseline, p);
-            
+
             // restore paint
             p.setStyle(oldStyle);
             p.setTextSize(oldTextSize);

@@ -26,7 +26,7 @@ import android.text.style.LeadingMarginSpan;
 
 /**
  * Implementation for a bullet point LeadingMarginSpan
- * 
+ * <p>
  * Android seems to add the leading margin for an empty paragraph to the
  * previous paragraph (]0, 4][4, 4] --> the leading margin of the second span is
  * added to the ]0, 4] paragraph regardless of the Spanned.flags) --> therefore
@@ -55,21 +55,21 @@ public class BulletSpan implements LeadingMarginSpan {
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom,
                                   CharSequence text, int start, int end, boolean first, Layout l) {
-    	Spanned spanned = (Spanned) text;
+        Spanned spanned = (Spanned) text;
         if (!mIgnoreSpan && spanned.getSpanStart(this) == start) {
-        	// set paint
+            // set paint
             Paint.Style oldStyle = p.getStyle();
             p.setStyle(Paint.Style.FILL);
 
             // draw the bullet point
-        	int size = Math.max(Math.round((baseline-top) / 9f), 4);
-        	draw(c, p, x, dir, top, bottom, size);
+            int size = Math.max(Math.round((baseline - top) / 9f), 4);
+            draw(c, p, x, dir, top, bottom, size);
 
             // restore paint
             p.setStyle(oldStyle);
         }
     }
-    
+
     private void draw(Canvas c, Paint p, int x, int dir, int top, int bottom, int size) {
         sBulletPath.reset();
         sBulletPath.addCircle(0.0f, 0.0f, size, Direction.CW);

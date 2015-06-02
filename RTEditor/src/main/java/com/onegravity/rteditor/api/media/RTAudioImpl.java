@@ -20,38 +20,38 @@ package com.onegravity.rteditor.api.media;
  * This is a basic implementation of the RTAudio interface.
  */
 public class RTAudioImpl extends RTMediaImpl implements RTAudio {
-	private static final long serialVersionUID = -1213141231761752521L;
+    private static final long serialVersionUID = -1213141231761752521L;
 
-	private String mAudioPreviewImage;
+    private String mAudioPreviewImage;
 
-	public RTAudioImpl(String filePath) {
-		super(filePath);
-	}
+    public RTAudioImpl(String filePath) {
+        super(filePath);
+    }
 
-	@Override
-	public void remove() {
-		super.remove();
-		removeFile(mAudioPreviewImage);
-	}
+    @Override
+    public void remove() {
+        super.remove();
+        removeFile(mAudioPreviewImage);
+    }
 
-	@Override
-	public void setAudioPreviewImage(String audioPreviewImage) {
-		mAudioPreviewImage = audioPreviewImage;
-	}
+    @Override
+    public void setAudioPreviewImage(String audioPreviewImage) {
+        mAudioPreviewImage = audioPreviewImage;
+    }
 
-	@Override
-	public String getAudioPreviewImage() {
-		return mAudioPreviewImage;
-	}
+    @Override
+    public String getAudioPreviewImage() {
+        return mAudioPreviewImage;
+    }
 
-	@Override
-	public int getHeight() {
-		return getHeight(mAudioPreviewImage);
-	}
+    @Override
+    public int getHeight() {
+        return getHeight(mAudioPreviewImage);
+    }
 
-	@Override
-	public int getWidth() {
-		return getWidth(mAudioPreviewImage);
-	}
+    @Override
+    public int getWidth() {
+        return getWidth(mAudioPreviewImage);
+    }
 
 }

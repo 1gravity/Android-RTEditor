@@ -16,17 +16,6 @@
 
 package com.onegravity.rteditor.media.choose.processor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.util.Log;
@@ -38,114 +27,119 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public abstract class MediaProcessor implements Runnable {
 
-	public interface MediaProcessorListener {
-		public void onError(String reason);
-	}
-	
-	final private MediaProcessorListener mListener;
+    public interface MediaProcessorListener {
+        public void onError(String reason);
+    }
+
+    final private MediaProcessorListener mListener;
 
     final private String mOriginalFile;
 
     protected final RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
 
     public MediaProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, MediaProcessorListener listener) {
-    	mOriginalFile = originalFile;
-    	mMediaFactory = mediaFactory;
+        mOriginalFile = originalFile;
+        mMediaFactory = mediaFactory;
         mListener = listener;
     }
 
     @Override
     final public void run() {
         try {
-        	processMedia();
-        }
-        catch (Exception e) {
+            processMedia();
+        } catch (Exception e) {
             if (mListener != null) {
                 mListener.onError(e.getMessage());
             }
         }
     }
-    
+
     protected String getOriginalFile() {
-    	return mOriginalFile;
+        return mOriginalFile;
     }
 
     protected abstract void processMedia() throws IOException, Exception;
 
     protected InputStream getInputStream() throws IOException, Exception {
-    	InputStream in = null;
-		if (mOriginalFile.startsWith("http")) {
-			// http download
-			in = downloadFile(mOriginalFile);
-		}
-		else if (mOriginalFile.startsWith("content://")) {
-			// ContentProvider file
-			in = processContentProviderMedia(mOriginalFile);
-		}
-		else {
-			// file system
-			in = copyFileToDir(mOriginalFile);
-		}
+        InputStream in = null;
+        if (mOriginalFile.startsWith("http")) {
+            // http download
+            in = downloadFile(mOriginalFile);
+        } else if (mOriginalFile.startsWith("content://")) {
+            // ContentProvider file
+            in = processContentProviderMedia(mOriginalFile);
+        } else {
+            // file system
+            in = copyFileToDir(mOriginalFile);
+        }
 
-		return in;
+        return in;
     }
 
     protected String getMimeType() throws IOException, Exception {
-		if (mOriginalFile.startsWith("content://")) {
-			// ContentProvider file
-			ContentResolver resolver = RTApi.getApplicationContext().getContentResolver();
-			Uri uri = Uri.parse(mOriginalFile);
-			return resolver.getType(uri);
-		}
+        if (mOriginalFile.startsWith("content://")) {
+            // ContentProvider file
+            ContentResolver resolver = RTApi.getApplicationContext().getContentResolver();
+            Uri uri = Uri.parse(mOriginalFile);
+            return resolver.getType(uri);
+        }
 
-		String extension = FilenameUtils.getExtension(mOriginalFile);
-    	return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        String extension = FilenameUtils.getExtension(mOriginalFile);
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
 
-	private InputStream copyFileToDir(String sourceFile) {
-		InputStream in = null;
-		try {
-			File fileFrom = new File(Uri.parse(sourceFile).getPath());
-			in = new FileInputStream(fileFrom);
-		}
-		catch (IOException e) {
-			Log.e(getClass().getSimpleName(), e.getMessage(), e);
-		}
+    private InputStream copyFileToDir(String sourceFile) {
+        InputStream in = null;
+        try {
+            File fileFrom = new File(Uri.parse(sourceFile).getPath());
+            in = new FileInputStream(fileFrom);
+        } catch (IOException e) {
+            Log.e(getClass().getSimpleName(), e.getMessage(), e);
+        }
 
-		return in;
-	}
+        return in;
+    }
 
-	private InputStream downloadFile(String sourceFile) {
-		HttpClient client = new DefaultHttpClient();
-		HttpGet getRequest = new HttpGet(sourceFile);
+    private InputStream downloadFile(String sourceFile) {
+        HttpClient client = new DefaultHttpClient();
+        HttpGet getRequest = new HttpGet(sourceFile);
 
-		InputStream in = null;
-		try {
-			HttpResponse response = client.execute(getRequest);
-			in = response.getEntity().getContent();
-		}
-		catch (Exception e) {
-			Log.e(getClass().getSimpleName(), e.getMessage(), e);
-		}
-		
-		return in;
-	}
+        InputStream in = null;
+        try {
+            HttpResponse response = client.execute(getRequest);
+            in = response.getEntity().getContent();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), e.getMessage(), e);
+        }
 
-	private InputStream processContentProviderMedia(String sourceFile) {
-		ContentResolver resolver = RTApi.getApplicationContext().getContentResolver();
-		Uri uri = Uri.parse(sourceFile);
+        return in;
+    }
 
-		InputStream in = null;
-		try {
-			in = resolver.openInputStream(uri);
-		}
-		catch (IOException ioe) {
-			Log.e(getClass().getSimpleName(), ioe.getMessage(), ioe);
-		}
+    private InputStream processContentProviderMedia(String sourceFile) {
+        ContentResolver resolver = RTApi.getApplicationContext().getContentResolver();
+        Uri uri = Uri.parse(sourceFile);
 
-		return in;
-	}
+        InputStream in = null;
+        try {
+            in = resolver.openInputStream(uri);
+        } catch (IOException ioe) {
+            Log.e(getClass().getSimpleName(), ioe.getMessage(), ioe);
+        }
+
+        return in;
+    }
 
 }

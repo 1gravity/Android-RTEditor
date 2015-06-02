@@ -19,8 +19,9 @@ package com.onegravity.rteditor.effects;
 /**
  * Effects implementing this interface are always applied to whole paragraphs,
  * like bullet points or alignment.
- * 
+ * <p>
  * If we apply ParagraphEffect we need to call the cleanupParagraphs()
  * afterwards.
  */
-public interface ParagraphEffect {}
+public interface ParagraphEffect {
+}

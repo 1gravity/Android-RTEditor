@@ -29,55 +29,55 @@ import com.onegravity.rteditor.utils.Selection;
 
 /**
  * Text indentation.
- * 
+ * <p>
  * LeadingMarginSpans are always applied to whole paragraphs and each paragraphs gets its "own" LeadingMarginSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
  * Each call to applyToSelection will again make sure that each paragraph has again its own LeadingMarginSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
- * 
- * The Boolean parameter is used to increment, decrement the indentation   
+ * <p>
+ * The Boolean parameter is used to increment, decrement the indentation
  */
 public abstract class LeadingMarginEffect extends Effect<Boolean> implements ParagraphEffect {
 
-	private static final int LEADING_MARGIN_INCREMENT = 28;
-	private static int sLeadingMargingIncrement = -1;
-	
-	public static int getLeadingMargingIncrement() {
-		if (sLeadingMargingIncrement == -1) {
-			float density = Helper.getDisplayDensity();
-			sLeadingMargingIncrement = Math.round( LEADING_MARGIN_INCREMENT * density ); 
-		}
-		return sLeadingMargingIncrement;
-	}
+    private static final int LEADING_MARGIN_INCREMENT = 28;
+    private static int sLeadingMargingIncrement = -1;
 
-	@Override
-	public List<Boolean> valuesInSelection(RTEditText editor, int spanType) {
-		List<Boolean> result = new ArrayList<Boolean>();
+    public static int getLeadingMargingIncrement() {
+        if (sLeadingMargingIncrement == -1) {
+            float density = Helper.getDisplayDensity();
+            sLeadingMargingIncrement = Math.round(LEADING_MARGIN_INCREMENT * density);
+        }
+        return sLeadingMargingIncrement;
+    }
 
-		Selection expandedSelection = editor.getParagraphsInSelection();
-		if (expandedSelection != null) {
-			for (@SuppressWarnings("unused") Object span : getSpans(editor.getText(), expandedSelection)) {
-				result.add(true);
-			}
-		}
+    @Override
+    public List<Boolean> valuesInSelection(RTEditText editor, int spanType) {
+        List<Boolean> result = new ArrayList<Boolean>();
 
-		return result;
-	}
+        Selection expandedSelection = editor.getParagraphsInSelection();
+        if (expandedSelection != null) {
+            for (@SuppressWarnings("unused") Object span : getSpans(editor.getText(), expandedSelection)) {
+                result.add(true);
+            }
+        }
 
-	@Override
-	public void applyToSelection(RTEditText editor, Boolean value) {
-		Selection selection = new Selection(editor);
-		applyToSelection(editor, selection, value);
-	}
+        return result;
+    }
 
-	public abstract void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean value);
+    @Override
+    public void applyToSelection(RTEditText editor, Boolean value) {
+        Selection selection = new Selection(editor);
+        applyToSelection(editor, selection, value);
+    }
 
-	protected void findSpans2Remove(Spannable str, Paragraph paragraph, List<ParagraphSpan> spans2Remove) {
-		Object[] spans = getSpans(str, paragraph);
-		if (spans != null) {
-			for (Object span : spans) {
-				spans2Remove.add( new ParagraphSpan(span, paragraph, true) );
-			}
-		}
-	}
+    public abstract void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean value);
+
+    protected void findSpans2Remove(Spannable str, Paragraph paragraph, List<ParagraphSpan> spans2Remove) {
+        Object[] spans = getSpans(str, paragraph);
+        if (spans != null) {
+            for (Object span : spans) {
+                spans2Remove.add(new ParagraphSpan(span, paragraph, true));
+            }
+        }
+    }
 }

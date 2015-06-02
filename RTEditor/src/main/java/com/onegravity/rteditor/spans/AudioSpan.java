@@ -23,12 +23,12 @@ import com.onegravity.rteditor.api.media.RTAudio;
  */
 public class AudioSpan extends MediaSpan {
 
-	public AudioSpan(RTAudio audio, boolean isSaved) {
-		super(audio, isSaved);
-	}
+    public AudioSpan(RTAudio audio, boolean isSaved) {
+        super(audio, isSaved);
+    }
 
-	public RTAudio getAudio() {
-		return (RTAudio) mMedia;
-	}
+    public RTAudio getAudio() {
+        return (RTAudio) mMedia;
+    }
 
 }

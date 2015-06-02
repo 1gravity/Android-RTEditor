@@ -32,172 +32,172 @@ import com.onegravity.rteditor.api.media.RTVideo;
  * RTMediaFactory implementations in one class and acts as a proxy to them. It
  * also provides the Application context as a singleton to all rich text editor
  * components that need access to a (non-Activity) context.
- * 
+ * <p>
  * Usually there's no need to extends this class because all the real logic is
  * in the RTProxy and RTMediaFactory implementations.
- * 
+ * <p>
  * Important: the RTProxy class isn't Serializable. If RTApi is serialized (e.g.
  * as extra in an Intent) the receiver of that Intent will be able to use the
  * RTMediaFactory but not the RTProxy part.
  */
 public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo> {
 
-	private static final long serialVersionUID = -3877685955074371741L;
+    private static final long serialVersionUID = -3877685955074371741L;
 
 	/*
-	 * Application Context Part
+     * Application Context Part
 	 */
-	
-	private static final class IncorrectInitializationException extends AndroidRuntimeException {
-		private static final long serialVersionUID = 327389536289485672L;
-		
-		IncorrectInitializationException(String msg) {
-			super(msg);
-		}
-	}
 
-	
-	/*
-	 * The application context used throughout the different rich text editor
-	 * components.
-	 */
-	private static Object sTheLock = new Object();	// synchronize access to sAppContext
-	private static Context sAppContext;
+    private static final class IncorrectInitializationException extends AndroidRuntimeException {
+        private static final long serialVersionUID = 327389536289485672L;
 
-	/**
-	 * Return the context of the single, global Application object for the
-	 * current process. This generally should only be used if you need a Context
-	 * whose lifecycle is separate from the current context, that is tied to the
-	 * lifetime of the process rather than the current component
-	 * (Activity/Fragment).
-	 */
-	public static Context getApplicationContext() {
-		synchronized (sTheLock) {
-			if (sAppContext == null) {
-				throw new IncorrectInitializationException(
-						"Create an RTApi object before calling RTApi.getApplicationContext()");
-			}
-			return sAppContext;
-		}
-	}
+        IncorrectInitializationException(String msg) {
+            super(msg);
+        }
+    }
+
+
+    /*
+     * The application context used throughout the different rich text editor
+     * components.
+     */
+    private static Object sTheLock = new Object();    // synchronize access to sAppContext
+    private static Context sAppContext;
+
+    /**
+     * Return the context of the single, global Application object for the
+     * current process. This generally should only be used if you need a Context
+     * whose lifecycle is separate from the current context, that is tied to the
+     * lifetime of the process rather than the current component
+     * (Activity/Fragment).
+     */
+    public static Context getApplicationContext() {
+        synchronized (sTheLock) {
+            if (sAppContext == null) {
+                throw new IncorrectInitializationException(
+                        "Create an RTApi object before calling RTApi.getApplicationContext()");
+            }
+            return sAppContext;
+        }
+    }
 
 	/*
 	 * Constructor
 	 */
 
-	transient final private RTProxy mRTProxy;	// not Serializable
-	final private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+    transient final private RTProxy mRTProxy;    // not Serializable
+    final private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
 
-	/**
-	 * @param context This must be an Application not an Activity context!
-	 * @param rtProxy The RTProxy provided by the app.
-	 * @param mediaFactory the RTMediaFactory provided by the app.
-	 */
-	public RTApi(Context context, RTProxy rtProxy, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
-		synchronized (sTheLock) {
-			sAppContext = context.getApplicationContext();
-		}
+    /**
+     * @param context      Can be an Application or an Activity context
+     * @param rtProxy      The RTProxy provided by the app.
+     * @param mediaFactory the RTMediaFactory provided by the app.
+     */
+    public RTApi(Context context, RTProxy rtProxy, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+        synchronized (sTheLock) {
+            sAppContext = context.getApplicationContext();
+        }
 
-		mRTProxy = rtProxy;
-		mMediaFactory = mediaFactory;
-	}
+        mRTProxy = rtProxy;
+        mMediaFactory = mediaFactory;
+    }
 
 	/*
 	 * RTProxy Methods
 	 */
 
-	/**
-	 * The RTProxy is the link to the "outside world".
-	 * Since the class is part of the app and not the rich text editor component
-	 * we allow access through this method as a convenience.
-	 */
-	public RTProxy getRTProxy() {
-		return mRTProxy;
-	}
+    /**
+     * The RTProxy is the link to the "outside world".
+     * Since the class is part of the app and not the rich text editor component
+     * we allow access through this method as a convenience.
+     */
+    public RTProxy getRTProxy() {
+        return mRTProxy;
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public void startActivityForResult(Intent intent, int requestCode) {
-		mRTProxy.startActivityForResult(intent, requestCode);
-	}
+    public void startActivityForResult(Intent intent, int requestCode) {
+        mRTProxy.startActivityForResult(intent, requestCode);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public void runOnUiThread(Runnable action) {
-		mRTProxy.runOnUiThread(action);
-	}
+    public void runOnUiThread(Runnable action) {
+        mRTProxy.runOnUiThread(action);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public Toast makeText(int resId, int duration) {
-		return mRTProxy.makeText(resId, duration);
-	}
+    public Toast makeText(int resId, int duration) {
+        return mRTProxy.makeText(resId, duration);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public Toast makeText(CharSequence text, int duration) {
-		return mRTProxy.makeText(text, duration);
-	}
+    public Toast makeText(CharSequence text, int duration) {
+        return mRTProxy.makeText(text, duration);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
-		mRTProxy.openDialogFragment(fragmentTag, fragment);
-	}
+    public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
+        mRTProxy.openDialogFragment(fragmentTag, fragment);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public void removeFragment(String fragmentTag) {
-		mRTProxy.removeFragment(fragmentTag);
-	}
+    public void removeFragment(String fragmentTag) {
+        mRTProxy.removeFragment(fragmentTag);
+    }
 
 	/*
 	 * RTMediaFactory Methods
 	 */
 
-	/**
-	 * The media factory allows custom storage implementations for media files.
-	 * Since the class is part of the app and not the rich text editor component
-	 * we allow access through this method as a convenience.
-	 */
-	public RTMediaFactory<RTImage, RTAudio, RTVideo> getMediaFactory() {
-		return mMediaFactory;
-	}
+    /**
+     * The media factory allows custom storage implementations for media files.
+     * Since the class is part of the app and not the rich text editor component
+     * we allow access through this method as a convenience.
+     */
+    public RTMediaFactory<RTImage, RTAudio, RTVideo> getMediaFactory() {
+        return mMediaFactory;
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTImage createImage(RTMediaSource mediaSource) {
-		return mMediaFactory.createImage(mediaSource);
-	}
+    public RTImage createImage(RTMediaSource mediaSource) {
+        return mMediaFactory.createImage(mediaSource);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTAudio createAudio(RTMediaSource mediaSource) {
-		return mMediaFactory.createAudio(mediaSource);
-	}
+    public RTAudio createAudio(RTMediaSource mediaSource) {
+        return mMediaFactory.createAudio(mediaSource);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTVideo createVideo(RTMediaSource mediaSource) {
-		return mMediaFactory.createVideo(mediaSource);
-	}
+    public RTVideo createVideo(RTMediaSource mediaSource) {
+        return mMediaFactory.createVideo(mediaSource);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTImage createImage(String path) {
-		return mMediaFactory.createImage(path);
-	}
+    public RTImage createImage(String path) {
+        return mMediaFactory.createImage(path);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTAudio createAudio(String path) {
-		return mMediaFactory.createAudio(path);
-	}
+    public RTAudio createAudio(String path) {
+        return mMediaFactory.createAudio(path);
+    }
 
-	@Override
+    @Override
 	/* @inheritDoc */
-	public RTVideo createVideo(String path) {
-		return mMediaFactory.createVideo(path);
-	}
+    public RTVideo createVideo(String path) {
+        return mMediaFactory.createVideo(path);
+    }
 
 }

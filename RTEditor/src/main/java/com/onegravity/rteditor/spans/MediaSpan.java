@@ -27,24 +27,24 @@ import com.onegravity.rteditor.media.MediaUtils;
  */
 public abstract class MediaSpan extends android.text.style.ImageSpan {
 
-	final protected RTMedia mMedia;
+    final protected RTMedia mMedia;
 
-	// when saving the text delete the Media if the MediaSpan was removed from the text
-	// when dismissing the text delete the Media if the MediaSpan was removed from the text and if the Media wasn't saved
-	final private boolean mIsSaved;
+    // when saving the text delete the Media if the MediaSpan was removed from the text
+    // when dismissing the text delete the Media if the MediaSpan was removed from the text and if the Media wasn't saved
+    final private boolean mIsSaved;
 
-	public MediaSpan(RTMedia media, boolean isSaved) {
-		super(RTApi.getApplicationContext(), MediaUtils.createFileUri( media.getFilePath(RTFormat.SPANNED) ));
-		mMedia = media;
-		mIsSaved = isSaved;
-	}
+    public MediaSpan(RTMedia media, boolean isSaved) {
+        super(RTApi.getApplicationContext(), MediaUtils.createFileUri(media.getFilePath(RTFormat.SPANNED)));
+        mMedia = media;
+        mIsSaved = isSaved;
+    }
 
-	public RTMedia getMedia() {
-		return mMedia;
-	}
+    public RTMedia getMedia() {
+        return mMedia;
+    }
 
-	public boolean isSaved() {
-		return mIsSaved;
-	}
+    public boolean isSaved() {
+        return mIsSaved;
+    }
 
 }

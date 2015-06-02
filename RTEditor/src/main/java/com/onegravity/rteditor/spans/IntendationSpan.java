@@ -18,18 +18,18 @@ package com.onegravity.rteditor.spans;
 
 /**
  * Paragraph intendation.
- * 
+ * <p>
  * Android seems to add the leading margin for an empty paragraph to the previous paragraph
  * (]0, 4][4, 4] --> the leading margin of the second span is added to the ]0, 4] paragraph regardless of the Spanned.flags)
- * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one   
+ * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one
  */
 public class IntendationSpan extends android.text.style.LeadingMarginSpan.Standard {
     private final int mIndentation;
     private final boolean mIgnoreSpan;
 
     public IntendationSpan(int indentation, boolean isEmpty, boolean isFirst, boolean isLast) {
-		super(indentation);
-		mIndentation = indentation;
+        super(indentation);
+        mIndentation = indentation;
         mIgnoreSpan = isEmpty && isLast && !isFirst;
     }
 

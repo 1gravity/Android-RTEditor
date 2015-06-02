@@ -16,9 +16,6 @@
 
 package com.onegravity.rteditor.converter;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.text.TextUtils;
 import android.util.Patterns;
 
@@ -29,25 +26,28 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Converts plain text to html
  */
 public class ConverterTextToHtml {
 
-	// Number of extra bytes to allocate in a string buffer for htmlification.
+    // Number of extra bytes to allocate in a string buffer for htmlification.
     private static final int TEXT_TO_HTML_EXTRA_BUFFER_LENGTH = 512;
 
     private static final String BITCOIN_URI_PATTERN = "bitcoin:[1-9a-km-zA-HJ-NP-Z]{27,34}(\\?[a-zA-Z0-9$\\-_.+!*'(),%:@&=]*)?";
 
-	private static final boolean USE_REPLACE_ALL = false;
+    private static final boolean USE_REPLACE_ALL = false;
 
-	public static RTHtml<RTImage, RTAudio, RTVideo> convert(RTPlainText input) {
-		String text = input.getText();
-		String result = convert(text);
+    public static RTHtml<RTImage, RTAudio, RTVideo> convert(RTPlainText input) {
+        String text = input.getText();
+        String result = convert(text);
         return new RTHtml<RTImage, RTAudio, RTVideo>(RTFormat.HTML, result);
     }
 
-	public static String convert(String text) {
+    public static String convert(String text) {
         // Escape the entities and add newlines.
         String htmlified = text == null ? "" : TextUtils.htmlEncode(text);
 
@@ -62,19 +62,17 @@ public class ConverterTextToHtml {
     }
 
     private static void linkifyText(final String text, final StringBuffer outputBuffer) {
-    	String prepared = replaceAll(text, BITCOIN_URI_PATTERN, "<a href=\"$0\">$0</a>");
-    	Matcher m = Patterns.WEB_URL.matcher(prepared);
+        String prepared = replaceAll(text, BITCOIN_URI_PATTERN, "<a href=\"$0\">$0</a>");
+        Matcher m = Patterns.WEB_URL.matcher(prepared);
         while (m.find()) {
             int start = m.start();
             if (start == 0 || (start != 0 && text.charAt(start - 1) != '@')) {
                 if (m.group().indexOf(':') > 0) { // With no URI-schema we may get "http:/" links with the second / missing
                     m.appendReplacement(outputBuffer, "<a href=\"$0\">$0</a>");
-                }
-                else {
+                } else {
                     m.appendReplacement(outputBuffer, "<a href=\"http://$0\">$0</a>");
                 }
-            }
-            else {
+            } else {
                 m.appendReplacement(outputBuffer, "$0");
             }
         }
@@ -82,28 +80,27 @@ public class ConverterTextToHtml {
     }
 
     /**
-	 * A memory optimized algorithm for String.replaceAll
-	 */
+     * A memory optimized algorithm for String.replaceAll
+     */
     private static String replaceAll(String source, String search, String replace) {
-		if (USE_REPLACE_ALL) {
-			return source.replaceAll(search, replace);
-		}
-		else {
-			Pattern p = Pattern.compile(search);
-			Matcher m = p.matcher(source);
-			StringBuffer sb = new StringBuffer();
-			boolean atLeastOneFound = false;
-			while (m.find()) {
-				m.appendReplacement(sb, replace);
-				atLeastOneFound = true;
-			}
-			if (atLeastOneFound) {
-				m.appendTail(sb);
-				return sb.toString();
-			} else {
-				return source;
-			}
-		}
-	}
+        if (USE_REPLACE_ALL) {
+            return source.replaceAll(search, replace);
+        } else {
+            Pattern p = Pattern.compile(search);
+            Matcher m = p.matcher(source);
+            StringBuffer sb = new StringBuffer();
+            boolean atLeastOneFound = false;
+            while (m.find()) {
+                m.appendReplacement(sb, replace);
+                atLeastOneFound = true;
+            }
+            if (atLeastOneFound) {
+                m.appendTail(sb);
+                return sb.toString();
+            } else {
+                return source;
+            }
+        }
+    }
 
 }

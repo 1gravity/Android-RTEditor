@@ -20,10 +20,10 @@ package com.onegravity.rteditor.api.media;
  * This is a basic implementation of the RTImage interface.
  */
 public class RTImageImpl extends RTMediaImpl implements RTImage {
-	private static final long serialVersionUID = -1639564429914951720L;
+    private static final long serialVersionUID = -1639564429914951720L;
 
-	public RTImageImpl(String filePath) {
-    	super(filePath);
+    public RTImageImpl(String filePath) {
+        super(filePath);
     }
 
 }

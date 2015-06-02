@@ -26,36 +26,35 @@ import com.onegravity.rteditor.spans.IntendationSpan;
  * It's the paragraph style for a single line.
  */
 public class SingleParagraphStyle implements ParagraphStyle {
-	final private ParagraphType mType;
-	final private ParagraphStyle mStyle;
+    final private ParagraphType mType;
+    final private ParagraphStyle mStyle;
 
-	public SingleParagraphStyle(ParagraphType type, ParagraphStyle style) {
-		mType = type;
-		mStyle = style;
-	}
+    public SingleParagraphStyle(ParagraphType type, ParagraphStyle style) {
+        mType = type;
+        mStyle = style;
+    }
 
-	public int getIndentation() {
-		if (mType.isIndentation()) {
-			float increment = LeadingMarginEffect.getLeadingMargingIncrement();
-			float margin = ((IntendationSpan) mStyle).getLeadingMargin();
-			return Math.round(margin / increment); 
-		}
-		else if (mType.isBullet() || mType.isNumbering()) {
-			return 1;
-		}
-		return 0;
-	}
+    public int getIndentation() {
+        if (mType.isIndentation()) {
+            float increment = LeadingMarginEffect.getLeadingMargingIncrement();
+            float margin = ((IntendationSpan) mStyle).getLeadingMargin();
+            return Math.round(margin / increment);
+        } else if (mType.isBullet() || mType.isNumbering()) {
+            return 1;
+        }
+        return 0;
+    }
 
-	public ParagraphType getType() {
-		return mType;
-	}
+    public ParagraphType getType() {
+        return mType;
+    }
 
-	public ParagraphStyle getStyle() {
-		return mStyle;
-	}
+    public ParagraphStyle getStyle() {
+        return mStyle;
+    }
 
-	@Override
-	public String toString() {
-		return mType.name() + " - " + mStyle.getClass().getSimpleName();
-	}
+    @Override
+    public String toString() {
+        return mType.name() + " - " + mStyle.getClass().getSimpleName();
+    }
 }

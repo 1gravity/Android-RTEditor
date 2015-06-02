@@ -23,12 +23,12 @@ import com.onegravity.rteditor.api.media.RTVideo;
  */
 public class VideoSpan extends MediaSpan {
 
-	public VideoSpan(RTVideo video, boolean isSaved) {
-		super(video, isSaved);
-	}
+    public VideoSpan(RTVideo video, boolean isSaved) {
+        super(video, isSaved);
+    }
 
-	public RTVideo getVideo() {
-		return (RTVideo) mMedia;
-	}
+    public RTVideo getVideo() {
+        return (RTVideo) mMedia;
+    }
 
 }

@@ -17,36 +17,36 @@
 package com.onegravity.rteditor.utils;
 
 public abstract class Constants {
-	
-	/*
-	 * Request codes for startActivityForResult calls.
-	 * Change to codes if they overlap with the ones already in use by the app.
-	 */
-	public enum MediaAction {
-		PICK_PICTURE(101),
-		PICK_VIDEO(102),
-		PICK_AUDIO(103),
-		CAPTURE_PICTURE(104),
-		CAPTURE_VIDEO(105),
-		CAPTURE_AUDIO(106);
-		
-		private int mRequestCode;
-		
-		private MediaAction(int requestCode) {
-			mRequestCode = requestCode;
-		}
-		
-		public int requestCode() {
-			return mRequestCode;
-		}
-	}
 
-	public final static int CROP_IMAGE = 107;
+    /*
+     * Request codes for startActivityForResult calls.
+     * Change to codes if they overlap with the ones already in use by the app.
+     */
+    public enum MediaAction {
+        PICK_PICTURE(101),
+        PICK_VIDEO(102),
+        PICK_AUDIO(103),
+        CAPTURE_PICTURE(104),
+        CAPTURE_VIDEO(105),
+        CAPTURE_AUDIO(106);
+
+        private int mRequestCode;
+
+        private MediaAction(int requestCode) {
+            mRequestCode = requestCode;
+        }
+
+        public int requestCode() {
+            return mRequestCode;
+        }
+    }
+
+    public final static int CROP_IMAGE = 107;
 
     /*
      * Extra in the Intent sent back to the rich text editor
      * when picking a media file. It's a serialized Media object.
      */
-	public static final String RESULT_MEDIA = "RTE_RESULT_MEDIA";
+    public static final String RESULT_MEDIA = "RTE_RESULT_MEDIA";
 
 }

@@ -25,16 +25,16 @@ import android.text.style.StyleSpan;
  */
 public class BoldSpan extends StyleSpan {
 
-	public BoldSpan() {
-		super(Typeface.BOLD);
-	}
+    public BoldSpan() {
+        super(Typeface.BOLD);
+    }
 
-	public BoldSpan(int style) {
-		super(Typeface.BOLD);
-	}
-	
-	public BoldSpan(Parcel src) {
-		super(src);
-	}
+    public BoldSpan(int style) {
+        super(Typeface.BOLD);
+    }
+
+    public BoldSpan(Parcel src) {
+        super(src);
+    }
 
 }

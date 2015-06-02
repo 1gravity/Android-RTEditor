@@ -22,7 +22,7 @@ import android.text.style.StrikethroughSpan;
  * Strike-through text
  */
 public class StrikethroughEffect extends SimpleBooleanEffect<StrikethroughSpan> {
-	public StrikethroughEffect() {
-		super(StrikethroughSpan.class);
-	}
+    public StrikethroughEffect() {
+        super(StrikethroughSpan.class);
+    }
 }
