@@ -20,5 +20,5 @@ package com.larswerkman.holocolorpicker;
  * An interface that is called whenever the color is changed.
  */
 public interface OnColorChangedListener {
-	public void onColorChanged(int color);
+    public void onColorChanged(int color);
 }

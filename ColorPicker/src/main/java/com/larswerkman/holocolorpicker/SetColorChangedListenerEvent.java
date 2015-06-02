@@ -17,26 +17,26 @@
 package com.larswerkman.holocolorpicker;
 
 public class SetColorChangedListenerEvent {
-	
-	/**
-	 * The is is used to map the publisher to the subscriber.
-	 * The subscriber provides the id and the publisher uses it to register its listener.
-	 */
-	private final int mId;
 
-	private final OnColorChangedListener mListener;
-	
-	public SetColorChangedListenerEvent(int id, OnColorChangedListener listener) {
-		mId = id;
-		mListener = listener;
-	}
-	
-	public int getId() {
-		return mId;
-	}
+    /**
+     * The is is used to map the publisher to the subscriber.
+     * The subscriber provides the id and the publisher uses it to register its listener.
+     */
+    private final int mId;
 
-	public OnColorChangedListener getOnColorChangedListener() {
-		return mListener;
-	}
+    private final OnColorChangedListener mListener;
+
+    public SetColorChangedListenerEvent(int id, OnColorChangedListener listener) {
+        mId = id;
+        mListener = listener;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public OnColorChangedListener getOnColorChangedListener() {
+        return mListener;
+    }
 
 }

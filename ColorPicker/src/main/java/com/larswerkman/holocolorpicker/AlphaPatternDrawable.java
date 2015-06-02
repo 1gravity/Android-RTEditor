@@ -32,129 +32,129 @@ import android.graphics.drawable.Drawable;
  */
 public class AlphaPatternDrawable extends Drawable {
 
-	private int mRectangleSize = 10;
+    private int mRectangleSize = 10;
 
-	private Paint mPaint = new Paint();
-	private Paint mPaintWhite = new Paint();
-	private Paint mPaintGray = new Paint();
+    private Paint mPaint = new Paint();
+    private Paint mPaintWhite = new Paint();
+    private Paint mPaintGray = new Paint();
 
-	private int numRectanglesHorizontal;
-	private int numRectanglesVertical;
+    private int numRectanglesHorizontal;
+    private int numRectanglesVertical;
 
-	/**
-	 * Bitmap in which the pattern will be cached.
-	 */
-	private Bitmap mBitmap;
+    /**
+     * Bitmap in which the pattern will be cached.
+     */
+    private Bitmap mBitmap;
 
-	public AlphaPatternDrawable(Context context) {
-		float density = Util.getDisplayDensity(context);
-		mRectangleSize = (int)(5 * density);
-		mPaintWhite.setColor(0xffffffff);
-		mPaintGray.setColor(0xffcbcbcb);
-	}
+    public AlphaPatternDrawable(Context context) {
+        float density = Util.getDisplayDensity(context);
+        mRectangleSize = (int) (5 * density);
+        mPaintWhite.setColor(0xffffffff);
+        mPaintGray.setColor(0xffcbcbcb);
+    }
 
-	@Override
-	public void draw(Canvas canvas) {
-		if (mBitmap != null) {
-			canvas.drawBitmap(mBitmap, null, getBounds(), mPaint);
-		}
-	}
+    @Override
+    public void draw(Canvas canvas) {
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, null, getBounds(), mPaint);
+        }
+    }
 
-	@Override
-	public int getOpacity() {
-		return PixelFormat.OPAQUE;
-	}
+    @Override
+    public int getOpacity() {
+        return PixelFormat.OPAQUE;
+    }
 
-	@Override
-	public void setAlpha(int arg0) { /* not supported */ }
+    @Override
+    public void setAlpha(int arg0) { /* not supported */ }
 
-	@Override
-	public void setColorFilter(ColorFilter arg0) { /* not supported */ }
+    @Override
+    public void setColorFilter(ColorFilter arg0) { /* not supported */ }
 
-	@Override
-	protected void onBoundsChange(Rect bounds) {
-		super.onBoundsChange(bounds);
+    @Override
+    protected void onBoundsChange(Rect bounds) {
+        super.onBoundsChange(bounds);
 
-		int height = bounds.height();
-		int width = bounds.width();
+        int height = bounds.height();
+        int width = bounds.width();
 
-		numRectanglesHorizontal = (int) Math.ceil((width / mRectangleSize));
-		numRectanglesVertical = (int) Math.ceil(height / mRectangleSize);
+        numRectanglesHorizontal = (int) Math.ceil((width / mRectangleSize));
+        numRectanglesVertical = (int) Math.ceil(height / mRectangleSize);
 
-		generatePatternBitmap();
-	}
+        generatePatternBitmap();
+    }
 
-	/**
-	 * This will generate a bitmap with the pattern
-	 * as big as the rectangle we were allow to draw on.
-	 * We do this to cache the bitmap so we don't need to
-	 * recreate it each time draw() is called since it
-	 * takes a few milliseconds.
-	 */
-	private void generatePatternBitmap(){
+    /**
+     * This will generate a bitmap with the pattern
+     * as big as the rectangle we were allow to draw on.
+     * We do this to cache the bitmap so we don't need to
+     * recreate it each time draw() is called since it
+     * takes a few milliseconds.
+     */
+    private void generatePatternBitmap() {
 
-		if(getBounds().width()<= 0 || getBounds().height()<= 0) return;
-		
-		mBitmap = Util.allocateBitmap(getBounds().width(), getBounds().height());
-		if (mBitmap==null) return;
-		
-		Canvas canvas = new Canvas(mBitmap);
-		Rect r = new Rect();
-		boolean verticalStartWhite = true;
-		for (int i = 0; i <= numRectanglesVertical; i++) {
-			boolean isWhite = verticalStartWhite;
-			for (int j = 0; j <= numRectanglesHorizontal; j++) {
-				r.top = i * mRectangleSize;
-				r.left = j * mRectangleSize;
-				r.bottom = r.top + mRectangleSize;
-				r.right = r.left + mRectangleSize;
-				canvas.drawRect(r, isWhite ? mPaintWhite : mPaintGray);
-				isWhite = !isWhite;
-			}
-			verticalStartWhite = !verticalStartWhite;
-		}
+        if (getBounds().width() <= 0 || getBounds().height() <= 0) return;
 
-	}
+        mBitmap = Util.allocateBitmap(getBounds().width(), getBounds().height());
+        if (mBitmap == null) return;
 
-	/**
-	 * This will generate a bitmap with the pattern
-	 * as big as the rectangle we are allowed to draw on.
-	 * We do this to cache the bitmap so we don't need to
-	 * recreate it each time draw() is called since it
-	 * takes a few milliseconds.
-	 */
-	public Bitmap generatePatternBitmap(int w, int h){
-		if(w <= 0 || h <= 0) return null;
-		
-		Bitmap bitmap = Util.allocateBitmap(w, h);
-		if (bitmap==null) return null;
-		
-		Canvas canvas = new Canvas(bitmap);
+        Canvas canvas = new Canvas(mBitmap);
+        Rect r = new Rect();
+        boolean verticalStartWhite = true;
+        for (int i = 0; i <= numRectanglesVertical; i++) {
+            boolean isWhite = verticalStartWhite;
+            for (int j = 0; j <= numRectanglesHorizontal; j++) {
+                r.top = i * mRectangleSize;
+                r.left = j * mRectangleSize;
+                r.bottom = r.top + mRectangleSize;
+                r.right = r.left + mRectangleSize;
+                canvas.drawRect(r, isWhite ? mPaintWhite : mPaintGray);
+                isWhite = !isWhite;
+            }
+            verticalStartWhite = !verticalStartWhite;
+        }
 
-		int numRectanglesHorizontal = (int) Math.ceil((w / mRectangleSize));
-		int numRectanglesVertical = (int) Math.ceil(h / mRectangleSize);
+    }
 
-		Rect r = new Rect();
-		boolean verticalStartWhite = true;
-		for (int i = 0; i <= numRectanglesVertical; i++) {
+    /**
+     * This will generate a bitmap with the pattern
+     * as big as the rectangle we are allowed to draw on.
+     * We do this to cache the bitmap so we don't need to
+     * recreate it each time draw() is called since it
+     * takes a few milliseconds.
+     */
+    public Bitmap generatePatternBitmap(int w, int h) {
+        if (w <= 0 || h <= 0) return null;
 
-			boolean isWhite = verticalStartWhite;
-			for (int j = 0; j <= numRectanglesHorizontal; j++) {
+        Bitmap bitmap = Util.allocateBitmap(w, h);
+        if (bitmap == null) return null;
 
-				r.top = i * mRectangleSize;
-				r.left = j * mRectangleSize;
-				r.bottom = r.top + mRectangleSize;
-				r.right = r.left + mRectangleSize;
+        Canvas canvas = new Canvas(bitmap);
 
-				canvas.drawRect(r, isWhite ? mPaintWhite : mPaintGray);
+        int numRectanglesHorizontal = (int) Math.ceil((w / mRectangleSize));
+        int numRectanglesVertical = (int) Math.ceil(h / mRectangleSize);
 
-				isWhite = !isWhite;
-			}
+        Rect r = new Rect();
+        boolean verticalStartWhite = true;
+        for (int i = 0; i <= numRectanglesVertical; i++) {
 
-			verticalStartWhite = !verticalStartWhite;
+            boolean isWhite = verticalStartWhite;
+            for (int j = 0; j <= numRectanglesHorizontal; j++) {
 
-		}
-		
-		return bitmap;
-	}
+                r.top = i * mRectangleSize;
+                r.left = j * mRectangleSize;
+                r.bottom = r.top + mRectangleSize;
+                r.right = r.left + mRectangleSize;
+
+                canvas.drawRect(r, isWhite ? mPaintWhite : mPaintGray);
+
+                isWhite = !isWhite;
+            }
+
+            verticalStartWhite = !verticalStartWhite;
+
+        }
+
+        return bitmap;
+    }
 }
