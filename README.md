@@ -54,13 +54,21 @@ In code you would typically use methods to set and get the text content:
 ####**RTToolbar**
 is an interface for the toolbar used to apply text and paragraph formatting and other features listed above. The actual RTToolbar implementation is in a separate module and is a scrollable ribbon but alternative implementations aren't too hard to realize (popup, action buttons, floating buttons...). The toolbar implementation is easy to integrate into your layout:
 ```xml
-  <include layout="@layout/rte_toolbar" />
+  <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
 ```
 
  or if you want to have two ribbons for character and paragraph formatting:
 ```xml
-  <include layout="@layout/rte_toolbar_character" />
-  <include layout="@layout/rte_toolbar_paragraph" />
+    <LinearLayout
+        android:id="@+id/rte_toolbar_container"
+    	android:orientation="vertical"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content">
+
+    	<include layout="@layout/rte_toolbar_character" />
+    	<include layout="@layout/rte_toolbar_paragraph" />
+
+    </LinearLayout>
 ```
 
 In code you'd typically not interact with the toolbar (see RTManager below for the one exception).
@@ -75,6 +83,7 @@ RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this
 RTManager rtManager = new RTManager(rtApi, savedInstanceState);
 
 // register toolbar
+ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.rte_toolbar_container);
 HorizontalRTToolbar rtToolbar = (HorizontalRTToolbar) findViewById(R.id.rte_toolbar);
 if (rtToolbar != null) {
   rtManager.registerToolbar(toolbarContainer, rtToolbar);
