@@ -16,12 +16,6 @@
 
 package com.onegravity.rteditor;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,6 +59,12 @@ import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 import com.onegravity.rteditor.utils.Selection;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.greenrobot.event.EventBus;
 
@@ -306,7 +306,10 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      * Only after doing that can it be used in conjunction with a rich text editor.
      * Must be called from the ui thread.
      *
-     * @param toolbar The toolbar to register.
+     * @param toolbarContainer The ViewGroup containing the toolbar.
+     *                         This container is used to show/hide the toolbar if needed (e.g. if the RTEditText field loses/gains focus).
+     *                         We can't use the toolbar itself because there could be multiple and they could be embedded in a complex layout hierarchy.
+     * @param toolbar          The toolbar to register.
      */
     public void registerToolbar(ViewGroup toolbarContainer, RTToolbar toolbar) {
         mToolbars.put(toolbar.getId(), toolbar);
@@ -409,7 +412,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onClearFormatting() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
@@ -429,7 +432,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onUndo() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
