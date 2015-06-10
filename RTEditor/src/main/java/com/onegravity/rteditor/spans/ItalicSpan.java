@@ -29,12 +29,16 @@ public class ItalicSpan extends StyleSpan {
         super(Typeface.ITALIC);
     }
 
-    public ItalicSpan(int style) {
-        super(Typeface.ITALIC);
-    }
-
     public ItalicSpan(Parcel src) {
         super(src);
     }
 
+    public static boolean hasCompatibleType(Object span) {
+        if (!(span instanceof StyleSpan)) {
+            return false;
+        }
+
+        StyleSpan styleSpan = (StyleSpan) span;
+        return styleSpan.getStyle() == Typeface.ITALIC;
+    }
 }

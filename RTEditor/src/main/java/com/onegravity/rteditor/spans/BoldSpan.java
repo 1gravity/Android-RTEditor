@@ -29,12 +29,16 @@ public class BoldSpan extends StyleSpan {
         super(Typeface.BOLD);
     }
 
-    public BoldSpan(int style) {
-        super(Typeface.BOLD);
-    }
-
     public BoldSpan(Parcel src) {
         super(src);
     }
 
+    public static boolean hasCompatibleType(Object span) {
+        if (!(span instanceof StyleSpan)) {
+            return false;
+        }
+
+        StyleSpan styleSpan = (StyleSpan) span;
+        return styleSpan.getStyle() == Typeface.BOLD;
+    }
 }
