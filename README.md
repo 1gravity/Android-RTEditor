@@ -19,7 +19,7 @@ The editor offers the following <b>character formatting</b> options:
 * Text color
 * Background color
 
-It also includes the following <b>paragraph formatting</b> options:
+It also supports the following <b>paragraph formatting</b>:
 
 <ol><li>Numbered</li></ol>
 <ul>
@@ -108,4 +108,21 @@ The project consists of five different modules:
 * **MaterialDialog** a library based on this: https://github.com/afollestad/material-dialogs. The RTEditor uses a trimmed-down version because it only uses a subset of its functionality for the link dialog. You can easily remove this module and use the standard Android dialog instead.
 * **RTEditor**: the actual rich text editor (excluding the toolbar implementation).
 * **RTEditor-Toolbar**: the toolbar implementation.
-* **App Module**: the app module itself isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
+* **RTEditor-Demo**: this modile isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
+
+License
+-------
+
+Copyright 2015 Emanuel Moecklin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
