@@ -60,7 +60,7 @@ import com.onegravity.rteditor.utils.Selection;
  */
 public class ConverterSpannedToHtml {
 
-    private static final String BR = "<br>\n";
+    private static final String BR = "<br/>\n";
     private static final String LT = "&lt;";
     private static final String GT = "&gt;";
     private static final String AMP = "&amp;";
