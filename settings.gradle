@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include ':app', ':ColorPicker', ':MaterialDialog', ':RTEditor-Toolbar', ':RTEditor', ':'
+include ':RTEditor-Demo', ':ColorPicker', ':MaterialDialog', ':RTEditor-Toolbar', ':RTEditor', ':'
