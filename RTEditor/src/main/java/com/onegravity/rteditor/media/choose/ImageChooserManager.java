@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 Emanuel Moecklin
+ * Copyright (C) 2015 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,8 +15,6 @@
  */
 
 package com.onegravity.rteditor.media.choose;
-
-import java.io.File;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -36,6 +34,8 @@ import com.onegravity.rteditor.media.MonitoredActivity;
 import com.onegravity.rteditor.media.choose.processor.ImageProcessor;
 import com.onegravity.rteditor.media.choose.processor.ImageProcessor.ImageProcessorListener;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
+
+import java.io.File;
 
 class ImageChooserManager extends MediaChooserManager implements ImageProcessorListener {
 

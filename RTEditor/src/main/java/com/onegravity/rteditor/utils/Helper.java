@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 Emanuel Moecklin
+ * Copyright (C) 2015 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,6 @@
 
 package com.onegravity.rteditor.utils;
 
-import java.io.Closeable;
-
-import org.apache.commons.io.IOUtils;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
@@ -27,6 +23,10 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.onegravity.rteditor.api.RTApi;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.Closeable;
 
 /**
  * Miscellaneous helper methods
