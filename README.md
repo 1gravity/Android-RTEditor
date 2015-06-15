@@ -108,7 +108,22 @@ The project consists of five different modules:
 * **MaterialDialog** a library based on this: https://github.com/afollestad/material-dialogs. The RTEditor uses a trimmed-down version because it only uses a subset of its functionality for the link dialog. You can easily remove this module and use the standard Android dialog instead.
 * **RTEditor**: the actual rich text editor (excluding the toolbar implementation).
 * **RTEditor-Toolbar**: the toolbar implementation.
-* **RTEditor-Demo**: this modile isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
+* **RTEditor-Demo**: this module isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
+
+Issues
+------
+
+If you see any issues with this libary please open a issue and provide enough information to reproduce the issue reliably. The following information needs to be provided or the issue will be closed without any further notice:
+
+* Which version of the SDK are you using?
+* Which Android build are you using? (e.g. MPZ44Q)
+* What device are you using?
+* What steps will reproduce the problem? (Please provide the minimal reproducible test case.)
+* What is the expected output?
+* What do you see instead?
+* Relevant logcat output.
+* Optional: Link to any screenshot(s) that demonstrate the issue (shared privately in Drive.)
+* Optional: Link to your APK (either downloadable in Drive or in the Play Store.)
 
 License
 -------
