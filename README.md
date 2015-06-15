@@ -113,7 +113,7 @@ The project consists of five different modules:
 Issues
 ------
 
-If you see any issues with this libary please open a issue and provide enough information to reproduce the issue reliably. The following information needs to be provided or the issue will be closed without any further notice:
+If you have an issues with this library, please open a issue here: https://github.com/1gravity/Android-RTEditor/issues and provide enough information to reproduce it reliably. The following information needs to be provided or the issue will be closed without any further notice:
 
 * Which version of the SDK are you using?
 * Which Android build are you using? (e.g. MPZ44Q)
