@@ -29,13 +29,6 @@ import com.onegravity.rteditor.effects.Effects;
 
 /**
  * RTText representing rich text in android.text.Spanned format.
- * <p>
- * Use this class if the source text is immutable and RTEditable if the source
- * text is mutable (from an RTEditText).
- */
-
-/**
- * RTText representing rich text in android.text.Spanned format.
  *
  * Use this class if the source text is an RTEditText.
  * This allows to pre-process the text before converting it (e.g. to eliminate
