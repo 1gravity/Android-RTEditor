@@ -18,6 +18,7 @@ package com.onegravity.rteditor;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.SpanWatcher;
@@ -129,9 +130,9 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     private boolean mIgnoreTextChange;
 
     private int mSelStartBefore;        // selection start before text changed
-    private int mSelEndBefore;            // selection end before text changed
+    private int mSelEndBefore;          // selection end before text changed
     private String mOldText;            // old text before it changed
-    private String mNewText;            // new text text after it changed (needed in afterTextChanged to see if the text has changed)
+    private String mNewText;            // new text after it changed (needed in afterTextChanged to see if the text has changed)
     private Spannable mOldSpannable;    // undo/redo
 
     // we need to keep track of the media for this editor to be able to clean up after we're done
@@ -517,9 +518,70 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     @Override
     public Parcelable onSaveInstanceState() {
         mIsSaving = true;
-        Parcelable result = super.onSaveInstanceState();
+
+        Parcelable superState = super.onSaveInstanceState();
+        String content = getText(mUseRTFormatting ? RTFormat.HTML : RTFormat.PLAIN_TEXT);
+        SavedState savedState = new SavedState(superState, mUseRTFormatting, content);
+
         mIsSaving = false;
-        return result;
+        return savedState;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if(state instanceof SavedState) {
+            SavedState savedState = (SavedState)state;
+            super.onRestoreInstanceState(savedState.getSuperState());
+            setRichTextEditing(savedState.useRTFormatting(), savedState.getContent());
+        }
+        else {
+            super.onRestoreInstanceState(state);
+        }
+    }
+
+    private static class SavedState extends BaseSavedState {
+        private String mContent;
+        private boolean mUseRTFormatting;
+
+        SavedState(Parcelable superState, boolean useRTFormatting, String content) {
+            super(superState);
+
+            mUseRTFormatting = useRTFormatting;
+            mContent = content;
+        }
+
+        private String getContent() {
+            return mContent;
+        }
+
+        private boolean useRTFormatting() {
+            return mUseRTFormatting;
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+
+            mUseRTFormatting = in.readInt() == 1;
+            mContent = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+
+            out.writeInt(mUseRTFormatting ? 1 : 0);
+            out.writeString(mContent);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 
     @Override

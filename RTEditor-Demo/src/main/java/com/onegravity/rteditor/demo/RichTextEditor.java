@@ -55,19 +55,13 @@ public class RichTextEditor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // read extras
         String subject = "";
-        String message = "";
-        String signature = "";
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             subject = getStringExtra(intent, "subject");
-            message = getStringExtra(intent, "message");
-            signature = getStringExtra(intent, "signature");
             mUseDarkTheme = intent.getBooleanExtra("mUseDarkTheme", false);
             mSplitToolbar = intent.getBooleanExtra("mSplitToolbar", false);
         } else {
             subject = savedInstanceState.getString("subject", "");
-            message = savedInstanceState.getString("message", "");
-            signature = savedInstanceState.getString("signature", "");
             mUseDarkTheme = savedInstanceState.getBoolean("mUseDarkTheme", false);
             mSplitToolbar = savedInstanceState.getBoolean("mSplitToolbar", false);
         }
@@ -111,13 +105,12 @@ public class RichTextEditor extends AppCompatActivity {
         // register editor 1
         mRTMessageField = (RTEditText) findViewById(R.id.rtEditText_1);
         mRTManager.registerEditor(mRTMessageField, true);
-        mRTMessageField.setRichTextEditing(true, message);
-        mRTMessageField.requestFocus();
 
         // register editor 2
         mRTSignatureField = (RTEditText) findViewById(R.id.rtEditText_2);
         mRTManager.registerEditor(mRTSignatureField, true);
-        mRTSignatureField.setRichTextEditing(true, signature);
+
+        mRTMessageField.requestFocus();
     }
 
     private String getStringExtra(Intent intent, String key) {
@@ -141,12 +134,6 @@ public class RichTextEditor extends AppCompatActivity {
 
         String subject = mSubjectField.getText().toString();
         if (subject != null) outState.putString("subject", subject);
-
-        String message = mRTMessageField.getText(RTFormat.HTML);
-        if (message != null) outState.putString("message", message);
-
-        String signature = mRTSignatureField.getText(RTFormat.HTML);
-        if (signature != null) outState.putString("signature", signature);
 
         outState.putBoolean("mUseDarkTheme", mUseDarkTheme);
         outState.putBoolean("mSplitToolbar", mSplitToolbar);
