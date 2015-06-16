@@ -290,9 +290,9 @@ public class ConverterSpannedToHtml {
      * @return True if the text between the tags should be converted too, False if it should be skipped (ImageSpan e.g.)
      */
     private boolean handleStartTag(CharacterStyle style) {
-        if (style instanceof BoldSpan) {
+        if (BoldSpan.hasCompatibleType(style)) {
             mOut.append("<b>");
-        } else if (style instanceof ItalicSpan) {
+        } else if (ItalicSpan.hasCompatibleType(style)) {
             mOut.append("<i>");
         } else if (style instanceof UnderlineSpan) {
             mOut.append("<u>");
@@ -382,9 +382,9 @@ public class ConverterSpannedToHtml {
             mOut.append("</sup>");
         } else if (style instanceof UnderlineSpan) {
             mOut.append("</u>");
-        } else if (style instanceof BoldSpan) {
+        } else if (BoldSpan.hasCompatibleType(style)) {
             mOut.append("</b>");
-        } else if (style instanceof ItalicSpan) {
+        } else if (ItalicSpan.hasCompatibleType(style)) {
             mOut.append("</i>");
         }
     }
