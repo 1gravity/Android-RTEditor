@@ -106,14 +106,14 @@ public class RichTextEditor extends AppCompatActivity {
         mSubjectField = (EditText) findViewById(R.id.subject);
         mSubjectField.setText(subject);
 
-        // register editor 1
+        // register message editor
         mRTMessageField = (RTEditText) findViewById(R.id.rtEditText_1);
         mRTManager.registerEditor(mRTMessageField, true);
         if (message != null) {
             mRTMessageField.setRichTextEditing(true, message);
         }
 
-        // register editor 2
+        // register signature editor
         mRTSignatureField = (RTEditText) findViewById(R.id.rtEditText_2);
         mRTManager.registerEditor(mRTSignatureField, true);
         if (signature != null) {
@@ -132,7 +132,7 @@ public class RichTextEditor extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         if (mRTManager != null) {
-            mRTManager.onDestroy(false);
+            mRTManager.onDestroy(true);
         }
     }
 

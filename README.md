@@ -120,6 +120,9 @@ public void onDestroy() {
 
 ```
 
+The isSaved parameter passed into RTManager.onDestroy(boolean) is important. If it's true then media files inserted into the text (images at the moment) will remain untouched.
+If the parameter is false (text content is dismissed), media files will be deleted. Note that the rich text editor copies the original file to a dedicated area according to the MediaFactory configuration, meaning the original will remain untouched.
+
 Demo project
 ------------
 
