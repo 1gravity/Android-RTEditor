@@ -97,7 +97,27 @@ rtEditText.setRichTextEditing(true, message);
 
 To retrieve the edited text in html format you'd do:
 ```
-   String text = rtEditText.getText(RTFormat.HTML);
+String text = rtEditText.getText(RTFormat.HTML);
+```
+
+The RTManager also needs to be called in onSaveInstanceState and in onDestroy:
+```
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    mRTManager.onSaveInstanceState(outState);
+
+    outState.putBoolean("mUseDarkTheme", mUseDarkTheme);
+    outState.putBoolean("mSplitToolbar", mSplitToolbar);
+}
+
+@Override
+public void onDestroy() {
+    super.onDestroy();
+    mRTManager.onDestroy(isFinishing());
+}
+
 ```
 
 Demo project
