@@ -55,9 +55,13 @@ public class RichTextEditor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // read extras
         String subject = "";
+        String message = null;
+        String signature = null;
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             subject = getStringExtra(intent, "subject");
+            message = getStringExtra(intent, "message");
+            signature = getStringExtra(intent, "signature");
             mUseDarkTheme = intent.getBooleanExtra("mUseDarkTheme", false);
             mSplitToolbar = intent.getBooleanExtra("mSplitToolbar", false);
         } else {
@@ -105,10 +109,16 @@ public class RichTextEditor extends AppCompatActivity {
         // register editor 1
         mRTMessageField = (RTEditText) findViewById(R.id.rtEditText_1);
         mRTManager.registerEditor(mRTMessageField, true);
+        if (message != null) {
+            mRTMessageField.setRichTextEditing(true, message);
+        }
 
         // register editor 2
         mRTSignatureField = (RTEditText) findViewById(R.id.rtEditText_2);
         mRTManager.registerEditor(mRTSignatureField, true);
+        if (signature != null) {
+            mRTSignatureField.setRichTextEditing(true, signature);
+        }
 
         mRTMessageField.requestFocus();
     }
