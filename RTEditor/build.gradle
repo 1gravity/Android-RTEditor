@@ -23,8 +23,6 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
     }
 
     buildTypes {
@@ -37,7 +35,6 @@ android {
 
 dependencies {
     compile project(':ColorPicker')
-
-    // jar files in the libs folder
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'commons-io:commons-io:2.4'
+    compile 'commons-validator:commons-validator:1.4.1@jar'
 }
