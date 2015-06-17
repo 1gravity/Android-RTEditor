@@ -15,34 +15,35 @@
   limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-		android:id="@+id/rotate_left"
-		android:icon="?attr/rte_icMenuRotateLeft"
-        android:showAsAction="always"
+        android:id="@+id/rotate_left"
+        android:icon="?attr/rte_icMenuRotateLeft"
+        app:showAsAction="always"
         android:orderInCategory="1"
         android:alphabeticShortcut="l"/>
-    
+
     <item
-		android:id="@+id/rotate_right"
-		android:icon="?attr/rte_icMenuRotateRight"
-        android:showAsAction="always"
+        android:id="@+id/rotate_right"
+        android:icon="?attr/rte_icMenuRotateRight"
+        app:showAsAction="always"
         android:orderInCategory="2"
         android:alphabeticShortcut="r"/>
-    
+
     <item
 		android:id="@+id/save"
 		android:icon="?attr/rte_icMenuSave"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:orderInCategory="3"
         android:alphabeticShortcut="s"/>
     
     <item
 		android:id="@+id/cancel"
 		android:icon="?attr/rte_icMenuCloseClearCancel"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:orderInCategory="4"
         android:alphabeticShortcut="q"/>
-    
+
 </menu>

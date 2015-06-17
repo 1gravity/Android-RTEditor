@@ -20,10 +20,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class MonitoredActivity extends Activity {
+public class MonitoredActivity extends AppCompatActivity {
 
     protected Handler mHandler;
 
