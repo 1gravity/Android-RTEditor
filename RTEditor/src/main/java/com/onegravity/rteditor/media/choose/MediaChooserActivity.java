@@ -52,9 +52,10 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
     private RTMedia mSelectedMedia;
 
+    private static boolean mWorkInProgress;
+
     // ****************************************** Lifecycle Methods *******************************************
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,6 @@ public class MediaChooserActivity extends MonitoredActivity implements
                 mSelectedMedia = (RTMedia) savedInstanceState.getSerializable("mSelectedMedia");
             }
 
-            // dispatch the work to be done
             switch (mMediaAction) {
 
                 case PICK_PICTURE:
@@ -93,8 +93,11 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
             if (mMediaChooserMgr == null) {
                 finish();
-            } else if (!mMediaChooserMgr.chooseMedia()) {
-                finish();
+            } else if (!isWorkInProgress()) {
+                setWorkInProgress(true);
+                if (!mMediaChooserMgr.chooseMedia()) {
+                    finish();
+                }
             }
         } else {
             finish();
@@ -106,6 +109,20 @@ public class MediaChooserActivity extends MonitoredActivity implements
         if (mSelectedMedia != null) {
             outState.putSerializable("mSelectedMedia", mSelectedMedia);
         }
+    }
+
+    private void setWorkInProgress(boolean value) {
+        mWorkInProgress = value;
+    }
+
+    private boolean isWorkInProgress() {
+        return mWorkInProgress;
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        setWorkInProgress(false);
     }
 
     // ****************************************** Listener Methods *******************************************
@@ -135,51 +152,59 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
     @Override
     /* ImageChooserListener */
-    public void onImageChosen(RTImage image) {
+    public void onImageChosen(final RTImage image) {
         mSelectedMedia = image;
 
-        if (mMediaAction == MediaAction.CAPTURE_PICTURE) {
-            String filePath = image.getFilePath(RTFormat.SPANNED);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mMediaAction == MediaAction.CAPTURE_PICTURE) {
+                    String filePath = image.getFilePath(RTFormat.SPANNED);
 
-            Intent intent = new Intent(this, CropImageActivity.class)
+                    Intent intent = new Intent(MediaChooserActivity.this, CropImageActivity.class)
 
-                    // tell CropImage activity to look for image to crop
-                    .putExtra(CropImageActivity.IMAGE_SOURCE_FILE, filePath)
-                    .putExtra(CropImageActivity.IMAGE_DESTINATION_FILE, filePath)
+                            // tell CropImage activity to look for image to crop
+                            .putExtra(CropImageActivity.IMAGE_SOURCE_FILE, filePath)
+                            .putExtra(CropImageActivity.IMAGE_DESTINATION_FILE, filePath)
 
-                            // allow CropImage activity to re-scale image
-                    .putExtra(CropImageActivity.SCALE, true)
-                    .putExtra(CropImageActivity.SCALE_UP_IF_NEEDED, false)
+                                    // allow CropImage activity to re-scale image
+                            .putExtra(CropImageActivity.SCALE, true)
+                            .putExtra(CropImageActivity.SCALE_UP_IF_NEEDED, false)
 
-                            // no fixed aspect ratio
-                    .putExtra(CropImageActivity.ASPECT_X, 0)
-                    .putExtra(CropImageActivity.ASPECT_Y, 0);
+                                    // no fixed aspect ratio
+                            .putExtra(CropImageActivity.ASPECT_X, 0)
+                            .putExtra(CropImageActivity.ASPECT_Y, 0);
 
-            // start activity CropImageActivity
-            startActivityForResult(intent, Constants.CROP_IMAGE);
-        } else {
-            Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-            setResult(RESULT_OK, resultIntent);
-            finish();
-        }
+                    // start activity CropImageActivity
+                    startActivityForResult(intent, Constants.CROP_IMAGE);
+                } else {
+                    Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
+            }
+        });
     }
 
     @Override
 	/* AudioChooserListener */
     public void onAudioChosen(RTAudio audio) {
         mSelectedMedia = audio;
+        setWorkInProgress(false);
     }
 
     @Override
 	/* VideoChooserListener */
     public void onVideoChosen(RTVideo video) {
         mSelectedMedia = video;
+        setWorkInProgress(false);
     }
 
     @Override
 	/* MediaChooserListener */
     public void onError(String reason) {
         Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
+        setWorkInProgress(false);
     }
 
 }
