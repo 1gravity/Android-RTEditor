@@ -133,6 +133,8 @@ The project consists of five different modules:
 * **RTEditor-Toolbar**: the toolbar implementation.
 * **RTEditor-Demo**: this module isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
 
+The demo app can also be found on Google Play: [Demo App](https://play.google.com/store/apps/details?id=com.onegravity.rteditor.demo)
+
 Issues
 ------
 
