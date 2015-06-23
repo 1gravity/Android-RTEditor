@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.lang.ref.SoftReference;
@@ -130,7 +132,15 @@ public class LinkFragment extends DialogFragment {
         // set field values
         Bundle args = getArguments();
         final String urlArg = args.getString("url");
-        final String url = urlArg == null || urlArg.length() == 0 ? "http://" : urlArg;
+
+        String tmp = "http://";
+        if (urlArg != null && ! urlArg.isEmpty()) {
+            try {
+                tmp = URIUtil.decode(urlArg);
+            } catch (URIException ignore) {}
+        }
+        final String url = tmp;
+
         final TextView urlView = ((TextView) view.findViewById(R.id.linkURL));
         if (url != null) {
             urlView.setText(url);
@@ -153,6 +163,9 @@ public class LinkFragment extends DialogFragment {
                     public void onPositive(MaterialDialog dialog) {
                         // OK button
                         String newUrl = urlView.getText().toString().trim();
+                        try {
+                            newUrl = URIUtil.encodeQuery(newUrl);
+                        } catch (URIException ignore) {}
                         if (!requiredFieldValid(urlView) || !sValidator.isValid(newUrl)) {
                             String errorMessage = getString(R.string.rte_invalid_link, newUrl);
                             urlView.setError(errorMessage);
