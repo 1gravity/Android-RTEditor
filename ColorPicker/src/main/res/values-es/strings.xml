@@ -16,6 +16,6 @@
   limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="color_picker_wheel">HSV Roda de Cores</string>
+  <string name="color_picker_wheel">HSV Rueda de Color</string>
   <string name="color_picker_exact">Valor ARGB</string>
 </resources>
