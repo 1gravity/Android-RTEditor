@@ -47,6 +47,7 @@
         <item name="rte_icToolbarDecIntent">@drawable/selector_ic_toolbar_dec_indent_light</item>
         <item name="rte_icToolbarBullet">@drawable/selector_ic_toolbar_bullet_light</item>
         <item name="rte_icToolbarNumber">@drawable/selector_ic_toolbar_number_light</item>
+        <item name="rte_icToolbarFont">@drawable/selector_ic_toolbar_font_light</item>
         <item name="rte_icToolbarFontSize">@drawable/selector_ic_toolbar_fontsize_light</item>
         <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_light</item>
         <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_light</item>
@@ -93,6 +94,7 @@
         <item name="rte_icToolbarDecIntent">@drawable/selector_ic_toolbar_dec_indent_dark</item>
         <item name="rte_icToolbarBullet">@drawable/selector_ic_toolbar_bullet_dark</item>
         <item name="rte_icToolbarNumber">@drawable/selector_ic_toolbar_number_dark</item>
+        <item name="rte_icToolbarFont">@drawable/selector_ic_toolbar_font_dark</item>
         <item name="rte_icToolbarFontSize">@drawable/selector_ic_toolbar_fontsize_dark</item>
         <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_dark</item>
         <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_dark</item>

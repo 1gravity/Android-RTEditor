@@ -36,6 +36,7 @@
         <attr name="rte_icToolbarDecIntent" format="reference" />
         <attr name="rte_icToolbarBullet" format="reference" />
         <attr name="rte_icToolbarNumber" format="reference" />
+        <attr name="rte_icToolbarFont" format="reference" />
         <attr name="rte_icToolbarFontSize" format="reference" />
         <attr name="rte_icToolbarFontColor" format="reference" />
         <attr name="rte_icToolbarBGColor" format="reference" />
