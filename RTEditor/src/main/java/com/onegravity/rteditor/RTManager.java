@@ -52,7 +52,9 @@ import com.onegravity.rteditor.effects.NumberEffect;
 import com.onegravity.rteditor.effects.StrikethroughEffect;
 import com.onegravity.rteditor.effects.SubscriptEffect;
 import com.onegravity.rteditor.effects.SuperscriptEffect;
+import com.onegravity.rteditor.effects.TypefaceEffect;
 import com.onegravity.rteditor.effects.UnderlineEffect;
+import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
@@ -602,6 +604,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         boolean isBullet = false;
         boolean isNumber = false;
         List<Alignment> alignments = null;
+        List<RTTypeface> typefaces = null;
         List<Integer> sizes = null;
         List<Integer> fontColors = null;
         List<Integer> bgColors = null;
@@ -628,6 +631,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                     isNumber = true;
                 } else if (effect instanceof AlignmentEffect) {
                     alignments = Effects.ALIGNMENT.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } else if (effect instanceof TypefaceEffect) {
+                    typefaces = Effects.TYPEFACE.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else if (effect instanceof AbsoluteSizeEffect) {
                     sizes = Effects.FONTSIZE.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else if (effect instanceof ForegroundColorEffect) {
@@ -654,6 +659,14 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 toolbar.setAlignment(Layout.Alignment.ALIGN_NORMAL);
             } else {
                 toolbar.setAlignments(alignments);
+            }
+
+            // fonts
+            if (typefaces != null && typefaces.size() == 1) {
+                toolbar.setFont(typefaces.get(0));
+            }
+            else {
+                toolbar.setFont(null);
             }
 
             // text size

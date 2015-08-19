@@ -16,10 +16,6 @@
 
 package com.onegravity.rteditor.toolbar;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -38,14 +34,22 @@ import com.larswerkman.holocolorpicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.SetColorChangedListenerEvent;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.effects.Effects;
+import com.onegravity.rteditor.fonts.FontManager;
+import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.toolbar.spinner.BGColorSpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.ColorSpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.FontColorSpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.FontSizeSpinnerItem;
+import com.onegravity.rteditor.toolbar.spinner.FontSpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.SpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.SpinnerItemAdapter;
 import com.onegravity.rteditor.toolbar.spinner.SpinnerItems;
 import com.onegravity.rteditor.utils.Helper;
+
+import java.util.List;
+import java.util.SortedSet;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import de.greenrobot.event.EventBus;
 
@@ -90,6 +94,9 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     /*
      * The Spinners and their SpinnerAdapters
      */
+    private Spinner mFont;
+    private SpinnerItemAdapter<FontSpinnerItem> mFontAdapter;
+
     private Spinner mFontSize;
     private SpinnerItemAdapter<FontSizeSpinnerItem> mFontSizeAdapter;
 
@@ -130,6 +137,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
 
     @Override
     protected void onFinishInflate() {
+        super.onFinishInflate();
         // configure regular action buttons
         mBold = initImageButton(R.id.toolbar_bold);
         mItalic = initImageButton(R.id.toolbar_italic);
@@ -161,6 +169,13 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             if (imageCapture != null) imageCapture.setVisibility(View.GONE);
         }
 
+        // configure font button
+        mFont = (Spinner) findViewById(R.id.toolbar_font);
+        mFontAdapter = createDropDownNav(mFont,
+                R.layout.rte_toolbar_font_spinner,
+                R.layout.rte_toolbar_spinner_item,
+                getFontItems(), mFontListener);
+
         // configure font size button
         mFontSize = (Spinner) findViewById(R.id.toolbar_fontsize);
         mFontSizeAdapter = createDropDownNav(mFontSize,
@@ -191,7 +206,26 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         return button;
     }
 
-    private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
+    private SpinnerItems<FontSpinnerItem> getFontItems() {
+        /*
+         * Retrieve the fonts.
+         */
+        Resources res = getResources();
+        SortedSet<RTTypeface> fonts = FontManager.getFonts(res);
+
+        /*
+         * Create the spinner items
+         */
+        SpinnerItems<FontSpinnerItem> spinnerItems = new SpinnerItems<FontSpinnerItem>();
+        spinnerItems.add(new FontSpinnerItem(null));        // empty element
+        for (RTTypeface typeface : fonts) {
+            spinnerItems.add(new FontSpinnerItem(typeface));
+        }
+
+        return spinnerItems;
+    }
+
+        private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
         SpinnerItems<FontSizeSpinnerItem> spinnerItems = new SpinnerItems<FontSizeSpinnerItem>();
         Resources res = getResources();
 
@@ -388,10 +422,28 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             mAlignRight.setChecked(alignments.contains(Layout.Alignment.ALIGN_OPPOSITE));
     }
 
+    @Override
+    public void setFont(RTTypeface typeface) {
+        if (typeface != null) {
+            for (int pos = 0; pos < mFontAdapter.getCount(); pos++) {
+                FontSpinnerItem item = mFontAdapter.getItem(pos);
+                if (typeface.equals(item.getTypeface())) {
+                    mFontAdapter.setSelectedItem(pos);
+                    mFont.setSelection(pos);
+                    break;
+                }
+            }
+        }
+        else {
+            mFontAdapter.setSelectedItem(0);
+            mFont.setSelection(0);
+        }
+    }
+
     /**
      * Set the text size.
      *
-     * @param pxSize the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
+     * @param size the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
      */
     @Override
     public void setFontSize(int size) {
@@ -458,6 +510,14 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     interface DropDownNavListener<T extends SpinnerItem> {
         void onItemSelected(T spinnerItem, int position);
     }
+
+    private DropDownNavListener<FontSpinnerItem> mFontListener = new DropDownNavListener<FontSpinnerItem>() {
+        @Override
+        public void onItemSelected(FontSpinnerItem spinnerItem, int position) {
+            RTTypeface typeface = spinnerItem.getTypeface();
+            mListener.onEffectSelected(Effects.TYPEFACE, typeface);
+        }
+    };
 
     private DropDownNavListener<FontSizeSpinnerItem> mFontSizeListener = new DropDownNavListener<FontSizeSpinnerItem>() {
         @Override

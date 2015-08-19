@@ -30,7 +30,6 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
-import android.text.style.TypefaceSpan;
 import android.text.style.UnderlineSpan;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
@@ -43,8 +42,11 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.HTMLSchema;
 import com.onegravity.rteditor.converter.tagsoup.Parser;
 import com.onegravity.rteditor.effects.LeadingMarginEffect;
+import com.onegravity.rteditor.fonts.FontManager;
+import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
+import com.onegravity.rteditor.spans.FontSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.IntendationSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
@@ -348,8 +350,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         } else if (tag.equalsIgnoreCase("blockquote")) {
             handleP();
             end(Blockquote.class, new QuoteSpan());
-        } else if (tag.equalsIgnoreCase("tt")) {
-            end(Monospace.class, new TypefaceSpan("monospace"));
         } else if (tag.equalsIgnoreCase("a")) {
             endAHref();
         } else if (tag.equalsIgnoreCase("u")) {
@@ -623,6 +623,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         int size = Integer.MIN_VALUE;
         String fgColor = null;
         String bgColor = null;
+        String fontName = null;
 
         String style = attributes.getValue("", "style");
         if (style != null) {
@@ -655,8 +656,14 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             }
         }
 
+        fontName = attributes.getValue("", "face");
+
         int len = mResult.length();
-        Font font = new Font().setSize(size).setFGColor(fgColor).setBGColor(bgColor);
+        Font font = new Font()
+                .setSize(size)
+                .setFGColor(fgColor)
+                .setBGColor(bgColor)
+                .setFontFace(fontName);
         mResult.setSpan(font, len, len, Spanned.SPAN_MARK_MARK);
     }
 
@@ -669,6 +676,14 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
         if (where != len) {
             Font font = (Font) obj;
+
+            // font type face
+            if (font.hasFontFace()) {
+                // Note: use SPAN_EXCLUSIVE_EXCLUSIVE, the TemporarySpan will be replaced by a SPAN_EXCLUSIVE_INCLUSIVE span
+                RTTypeface typeface = FontManager.getTypeface(font.mFontFace);
+                TemporarySpan span = new TemporarySpan(new FontSpan(typeface));
+                mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
 
             // text size
             if (font.hasSize()) {
@@ -696,13 +711,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
                     TemporarySpan span = new TemporarySpan(new BackgroundColorSpan(c | 0xFF000000));
                     mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
-            }
-
-            // font type face (unused)
-            if (font.hasFace()) {
-                // Note: use SPAN_EXCLUSIVE_EXCLUSIVE, the TemporarySpan will be replaced by a SPAN_EXCLUSIVE_INCLUSIVE span
-                TemporarySpan span = new TemporarySpan(new TypefaceSpan(font.mFace));
-                mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
@@ -836,7 +844,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         int mSize = Integer.MIN_VALUE;
         String mFGColor;
         String mBGColor;
-        String mFace;
+        String mFontFace;
 
         Font setSize(int size) {
             mSize = size;
@@ -853,10 +861,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             return this;
         }
         
-        /*private Font setFace(String face) {
-            mFace = face;
+        private Font setFontFace(String fontFace) {
+            mFontFace = fontFace;
             return this;
-        }*/
+        }
 
         boolean hasSize() {
             return mSize > 0;
@@ -870,8 +878,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             return !TextUtils.isEmpty(mBGColor);
         }
 
-        boolean hasFace() {
-            return !TextUtils.isEmpty(mFace);
+        boolean hasFontFace() {
+            return !TextUtils.isEmpty(mFontFace);
         }
     }
 

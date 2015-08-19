@@ -16,12 +16,13 @@
 
 package com.onegravity.rteditor;
 
-import java.util.List;
-
 import android.text.Layout;
 import android.view.ViewGroup;
 
 import com.onegravity.rteditor.effects.Effect;
+import com.onegravity.rteditor.fonts.RTTypeface;
+
+import java.util.List;
 
 /**
  * An interface describing a rich text toolbar.
@@ -106,10 +107,12 @@ public interface RTToolbar {
 
     public void setAlignments(List<Layout.Alignment> alignments);
 
+    public void setFont(RTTypeface typeface);
+
     /**
      * Set the text size.
      *
-     * @param pxSize the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
+     * @param size the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
      */
     public void setFontSize(int size);
 

@@ -25,7 +25,6 @@ import android.text.style.ParagraphStyle;
 import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
-import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
@@ -34,8 +33,10 @@ import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
+import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
+import com.onegravity.rteditor.spans.FontSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
@@ -300,18 +301,19 @@ public class ConverterSpannedToHtml {
             mOut.append("<sup>");
         } else if (style instanceof SubscriptSpan) {
             mOut.append("<sub>");
-        } else if (style instanceof TypefaceSpan) {
-            String s = ((TypefaceSpan) style).getFamily();
-            if (s.equals("monospace")) {
-                mOut.append("<tt>");
-            }
         } else if (style instanceof StrikethroughSpan) {
             mOut.append("<strike>");
         }
 	    /* Examples for fonts styles:
-	       <font style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-		   <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font> */
-        else if (style instanceof AbsoluteSizeSpan) {
+	       <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
+		   <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+		*/
+        else if (style instanceof FontSpan) {
+            mOut.append("<font face=\"");
+            String fontName = ((FontSpan)style).getTypeface().getName();
+            mOut.append(StringEscapeUtils.escapeHtml4(fontName));
+            mOut.append("\">");
+        } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("<font style=\"font-size:");
             int size = ((AbsoluteSizeSpan) style).getSize();
             size = Helper.convertSpToPx(size);
@@ -363,11 +365,8 @@ public class ConverterSpannedToHtml {
     private void handleEndTag(CharacterStyle style) {
         if (style instanceof URLSpan) {
             mOut.append("</a>");
-        } else if (style instanceof TypefaceSpan) {
-            String s = ((TypefaceSpan) style).getFamily();
-            if (s.equals("monospace")) {
-                mOut.append("</tt>");
-            }
+        } else if (style instanceof FontSpan) {
+            mOut.append("</font>");
         } else if (style instanceof ForegroundColorSpan) {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {

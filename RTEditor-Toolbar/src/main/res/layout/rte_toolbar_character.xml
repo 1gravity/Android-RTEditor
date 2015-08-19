@@ -61,12 +61,17 @@
             android:background="?attr/rte_icToolbarSubscript" />
 
 		<include layout="@layout/rte_toolbar_divider"/>
-        
+
+        <Spinner
+            android:id="@+id/toolbar_font"
+            style="?attr/rte_ToolbarSpinner"
+            android:background="?attr/rte_icToolbarFont" />
+
         <Spinner
             android:id="@+id/toolbar_fontsize"
             style="?attr/rte_ToolbarSpinner"
             android:background="?attr/rte_icToolbarFontSize" />
-		
+
         <Spinner
             android:id="@+id/toolbar_fontcolor"
             style="?attr/rte_ToolbarSpinner"
