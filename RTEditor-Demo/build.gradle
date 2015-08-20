@@ -38,6 +38,41 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+
+    task indexAssets {
+        description 'Index Build Variant assets for faster lookup by AssetManager'
+
+        ext.assetsSrcDir = file( "${projectDir}/src/main/assets" )
+
+        inputs.dir assetsSrcDir
+
+        doLast {
+            android.applicationVariants.each { target ->
+                // create index
+                def contents = ""
+                def tree = fileTree(dir: "${ext.assetsSrcDir}", include: ['**/*.ttf'], exclude: ['**/.svn/**', '*.index'])
+                // use this instead if you have assets folders in each flavor:
+                // def tree = fileTree(dir: "${ext.variantPath}", exclude: ['**/.svn/**', '*.index'])
+                tree.visit { fileDetails ->
+                    contents += "${fileDetails.relativePath}" + "\n"
+                }
+
+                // create index file
+                def assetIndexFile = new File("${ext.assetsSrcDir}/assets.index")
+                assetIndexFile.write contents
+            }
+        }
+    }
+
+    indexAssets.dependsOn {
+        tasks.matching { task -> task.name.startsWith( 'merge' ) && task.name.endsWith( 'Assets' ) }
+    }
+
+    tasks.withType( JavaCompile ) {
+        compileTask -> compileTask.dependsOn indexAssets
+    }
+
+    indexAssets
 }
 
 dependencies {

@@ -210,8 +210,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         /*
          * Retrieve the fonts.
          */
-        Resources res = getResources();
-        SortedSet<RTTypeface> fonts = FontManager.getFonts(res);
+        SortedSet<RTTypeface> fonts = FontManager.getFonts(getContext());
 
         /*
          * Create the spinner items
