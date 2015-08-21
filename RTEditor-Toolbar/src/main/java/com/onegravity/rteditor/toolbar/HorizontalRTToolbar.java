@@ -423,19 +423,21 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
 
     @Override
     public void setFont(RTTypeface typeface) {
-        if (typeface != null) {
-            for (int pos = 0; pos < mFontAdapter.getCount(); pos++) {
-                FontSpinnerItem item = mFontAdapter.getItem(pos);
-                if (typeface.equals(item.getTypeface())) {
-                    mFontAdapter.setSelectedItem(pos);
-                    mFont.setSelection(pos);
-                    break;
+        if (mFont != null) {
+            if (typeface != null) {
+                for (int pos = 0; pos < mFontAdapter.getCount(); pos++) {
+                    FontSpinnerItem item = mFontAdapter.getItem(pos);
+                    if (typeface.equals(item.getTypeface())) {
+                        mFontAdapter.setSelectedItem(pos);
+                        mFont.setSelection(pos);
+                        break;
+                    }
                 }
             }
-        }
-        else {
-            mFontAdapter.setSelectedItem(0);
-            mFont.setSelection(0);
+            else {
+                mFontAdapter.setSelectedItem(0);
+                mFont.setSelection(0);
+            }
         }
     }
 
