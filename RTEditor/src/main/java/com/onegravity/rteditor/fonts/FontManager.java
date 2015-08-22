@@ -99,8 +99,13 @@ public class FontManager {
         for (String fontName : assetFonts.keySet()) {
             String filePath = assetFonts.get(fontName);
             if (!ALL_FONTS.contains(fontName)) {
-                Typeface typeface = Typeface.createFromAsset(assets, filePath);
-                ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                try {
+                    Typeface typeface = Typeface.createFromAsset(assets, filePath);
+                    ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                }
+                catch (Exception e) {
+                    // this can happen if we don't have access to the font or it's not a font or...
+                }
             }
         }
 
@@ -111,8 +116,13 @@ public class FontManager {
         for (String fontName : systemFonts.keySet()) {
             String filePath = systemFonts.get(fontName);
             if (!ALL_FONTS.contains(fontName)) {
-                Typeface typeface = Typeface.createFromFile(filePath);
-                ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                try {
+                    Typeface typeface = Typeface.createFromFile(filePath);
+                    ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                }
+                catch (Exception e) {
+                    // this can happen if we don't have access to the font or it's not a font or...
+                }
             }
         }
 
