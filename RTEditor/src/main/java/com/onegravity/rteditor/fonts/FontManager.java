@@ -194,8 +194,6 @@ public class FontManager {
      */
     private static Map<String, String> getSystemFonts() {
         synchronized (SYSTEM_FONTS_BY_NAME) {
-            Map<String, String> fonts = new TreeMap<String, String>();
-
             for (String fontDir : FONT_DIRS) {
                 File dir = new File(fontDir);
 
