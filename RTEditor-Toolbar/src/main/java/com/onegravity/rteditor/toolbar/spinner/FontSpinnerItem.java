@@ -16,8 +16,6 @@
 
 package com.onegravity.rteditor.toolbar.spinner;
 
-import android.widget.TextView;
-
 import com.onegravity.rteditor.fonts.RTTypeface;
 
 /**
@@ -33,10 +31,5 @@ public class FontSpinnerItem extends SpinnerItem {
 
     public RTTypeface getTypeface() {
         return mTypeface;
-    }
-
-    @Override
-    void formatNameView(TextView view) {
-        super.formatNameView(view);
     }
 }
