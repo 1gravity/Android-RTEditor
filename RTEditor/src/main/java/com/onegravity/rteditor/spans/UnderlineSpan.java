@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor.effects;
-
-import com.onegravity.rteditor.spans.UnderlineSpan;
+package com.onegravity.rteditor.spans;
 
 /**
- * Underlined text
+ * Our custom UnderlineSpan.
+ * We need this to be able to distinguish between underlining done by the app and underlining
+ * inserted by e.g. a spell checker or a keyboard with auto-complete function.
  */
-public class UnderlineEffect extends SimpleBooleanEffect<UnderlineSpan> {
-    public UnderlineEffect() {
-        super(UnderlineSpan.class);
-    }
-}
+public class UnderlineSpan extends android.text.style.UnderlineSpan {}
