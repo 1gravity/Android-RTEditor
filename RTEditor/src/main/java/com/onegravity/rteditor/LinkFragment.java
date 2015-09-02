@@ -22,6 +22,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +32,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.URIUtil;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.lang.ref.SoftReference;
+import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 
@@ -41,6 +44,9 @@ import de.greenrobot.event.EventBus;
  * A DialogFragment to add, modify or remove links from Spanned text.
  */
 public class LinkFragment extends DialogFragment {
+
+    private static final String LINK_ADDRESS = "link_address";
+    private static final String LINK_TEXT = "link_text";
 
     /**
      * The Link class describes a link (link text and an URL).
@@ -95,15 +101,16 @@ public class LinkFragment extends DialogFragment {
         }
     }
 
-    private static final UrlValidator sValidator = new UrlValidator(UrlValidator.ALLOW_2_SLASHES + UrlValidator.ALLOW_ALL_SCHEMES);
+    private static final UrlValidator sUrlValidator = new UrlValidator(UrlValidator.ALLOW_2_SLASHES + UrlValidator.ALLOW_ALL_SCHEMES);
+    private static final EmailValidator sEmailValidator = EmailValidator.getInstance(false);
 
     private SoftReference<Activity> mActivity;
 
     public static LinkFragment newInstance(String linkText, String url) {
         LinkFragment fragment = new LinkFragment();
         Bundle args = new Bundle();
-        args.putString("linkText", linkText);
-        args.putString("url", url);
+        args.putString(LINK_TEXT, linkText);
+        args.putString(LINK_ADDRESS, url);
         fragment.setArguments(args);
         return fragment;
     }
@@ -129,26 +136,29 @@ public class LinkFragment extends DialogFragment {
         LayoutInflater li = LayoutInflater.from(mActivity.get());
         View view = li.inflate(R.layout.rte_link, null);
 
-        // set field values
         Bundle args = getArguments();
-        final String urlArg = args.getString("url");
 
+        // link address
         String tmp = "http://";
-        if (urlArg != null && ! urlArg.isEmpty()) {
+        final String address = args.getString(LINK_ADDRESS);
+        if (address != null && ! address.isEmpty()) {
             try {
-                tmp = URIUtil.decode(urlArg);
+                Uri uri = Uri.parse( URIUtil.decode(address) );
+                // if we have an email address remove the mailto: part for editing purposes
+                tmp = startsWithMailto(address) ? uri.getSchemeSpecificPart() : uri.toString();
             } catch (URIException ignore) {}
         }
         final String url = tmp;
-
-        final TextView urlView = ((TextView) view.findViewById(R.id.linkURL));
+        final TextView addressView = ((TextView) view.findViewById(R.id.linkURL));
         if (url != null) {
-            urlView.setText(url);
+            addressView.setText(url);
         }
-        String linkText = args.getString("linkText");
-        final TextView linkTextView = ((TextView) view.findViewById(R.id.linkText));
+
+        // link text
+        String linkText = args.getString(LINK_TEXT);
+        final TextView textView = ((TextView) view.findViewById(R.id.linkText));
         if (linkText != null) {
-            linkTextView.setText(linkText);
+            textView.setText(linkText);
         }
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(mActivity.get())
@@ -162,24 +172,7 @@ public class LinkFragment extends DialogFragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         // OK button
-                        String newUrl = urlView.getText().toString().trim();
-                        try {
-                            newUrl = URIUtil.encodeQuery(newUrl);
-                        } catch (URIException ignore) {}
-                        if (!requiredFieldValid(urlView) || !sValidator.isValid(newUrl)) {
-                            String errorMessage = getString(R.string.rte_invalid_link, newUrl);
-                            urlView.setError(errorMessage);
-                        } else {
-                            String linkText = linkTextView.getText().toString();
-                            if (linkText.length() == 0) {
-                                linkText = newUrl;
-                            }
-                            EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(linkText, newUrl), false));
-                            try {
-                                dialog.dismiss();
-                            } catch (Exception ignore) {
-                            }
-                        }
+                        validate(dialog, addressView, textView);
                     }
 
                     @Override
@@ -197,11 +190,50 @@ public class LinkFragment extends DialogFragment {
                 });
 
         // Remove button
-        if (urlArg != null) {
+        if (address != null) {
             builder.neutralText(R.string.rte_remove_action);
         }
 
         return builder.build();
+    }
+
+    private void validate(Dialog dialog, TextView addressView, TextView textView) {
+        // retrieve link address and do some cleanup
+        final String address = addressView.getText().toString().trim();
+
+        boolean isEmail = sEmailValidator.isValid(address);
+        boolean isUrl = sUrlValidator.isValid(address);
+        if (requiredFieldValid(addressView) && (isUrl || isEmail)) {
+            // valid url or email address
+
+            // encode address
+            String newAddress = address;
+            try {
+                newAddress = URIUtil.encodeQuery(newAddress);
+            } catch (URIException ignore) {}
+
+            // add mailto: for email addresses
+            if (isEmail && !startsWithMailto(newAddress)) {
+                newAddress = "mailto:" + newAddress;
+            }
+
+            // use the original address text as link text if the user didn't enter anything
+            String linkText = textView.getText().toString();
+            if (linkText.length() == 0) {
+                linkText = address;
+            }
+
+            EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(linkText, newAddress), false));
+            try { dialog.dismiss(); } catch (Exception ignore) {}
+        } else {
+            // invalid address (neither a url nor an email address
+            String errorMessage = getString(R.string.rte_invalid_link, address);
+            addressView.setError(errorMessage);
+        }
+    }
+
+    private boolean startsWithMailto(String address) {
+        return address != null && address.toLowerCase(Locale.getDefault()).startsWith("mailto:");
     }
 
     @Override
