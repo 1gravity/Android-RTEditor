@@ -43,10 +43,8 @@ abstract class TTFAnalyzer {
             RandomAccessFile file = new RandomAccessFile(filePath, "r");
             in = new TTFRandomAccessFile(file);
             return getTTFFontName(in, filePath);
-        } catch (FileNotFoundException e) {
-            return null;    // Missing permissions?
         } catch (IOException e) {
-            return null;    // Corrupted font file?
+            return null;    // Missing permissions or corrupted font file?
         }
         finally {
             IOUtils.closeQuietly(in);
