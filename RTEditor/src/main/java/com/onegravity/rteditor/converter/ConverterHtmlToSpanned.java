@@ -681,8 +681,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             if (font.hasFontFace()) {
                 // Note: use SPAN_EXCLUSIVE_EXCLUSIVE, the TemporarySpan will be replaced by a SPAN_EXCLUSIVE_INCLUSIVE span
                 RTTypeface typeface = FontManager.getTypeface(font.mFontFace);
-                TemporarySpan span = new TemporarySpan(new FontSpan(typeface));
-                mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (typeface != null) {
+                    TemporarySpan span = new TemporarySpan(new FontSpan(typeface));
+                    mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
             }
 
             // text size
