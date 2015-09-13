@@ -15,6 +15,7 @@ The editor offers the following <b>character formatting</b> options:
 * <strike>Strike through</strike>
 * <sup>Superscript</sup>
 * <sub>Subscript</sub>
+* Different fonts
 * Text size
 * Text color
 * Background color
@@ -135,10 +136,17 @@ The project consists of five different modules:
 
 The demo app can also be found on Google Play: [Demo App](https://play.google.com/store/apps/details?id=com.onegravity.rteditor.demo)
 
+####**Fonts**
+
+The rich text editor supports fonts that are part of the Android device it's running on. It's reading all ttf fonts in the /system/fonts, /system/font and /data/fonts and shows them in the editor. 
+
+A lot of frequently used fonts have a copyright and can therefore not be included in this library but you can use any true type font you want by adding them to the assets folder of the demo app (just make sure you don't infringe on someone else's copyright).   
+The fonts can be put anywhere in the assets folder (root or subdirectories). Since reading the directory structure of the assets folder during run-time is pretty slow (see [here](http://stackoverflow.com/a/12639530/534471)) a Gradle script generates an index of all ttf files during build time. 
+
 Issues
 ------
 
-If you have an issues with this library, please open a issue here: https://github.com/1gravity/Android-RTEditor/issues and provide enough information to reproduce it reliably. The following information needs to be provided or the issue will be closed without any further notice:
+If you have an issues with this library, please open a issue here: https://github.com/1gravity/Android-RTEditor/issues and provide enough information to reproduce it reliably. The following information needs to be provided:
 
 * Which version of the SDK are you using?
 * Which Android build are you using? (e.g. MPZ44Q)
