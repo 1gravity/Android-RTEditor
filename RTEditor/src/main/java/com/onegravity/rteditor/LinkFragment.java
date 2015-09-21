@@ -29,11 +29,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.util.URIUtil;
-import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.commons.validator.routines.UrlValidator;
+import com.onegravity.rteditor.utils.validator.EmailValidator;
+import com.onegravity.rteditor.utils.validator.UrlValidator;
 
 import java.lang.ref.SoftReference;
 import java.util.Locale;
@@ -143,10 +140,11 @@ public class LinkFragment extends DialogFragment {
         final String address = args.getString(LINK_ADDRESS);
         if (address != null && ! address.isEmpty()) {
             try {
-                Uri uri = Uri.parse( URIUtil.decode(address) );
+                //Uri uri = Uri.parse( URIUtil.decode(address) );
+                Uri uri = Uri.parse( address );
                 // if we have an email address remove the mailto: part for editing purposes
                 tmp = startsWithMailto(address) ? uri.getSchemeSpecificPart() : uri.toString();
-            } catch (URIException ignore) {}
+            } catch (Exception ignore) {}
         }
         final String url = tmp;
         final TextView addressView = ((TextView) view.findViewById(R.id.linkURL));
@@ -209,8 +207,8 @@ public class LinkFragment extends DialogFragment {
             // encode address
             String newAddress = address;
             try {
-                newAddress = URIUtil.encodeQuery(newAddress);
-            } catch (URIException ignore) {}
+                //newAddress = URIUtil.encodeQuery(newAddress);
+            } catch (Exception ignore) {}
 
             // add mailto: for email addresses
             if (isEmail && !startsWithMailto(newAddress)) {

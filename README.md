@@ -36,6 +36,14 @@ It also supports the following <b>paragraph formatting</b>:
 * Undo/Redo
 
 
+Setup
+-----
+```
+dependencies {
+    compile 'com.1gravity:android-rteditor:1.1.4'
+}
+```
+
 The 3 main components
 ---------------------
 ####**RTEditText**

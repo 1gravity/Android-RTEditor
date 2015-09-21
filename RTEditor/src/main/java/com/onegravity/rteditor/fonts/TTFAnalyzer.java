@@ -18,7 +18,7 @@ package com.onegravity.rteditor.fonts;
 
 import android.content.res.AssetManager;
 
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

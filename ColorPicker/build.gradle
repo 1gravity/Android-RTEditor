@@ -34,7 +34,16 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
-    compile project(':MaterialDialog')
+    compile 'com.1gravity:android-rteditor-materialdialog:1.1.2'
 }
+
+apply from: '../android-artifacts.gradle'
+apply from: '../central-publish.gradle'

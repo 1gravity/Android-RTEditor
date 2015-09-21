@@ -23,8 +23,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.onegravity.rteditor.api.RTApi;
-
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.Closeable;
 

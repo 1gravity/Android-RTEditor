@@ -26,8 +26,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.onegravity.rteditor.utils.Helper;
-
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.File;
 import java.io.FileReader;

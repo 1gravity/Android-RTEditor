@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.onegravity.rteditor.api.format.RTFormat;
 
-import org.apache.commons.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
 
 import java.io.File;
 

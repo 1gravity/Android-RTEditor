@@ -19,7 +19,7 @@ package com.onegravity.rteditor.media;
 import java.io.File;
 import java.util.Calendar;
 
-import org.apache.commons.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
 
 import android.content.Context;
 import android.database.Cursor;

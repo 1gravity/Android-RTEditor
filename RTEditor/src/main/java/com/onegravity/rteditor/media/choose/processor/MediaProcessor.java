@@ -27,8 +27,8 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -30,7 +30,7 @@ import com.onegravity.rteditor.api.media.RTVideoImpl;
 import com.onegravity.rteditor.media.MediaUtils;
 import com.onegravity.rteditor.utils.Helper;
 
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

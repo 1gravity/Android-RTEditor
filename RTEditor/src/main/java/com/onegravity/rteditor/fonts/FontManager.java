@@ -21,7 +21,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 
-import org.apache.commons.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
