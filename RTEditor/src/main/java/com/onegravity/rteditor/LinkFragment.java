@@ -24,11 +24,13 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.validator.EmailValidator;
 import com.onegravity.rteditor.utils.validator.UrlValidator;
 
@@ -138,15 +140,16 @@ public class LinkFragment extends DialogFragment {
         // link address
         String tmp = "http://";
         final String address = args.getString(LINK_ADDRESS);
+        Log.e("TAG", "address="+address);
         if (address != null && ! address.isEmpty()) {
             try {
-                //Uri uri = Uri.parse( URIUtil.decode(address) );
-                Uri uri = Uri.parse( address );
+                Uri uri = Uri.parse( Helper.decodeQuery(address) );
                 // if we have an email address remove the mailto: part for editing purposes
                 tmp = startsWithMailto(address) ? uri.getSchemeSpecificPart() : uri.toString();
             } catch (Exception ignore) {}
         }
         final String url = tmp;
+        Log.e("TAG", "url="+tmp);
         final TextView addressView = ((TextView) view.findViewById(R.id.linkURL));
         if (url != null) {
             addressView.setText(url);
@@ -205,10 +208,9 @@ public class LinkFragment extends DialogFragment {
             // valid url or email address
 
             // encode address
-            String newAddress = address;
-            try {
-                //newAddress = URIUtil.encodeQuery(newAddress);
-            } catch (Exception ignore) {}
+            String newAddress = Helper.encodeQuery(address);
+            Log.e("TAG", "address="+address);
+            Log.e("TAG", "newAddress="+newAddress);
 
             // add mailto: for email addresses
             if (isEmail && !startsWithMailto(newAddress)) {

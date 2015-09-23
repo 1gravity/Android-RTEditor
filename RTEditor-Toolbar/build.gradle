@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    compile 'com.1gravity:android-rteditor-core:1.1.4'
+    compile 'com.1gravity:android-rteditor-core:1.1.5'
 }
 
 apply from: '../android-artifacts.gradle'

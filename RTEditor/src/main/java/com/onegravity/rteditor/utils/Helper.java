@@ -18,6 +18,7 @@ package com.onegravity.rteditor.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -26,6 +27,11 @@ import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.Closeable;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * Miscellaneous helper methods
@@ -87,4 +93,37 @@ public abstract class Helper {
         return config.fontScale;
     }
 
+    /**
+     * This method encodes the query part of an url
+     * @param url an url (e.g. http://www.1gravity.com?query=üö)
+     * @return The url with an encoded query, e.g. http://www.1gravity.com?query%3D%C3%BC%C3%B6
+     */
+    public static String encodeQuery(String url) {
+        Uri uri = Uri.parse(url);
+
+        try {
+            String query = uri.getQuery();
+            String encodedQuery = query != null ? URLEncoder.encode(query, "UTF-8") : null;
+            URI tmp = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, uri.getFragment());
+            return tmp + (encodedQuery != null && encodedQuery.length() > 0 ? "?" + encodedQuery : "");
+        }
+        catch (UnsupportedEncodingException ignore) {}
+        catch (URISyntaxException ignore) {}
+
+        return uri.toString();
+    }
+
+    /**
+     * This method decodes an url with encoded query string
+     * @param url an url with encoded query string (e.g. http://www.1gravity.com?query%3D%C3%BC%C3%B6)
+     * @return The decoded url, e.g. http://www.1gravity.com?query=üö
+     */
+    public static String decodeQuery(String url) {
+        try {
+            return URLDecoder.decode(url, "UTF-8");
+        }
+        catch (UnsupportedEncodingException ignore) {}
+
+        return url;
+    }
 }
