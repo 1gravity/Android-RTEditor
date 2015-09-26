@@ -40,7 +40,7 @@ Setup
 -----
 ```
 dependencies {
-    compile 'com.1gravity:android-rteditor:1.1.4'
+    compile 'com.1gravity:android-rteditor:1.1.6'
 }
 ```
 
