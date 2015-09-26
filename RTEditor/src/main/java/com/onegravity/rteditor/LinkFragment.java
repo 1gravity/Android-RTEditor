@@ -24,7 +24,6 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -140,7 +139,6 @@ public class LinkFragment extends DialogFragment {
         // link address
         String tmp = "http://";
         final String address = args.getString(LINK_ADDRESS);
-        Log.e("TAG", "address="+address);
         if (address != null && ! address.isEmpty()) {
             try {
                 Uri uri = Uri.parse( Helper.decodeQuery(address) );
@@ -149,7 +147,6 @@ public class LinkFragment extends DialogFragment {
             } catch (Exception ignore) {}
         }
         final String url = tmp;
-        Log.e("TAG", "url="+tmp);
         final TextView addressView = ((TextView) view.findViewById(R.id.linkURL));
         if (url != null) {
             addressView.setText(url);
@@ -209,8 +206,6 @@ public class LinkFragment extends DialogFragment {
 
             // encode address
             String newAddress = Helper.encodeQuery(address);
-            Log.e("TAG", "address="+address);
-            Log.e("TAG", "newAddress="+newAddress);
 
             // add mailto: for email addresses
             if (isEmail && !startsWithMailto(newAddress)) {
