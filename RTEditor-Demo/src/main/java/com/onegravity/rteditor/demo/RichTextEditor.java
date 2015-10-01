@@ -29,12 +29,12 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
+import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTMediaFactoryImpl;
 import com.onegravity.rteditor.api.RTProxyImpl;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.media.MediaUtils;
-import com.onegravity.rteditor.toolbar.HorizontalRTToolbar;
 
 import java.io.File;
 
@@ -85,19 +85,19 @@ public class RichTextEditor extends AppCompatActivity {
         ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.rte_toolbar_container);
 
         // register toolbar 0 (if it exists)
-        HorizontalRTToolbar rtToolbar0 = (HorizontalRTToolbar) findViewById(R.id.rte_toolbar);
+        RTToolbar rtToolbar0 = (RTToolbar) findViewById(R.id.rte_toolbar);
         if (rtToolbar0 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar0);
         }
 
         // register toolbar 1 (if it exists)
-        HorizontalRTToolbar rtToolbar1 = (HorizontalRTToolbar) findViewById(R.id.rte_toolbar_character);
+        RTToolbar rtToolbar1 = (RTToolbar) findViewById(R.id.rte_toolbar_character);
         if (rtToolbar1 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar1);
         }
 
         // register toolbar 2 (if it exists)
-        HorizontalRTToolbar rtToolbar2 = (HorizontalRTToolbar) findViewById(R.id.rte_toolbar_paragraph);
+        RTToolbar rtToolbar2 = (RTToolbar) findViewById(R.id.rte_toolbar_paragraph);
         if (rtToolbar2 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar2);
         }
