@@ -38,10 +38,32 @@ It also supports the following <b>paragraph formatting</b>:
 
 Setup
 -----
+####**Dependencies**
+
+Add this to your Gradle build file:
 ```
 dependencies {
-    compile 'com.1gravity:android-rteditor:1.1.6'
+    compile 'com.1gravity:android-rteditor:1.1.7'
 }
+```
+
+####**Theming**
+
+The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
+You need to use a theme based on either RTE_ThemeLight or RTE_ThemeDark or define all rich text editor attributes (rte_toolbar_themes.xml) in your own theme. 
+
+Make sure to call setTheme before setContentView (or set the theme in the manifest):
+
+```
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // set theme before calling setContentView!
+    setTheme(R.style.ThemeLight);
+
+    // set layout
+    setContentView(R.layout.your_layout);
 ```
 
 The 3 main components
@@ -49,7 +71,7 @@ The 3 main components
 ####**RTEditText**
 is the EditText drop in component. Add it to your layout like you would EditText:
 ```xml
-  <com.onegravity.rteditor.RTEditText
+<com.onegravity.rteditor.RTEditText
     android:id="@+id/rtEditText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -63,28 +85,28 @@ In code you would typically use methods to set and get the text content:
 ####**RTToolbar**
 is an interface for the toolbar used to apply text and paragraph formatting and other features listed above. The actual RTToolbar implementation is in a separate module and is a scrollable ribbon but alternative implementations aren't too hard to realize (popup, action buttons, floating buttons...). The toolbar implementation is easy to integrate into your layout:
 ```xml
-  <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
+<include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
 ```
 
  or if you want to have two ribbons for character and paragraph formatting:
 ```xml
-    <LinearLayout
-        android:id="@+id/rte_toolbar_container"
-    	android:orientation="vertical"
-    	android:layout_width="match_parent"
-    	android:layout_height="wrap_content">
+<LinearLayout
+    android:id="@+id/rte_toolbar_container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    	<include layout="@layout/rte_toolbar_character" />
-    	<include layout="@layout/rte_toolbar_paragraph" />
+    <include layout="@layout/rte_toolbar_character" />
+    <include layout="@layout/rte_toolbar_paragraph" />
 
-    </LinearLayout>
+</LinearLayout>
 ```
 
 In code you'd typically not interact with the toolbar (see RTManager below for the one exception).
 
 ####**RTManager**
 is the glue that holds the rich text editors (RTEditText), the toolbar and your app together. Each rich text editor and each toolbar needs to be registered with the RTManager before they are functional. Multiple editors and multiple toolbars can be registered. The RTManager is instantiated by your app in code usually in the onCreate passing in an RTApi object that gives the rich text editor access to its context (your app).
-A typical initialization process looks like this:
+A typical initialization process looks like this (normally in the onCreate method):
 
 ```
 // create RTManager
@@ -93,7 +115,7 @@ RTManager rtManager = new RTManager(rtApi, savedInstanceState);
 
 // register toolbar
 ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.rte_toolbar_container);
-HorizontalRTToolbar rtToolbar = (HorizontalRTToolbar) findViewById(R.id.rte_toolbar);
+RTToolbar rtToolbar = (RTToolbar) findViewById(R.id.rte_toolbar);
 if (rtToolbar != null) {
   rtManager.registerToolbar(toolbarContainer, rtToolbar);
 }
@@ -124,9 +146,9 @@ protected void onSaveInstanceState(Bundle outState) {
 @Override
 public void onDestroy() {
     super.onDestroy();
+    
     mRTManager.onDestroy(isFinishing());
 }
-
 ```
 
 The isSaved parameter passed into RTManager.onDestroy(boolean) is important. If it's true then media files inserted into the text (images at the moment) will remain untouched.
