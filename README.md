@@ -154,6 +154,36 @@ public void onDestroy() {
 The isSaved parameter passed into RTManager.onDestroy(boolean) is important. If it's true then media files inserted into the text (images at the moment) will remain untouched.
 If the parameter is false (text content is dismissed), media files will be deleted. Note that the rich text editor copies the original file to a dedicated area according to the MediaFactory configuration, meaning the original will remain untouched.
 
+RTApi
+-----
+
+If you read the previous section ("The 3 main components") you might have noticed the RTApi object.
+The RTApi is a convenience class giving the various rich text editor components access to the application context and to RTProxy and RTMediaFactory methods.
+```
+RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this, true));
+```
+
+####**Context**
+
+The first parameter is merely a Context object (Application or Activity context).
+The RTApi will only store the Application context so no issue with leaking the Activity context here.  
+
+####**RTProxy**
+
+The RTProxy allows the rich text editor to call Activity related methods like:
+* startActivityForResult/runOnUiThread and Toast methods: for picking images to embed in the text
+* Fragment related methods: for the link dialog (LinkFragment)
+
+RTProxyImpl is the standard implementation for RTProxy and there's usually no need to use a custom implementation.
+RTProxyImpl stores the Activity context in a SoftReference.
+
+####**RTMediaFactory**
+
+The most interesting class is RTMediaFactory.
+By overriding it, different storage scenarios for embedded images (and potentially videos and audio files in the future) can be implemented (SQLite database, file system, cloud storage, access through ContentProvider etc.).
+
+[More details can be found here](STORAGE.md)
+
 Demo project
 ------------
 
