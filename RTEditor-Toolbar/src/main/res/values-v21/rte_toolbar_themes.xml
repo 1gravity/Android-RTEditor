@@ -19,12 +19,10 @@
 
     <style name="RTE_BaseThemeLight" parent="Theme.AppCompat.Light">
         <item name="rte_ToolbarSpinnerSelectedColor">#ffeeeeee</item>
-        <item name="android:statusBarColor">#E65100</item>
     </style>
 
     <style name="RTE_BaseThemeDark" parent="Theme.AppCompat">
         <item name="rte_ToolbarSpinnerSelectedColor">#ff303030</item>
-        <item name="android:statusBarColor">#E65100</item>
     </style>
     
 </resources>
