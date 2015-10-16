@@ -1,1 +1,4 @@
 /build
+
+# file in the assets folder created during build time
+assets.index
