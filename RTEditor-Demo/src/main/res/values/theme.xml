@@ -19,7 +19,7 @@
 
     <style name="ThemeLight" parent="@style/RTE_ThemeLight">
         <item name="colorPrimary">#CFD8DC</item>
-        <item name="colorAccent">#90A4AE</item>
+        <item name="colorAccent">#37474F</item>
         <item name="colorPrimaryDark">#90A4AE</item>
 
         <item name="rte_icMenuLoad">@drawable/ic_menu_load_light</item>
@@ -27,8 +27,8 @@
 
     <style name="ThemeDark" parent="@style/RTE_ThemeDark">
         <item name="colorPrimary">#3F51B5</item>
-        <item name="colorAccent">#3949AB</item>
-        <item name="colorPrimaryDark">#3949AB</item>
+        <item name="colorAccent">#ECEFF1</item>
+        <item name="colorPrimaryDark">#1A237E</item>
         
         <item name="rte_icMenuLoad">@drawable/ic_menu_load_dark</item>
     </style>

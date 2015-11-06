@@ -24,10 +24,12 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.validator.EmailValidator;
@@ -161,35 +163,35 @@ public class LinkFragment extends DialogFragment {
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(mActivity.get())
                 .title(R.string.rte_create_a_link)
-                .customView(view)
+                .customView(view, true)
                 .cancelable(false)
                 .autoDismiss(false)
                 .positiveText(android.R.string.ok)
-                .negativeText(android.R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         // OK button
                         validate(dialog, addressView, textView);
                     }
-
+                })
+                .negativeText(android.R.string.cancel)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         // Cancel button
                         EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(null, url), true));
                     }
-
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        // Remove button
-                        EventBus.getDefault().post(new LinkEvent(LinkFragment.this, null, false));
-                    }
-
                 });
 
-        // Remove button
         if (address != null) {
-            builder.neutralText(R.string.rte_remove_action);
+            builder.neutralText(R.string.rte_remove_action)
+            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                    // Remove button
+                    EventBus.getDefault().post(new LinkEvent(LinkFragment.this, null, false));
+                }
+            });
         }
 
         return builder.build();

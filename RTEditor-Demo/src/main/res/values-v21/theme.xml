@@ -18,9 +18,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ThemeLight" parent="@style/RTE_ThemeLight">
-
         <item name="colorPrimary">#CFD8DC</item>
-        <item name="colorAccent">#90A4AE</item>
+        <item name="colorAccent">#37474F</item>
         <item name="colorPrimaryDark">#90A4AE</item>
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -31,7 +30,7 @@
 
     <style name="ThemeDark" parent="@style/RTE_ThemeDark">
         <item name="colorPrimary">#3F51B5</item>
-        <item name="colorAccent">#1A237E</item>
+        <item name="colorAccent">#ECEFF1</item>
         <item name="colorPrimaryDark">#1A237E</item>
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>

@@ -23,11 +23,10 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -35,7 +34,7 @@ android {
 }
 
 dependencies {
-    compile 'com.1gravity:android-rteditor-core:1.1.6'
+    compile 'com.1gravity:android-rteditor-core:1.2.1'
 }
 
 apply from: '../android-artifacts.gradle'

@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.greenrobot.event.EventBus;
@@ -104,22 +106,23 @@ public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeLis
         String cancel = mContext.getString(android.R.string.cancel);
 
         mDialog = new MaterialDialog.Builder(mContext)
-                .customView(view)
+                .customView(view, false)
                 .cancelable(true)
                 .title(null)
-                .callback(new MaterialDialog.ButtonCallback() {
+                .positiveText(ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         finalizeChanges(mNewColor);
                     }
-
+                })
+                .negativeText(cancel)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         finalizeChanges(mInitialColor);
                     }
                 })
-                .positiveText(ok)
-                .negativeText(cancel)
                 .cancelListener(new OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {

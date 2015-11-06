@@ -25,7 +25,6 @@
 
     <EditText
         android:id="@+id/linkURL"
-		style="@android:style/Widget.EditText"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
         android:hint="@string/rte_link_enter_url"
@@ -33,7 +32,6 @@
 
     <EditText
         android:id="@+id/linkText"
-		style="@android:style/Widget.EditText"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
         android:hint="@string/rte_link_enter_url_text"

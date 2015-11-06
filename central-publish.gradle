@@ -31,10 +31,12 @@ def getSnapshotRepositoryUrl() {
             : "https://oss.sonatype.org/content/repositories/snapshots/"
 }
 
+// credentials are stored in ~/.gradle/gradle.properties with ~ being the path of the home directory
 def getRepositoryUsername() {
     return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
 }
 
+// credentials are stored in ~/.gradle/gradle.properties with ~ being the path of the home directory
 def getRepositoryPassword() {
     return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
 }

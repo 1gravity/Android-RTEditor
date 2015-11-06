@@ -30,8 +30,8 @@ import java.io.Serializable;
 public abstract interface RTMedia extends Serializable {
 
     /**
-     * Returns the file path of the media file (e.g. /data/.../image.png). This
-     * has to be an absolute file path (no content://... or file://... ).
+     * Returns the file path of the media file (e.g. /data/.../image.png).
+     * This can be any format used to locate the file (content://..., file://..., cid:...).
      */
     public String getFilePath(RTFormat format);
 
