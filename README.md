@@ -47,6 +47,13 @@ dependencies {
 }
 ```
 
+Because the library uses [a Material design library](https://github.com/afollestad/material-dialogs), you need to add the following code to your app's build.gradle file (allprojects block):  
+```
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+```
+
 ####**Theming**
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
@@ -187,9 +194,8 @@ By overriding it, different storage scenarios for embedded images (and potential
 Demo project
 ------------
 
-The project consists of five different modules:
+The project consists of four different modules:
 * **ColorPicker**: a color picker based on this: https://github.com/LarsWerkman/HoloColorPicker. The RTEditor uses an enhanced version that allows to enter ARGB values, includes a ColorPickerPreference that can be used in preference screens and shows a white and gray chessboard pattern behind the color visible when the the alpha channel is changed and the color becomes (partly) transparent.
-* **MaterialDialog** a library based on this: https://github.com/afollestad/material-dialogs. The RTEditor uses a trimmed-down version because it only uses a subset of its functionality for the link dialog. You can easily remove this module and use the standard Android dialog instead.
 * **RTEditor**: the actual rich text editor (excluding the toolbar implementation).
 * **RTEditor-Toolbar**: the toolbar implementation.
 * **RTEditor-Demo**: this module isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
