@@ -109,6 +109,8 @@ is an interface for the toolbar used to apply text and paragraph formatting and 
 </LinearLayout>
 ```
 
+Note that inflating the toolbar might take a moment (noticable) on certain devices because the included icons are high-resolution and each one comes in three different states (pressed, checked, normal). There's no workaround for this except using different icons with lower resolution.
+
 In code you'd typically not interact with the toolbar (see RTManager below for the one exception).
 
 ####**RTManager**
@@ -124,7 +126,7 @@ RTManager rtManager = new RTManager(rtApi, savedInstanceState);
 ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.rte_toolbar_container);
 RTToolbar rtToolbar = (RTToolbar) findViewById(R.id.rte_toolbar);
 if (rtToolbar != null) {
-  rtManager.registerToolbar(toolbarContainer, rtToolbar);
+    rtManager.registerToolbar(toolbarContainer, rtToolbar);
 }
 
 // register editor & set text
