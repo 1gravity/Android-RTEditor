@@ -49,9 +49,9 @@ dependencies {
 
 Because the library uses [a Material design library](https://github.com/afollestad/material-dialogs), you need to add the following code to your app's build.gradle file (allprojects block):  
 ```
-    repositories {
-        maven { url "https://jitpack.io" }
-    }
+repositories {
+    maven { url "https://jitpack.io" }
+}
 ```
 
 ####**Theming**
@@ -191,6 +191,19 @@ By overriding it, different storage scenarios for embedded images (and potential
 
 [More details can be found here](STORAGE.md)
 
+Fonts
+-----
+
+The rich text editor supports fonts that are part of the Android device it's running on. It's reading all ttf fonts in the /system/fonts, /system/font and /data/fonts and shows them in the editor.
+
+A lot of frequently used fonts have a copyright and can therefore not be included in this library but you can use any true type font you want by adding them to the assets folder of the demo app (just make sure you don't infringe on someone else's copyright).
+The fonts can be put anywhere in the assets folder (root or subdirectories). Since reading the directory structure of the assets folder during run-time is pretty slow (see [here](http://stackoverflow.com/a/12639530/534471)) a Gradle script generates an index of all ttf files during build time.
+
+Note that loading the fonts can take a moment. That's why you should pre-load them in your Application class:
+```
+    FontManager.preLoadFonts(Context) {
+```
+
 Demo project
 ------------
 
@@ -201,13 +214,6 @@ The project consists of four different modules:
 * **RTEditor-Demo**: this module isn't part of the actual rich text editor component but contains a sample app that shows how to use the component.
 
 The demo app can also be found on Google Play: [Demo App](https://play.google.com/store/apps/details?id=com.onegravity.rteditor.demo)
-
-####**Fonts**
-
-The rich text editor supports fonts that are part of the Android device it's running on. It's reading all ttf fonts in the /system/fonts, /system/font and /data/fonts and shows them in the editor. 
-
-A lot of frequently used fonts have a copyright and can therefore not be included in this library but you can use any true type font you want by adding them to the assets folder of the demo app (just make sure you don't infringe on someone else's copyright).   
-The fonts can be put anywhere in the assets folder (root or subdirectories). Since reading the directory structure of the assets folder during run-time is pretty slow (see [here](http://stackoverflow.com/a/12639530/534471)) a Gradle script generates an index of all ttf files during build time. 
 
 Issues
 ------
