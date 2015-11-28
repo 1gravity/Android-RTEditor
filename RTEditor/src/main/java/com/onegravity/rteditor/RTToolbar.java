@@ -33,27 +33,6 @@ import java.util.List;
  */
 public interface RTToolbar {
 
-    /*
-     * Listener interface to listen to toolbar events like bold
-	 * selected/unselected.
-	 * The methods should be fairly self-explaining.
-	 */
-    public interface RTToolbarListener {
-        public <T> void onEffectSelected(Effect<T> effect, T value);
-
-        public void onUndo();
-
-        public void onRedo();
-
-        public void onClearFormatting();
-
-        public void onCreateLink();
-
-        public void onPickImage();
-
-        public void onCaptureImage();
-    }
-
     /**
      * Set this toolbar's listener.
      * There can be only one since this should be the RTManager and there's only

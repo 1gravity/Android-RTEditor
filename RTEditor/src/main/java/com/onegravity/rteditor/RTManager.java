@@ -34,9 +34,7 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.LinkFragment.Link;
 import com.onegravity.rteditor.LinkFragment.LinkEvent;
-import com.onegravity.rteditor.RTEditText.RTEditTextListener;
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
-import com.onegravity.rteditor.RTToolbar.RTToolbarListener;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.effects.AbsoluteSizeEffect;
@@ -402,7 +400,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    // ****************************************** RTToolbar.RTToolbarListener *******************************************
+    // ****************************************** RTToolbarListener *******************************************
 
     @Override
     /* @inheritDoc */
@@ -553,7 +551,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         return null;
     }
 
-    // ****************************************** RTEditText.RTEditTextListener *******************************************
+    // ****************************************** RTEditTextListener *******************************************
 
     @Override
 	/* @inheritDoc */
