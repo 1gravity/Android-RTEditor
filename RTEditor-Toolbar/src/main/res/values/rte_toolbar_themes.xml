@@ -67,7 +67,7 @@
     <!-- DARK THEME -->
 
     <!--
-        Dark base application ttheme, dependent on API level.
+        Dark base application theme, dependent on API level.
         This theme is replaced by ThemeLight from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="RTE_BaseThemeDark" parent="Theme.AppCompat" />

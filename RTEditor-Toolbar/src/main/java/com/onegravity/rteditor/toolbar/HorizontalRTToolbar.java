@@ -33,6 +33,7 @@ import com.larswerkman.holocolorpicker.ColorPickerDialog;
 import com.larswerkman.holocolorpicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.SetColorChangedListenerEvent;
 import com.onegravity.rteditor.RTToolbar;
+import com.onegravity.rteditor.RTToolbarListener;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
