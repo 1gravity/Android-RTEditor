@@ -29,7 +29,7 @@ import android.text.style.LeadingMarginSpan;
  * (]0, 4][4, 4] --> the leading margin of the second span is added to the ]0, 4] paragraph regardless of the Spanned.flags)
  * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one
  */
-public class NumberSpan implements LeadingMarginSpan {
+public class NumberSpan implements LeadingMarginSpan, RTSpan<Boolean> {
     private final int mNr;
     private final int mGapWidth;
     private final boolean mIgnoreSpan;
@@ -71,4 +71,8 @@ public class NumberSpan implements LeadingMarginSpan {
         }
     }
 
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
+    }
 }

@@ -36,7 +36,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
-import com.onegravity.rteditor.spans.FontSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
@@ -308,9 +308,9 @@ public class ConverterSpannedToHtml {
 	       <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
 		   <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
 		*/
-        else if (style instanceof FontSpan) {
+        else if (style instanceof TypefaceSpan) {
             mOut.append("<font face=\"");
-            String fontName = ((FontSpan)style).getTypeface().getName();
+            String fontName = ((TypefaceSpan)style).getValue().getName();
             mOut.append(StringEscapeUtils.escapeHtml4(fontName));
             mOut.append("\">");
         } else if (style instanceof AbsoluteSizeSpan) {
@@ -365,7 +365,7 @@ public class ConverterSpannedToHtml {
     private void handleEndTag(CharacterStyle style) {
         if (style instanceof URLSpan) {
             mOut.append("</a>");
-        } else if (style instanceof FontSpan) {
+        } else if (style instanceof TypefaceSpan) {
             mOut.append("</font>");
         } else if (style instanceof ForegroundColorSpan) {
             mOut.append("</font>");

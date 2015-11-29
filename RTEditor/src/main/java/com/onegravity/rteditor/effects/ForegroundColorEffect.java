@@ -16,15 +16,8 @@
 
 package com.onegravity.rteditor.effects;
 
-import android.text.Spannable;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-
-import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.utils.Selection;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.onegravity.rteditor.spans.ForegroundColorSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 
 /**
  * Text color
@@ -32,46 +25,16 @@ import java.util.List;
 public class ForegroundColorEffect extends Effect<Integer> {
 
     @Override
-    public List<Integer> valuesInSelection(RTEditText editor, int spanType) {
-        Selection expandedSelection = getExpandedSelection(editor, spanType);
-
-        List<Integer> result = new ArrayList<Integer>();
-        for (ForegroundColorSpan span : getSpans(editor.getText(), expandedSelection)) {
-            result.add(span.getForegroundColor());
-        }
-        return result;
+    public Class<? extends RTSpan> getSpanClazz() {
+        return ForegroundColorSpan.class;
     }
 
     /**
-     * @param color If the color is Null then the font color will be removed
+     * @return If the value is Null then return Null -> remove all ForegroundColorSpan.
      */
     @Override
-    public void applyToSelection(RTEditText editor, Integer color) {
-        Selection selection = new Selection(editor);
-        Spannable str = editor.getText();
-
-        for (ForegroundColorSpan span : getSpans(str, selection)) {
-            int spanStart = str.getSpanStart(span);
-            if (spanStart < selection.start()) {
-                str.setSpan(new ForegroundColorSpan(span.getForegroundColor()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            int spanEnd = str.getSpanEnd(span);
-            if (spanEnd > selection.end()) {
-                str.setSpan(new ForegroundColorSpan(span.getForegroundColor()), selection.end() + 1, spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-            }
-            str.removeSpan(span);
-        }
-
-        if (color != null) {
-            // if the style is enabled add it to the selection (add the leading and trailing spans too if there are any)
-            str.setSpan(new ForegroundColorSpan(color), selection.start(), selection.end(),
-                    selection.start() == selection.end() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        }
-    }
-
-    @Override
-    protected ForegroundColorSpan[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), ForegroundColorSpan.class);
+    public RTSpan<Integer> newSpan(Integer value) {
+        return value == null ? null : new ForegroundColorSpan(value);
     }
 
 }

@@ -56,6 +56,7 @@ import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 import com.onegravity.rteditor.utils.Selection;
@@ -404,7 +405,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
     @Override
     /* @inheritDoc */
-    public <T> void onEffectSelected(Effect<T> effect, T value) {
+    public <V> void onEffectSelected(Effect<V> effect, V value) {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
             editor.applyEffect(effect, value);
@@ -419,7 +420,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             int selStartBefore = editor.getSelectionStart();
             int selEndBefore = editor.getSelectionEnd();
             Spannable oldSpannable = editor.cloneSpannable();
-            for (Effect<?> effect : Effects.FORMATTING_EFFECTS) {
+            for (Effect effect : Effects.FORMATTING_EFFECTS) {
                 effect.clearFormattingInSelection(editor);
             }
             int selStartAfter = editor.getSelectionStart();
@@ -457,7 +458,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             String url = null;
             String linkText = null;
 
-            LinkSpan[] links = Effects.LINK.getSpans(editor.getText(), new Selection(editor));
+            RTSpan<String>[] links = Effects.LINK.getSpans(editor.getText(), new Selection(editor));
             if (links.length == 0) {
                 // default values if no link is found at selection
                 linkText = editor.getSelectedText();
@@ -470,7 +471,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 mLinkSelection = editor.getSelection();
             } else {
                 // values if a link already exists
-                url = links[0].getURL();
+                url = links[0].getValue();
                 linkText = getLinkText(editor, links[0]);
             }
 
@@ -609,7 +610,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
         // check if effect exists in selection
         boolean isEmpty = (start == end);
-        for (Effect<?> effect : Effects.ALL_EFFECTS) {
+        for (Effect effect : Effects.ALL_EFFECTS) {
             if (effect.existsInSelection(editor, isEmpty ? Spanned.SPAN_INCLUSIVE_EXCLUSIVE : Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)) {
                 if (effect instanceof BoldEffect) {
                     isBold = true;
@@ -696,12 +697,10 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 	/* @inheritDoc */
     public void onTextChanged(RTEditText editor, Spannable before, Spannable after,
                               int selStartBefore, int selEndBefore, int selStartAfter, int selEndAfter) {
-
         TextChangeOperation op = new TextChangeOperation(before, after,
                 selStartBefore, selEndBefore,
                 selStartAfter, selEndAfter);
         mOPManager.executed(editor, op);
-
     }
 
     @Override
@@ -713,7 +712,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    private String getLinkText(RTEditText editor, LinkSpan span) {
+    private String getLinkText(RTEditText editor, RTSpan<String> span) {
         Spannable text = editor.getText();
         final int spanStart = text.getSpanStart(span);
         final int spanEnd = text.getSpanEnd(span);

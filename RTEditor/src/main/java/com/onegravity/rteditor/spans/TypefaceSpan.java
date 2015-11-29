@@ -19,24 +19,19 @@ package com.onegravity.rteditor.spans;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.TextPaint;
-import android.text.style.TypefaceSpan;
 
 import com.onegravity.rteditor.fonts.RTTypeface;
 
 /**
  * Custom TypefaceSpan class to add support for fonts
  */
-public class FontSpan extends TypefaceSpan {
+public class TypefaceSpan extends android.text.style.TypefaceSpan implements RTSpan<RTTypeface> {
 
     private final RTTypeface mTypeface;
 
-    public FontSpan(RTTypeface typeface) {
+    public TypefaceSpan(RTTypeface typeface) {
         super("");
         mTypeface = typeface;
-    }
-
-    public RTTypeface getTypeface() {
-        return mTypeface;
     }
 
     @Override
@@ -64,4 +59,10 @@ public class FontSpan extends TypefaceSpan {
 
         paint.setTypeface(tf);
     }
+
+    @Override
+    public RTTypeface getValue() {
+        return mTypeface;
+    }
+
 }

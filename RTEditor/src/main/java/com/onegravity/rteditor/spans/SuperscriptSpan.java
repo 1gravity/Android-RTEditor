@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor.effects;
+package com.onegravity.rteditor.spans;
 
-import com.onegravity.rteditor.spans.ItalicSpan;
+import android.os.Parcel;
 
 /**
- * Italic text
+ * Implementation for a superscript span (android.text.style.SuperscriptSpan).
  */
-public class ItalicEffect extends SimpleBooleanEffect {
+public class SuperscriptSpan extends android.text.style.SuperscriptSpan implements RTSpan<Boolean> {
 
-    public ItalicEffect() {
-        super(ItalicSpan.class);
+    public SuperscriptSpan() { super(); }
+
+    public SuperscriptSpan(Parcel src) {
+        super(src);
+    }
+
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
     }
 
 }

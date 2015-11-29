@@ -46,7 +46,7 @@ import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.FontSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.IntendationSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
@@ -682,7 +682,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
                 // Note: use SPAN_EXCLUSIVE_EXCLUSIVE, the TemporarySpan will be replaced by a SPAN_EXCLUSIVE_INCLUSIVE span
                 RTTypeface typeface = FontManager.getTypeface(font.mFontFace);
                 if (typeface != null) {
-                    TemporarySpan span = new TemporarySpan(new FontSpan(typeface));
+                    TemporarySpan span = new TemporarySpan(new TypefaceSpan(typeface));
                     mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }

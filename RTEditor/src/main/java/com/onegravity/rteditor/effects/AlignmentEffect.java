@@ -19,10 +19,11 @@ package com.onegravity.rteditor.effects;
 import android.text.Layout;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
-import android.text.style.AlignmentSpan;
 
 import com.onegravity.rteditor.RTEditText;
+import com.onegravity.rteditor.spans.AlignmentSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -40,17 +41,18 @@ import java.util.List;
 public class AlignmentEffect extends Effect<Layout.Alignment> implements ParagraphEffect {
 
     @Override
-    public List<Alignment> valuesInSelection(RTEditText editor, int spanType) {
-        List<Alignment> result = new ArrayList<Alignment>();
+    public Class<? extends RTSpan> getSpanClazz() {
+        return AlignmentSpan.class;
+    }
 
-        Selection expandedSelection = editor.getParagraphsInSelection();
-        if (expandedSelection != null) {
-            for (AlignmentSpan.Standard span : getSpans(editor.getText(), expandedSelection)) {
-                result.add(span.getAlignment());
-            }
-        }
+    @Override
+    public RTSpan<Alignment> newSpan(Alignment value) {
+        return null;
+    }
 
-        return result;
+    @Override
+    protected Selection getExpandedSelection(RTEditText editor, int spanType) {
+        return editor.getParagraphsInSelection();
     }
 
     @Override
@@ -86,11 +88,6 @@ public class AlignmentEffect extends Effect<Layout.Alignment> implements Paragra
         for (final ParagraphSpan spanDef : spans2Process) {
             spanDef.process(str);
         }
-    }
-
-    @Override
-    protected AlignmentSpan.Standard[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), AlignmentSpan.Standard.class);
     }
 
 }

@@ -580,7 +580,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      * You get the Effect object via the static data members (e.g., RTEditText.BOLD).
      * The value for most effects is a Boolean, indicating whether to add or remove the effect.
      */
-    public <T> void applyEffect(Effect<T> effect, T value) {
+    public <V> void applyEffect(Effect<V> effect, V value) {
         if (mUseRTFormatting && !mIsSelectionChanging && !mIsSaving) {
             Spannable oldSpannable = mIgnoreTextChange ? null : cloneSpannable();
 

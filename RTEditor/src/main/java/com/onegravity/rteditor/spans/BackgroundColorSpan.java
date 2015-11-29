@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor.effects;
+package com.onegravity.rteditor.spans;
 
-import com.onegravity.rteditor.spans.ItalicSpan;
+import android.os.Parcel;
 
 /**
- * Italic text
+ * Implementation for a background color span (android.text.style.BackgroundColorSpan)
  */
-public class ItalicEffect extends SimpleBooleanEffect {
+public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan implements RTSpan<Integer> {
 
-    public ItalicEffect() {
-        super(ItalicSpan.class);
+    public BackgroundColorSpan(int color) {
+        super(color);
+    }
+
+    public BackgroundColorSpan(Parcel src) {
+        super(src);
+    }
+
+    @Override
+    public Integer getValue() {
+        return getBackgroundColor();
     }
 
 }

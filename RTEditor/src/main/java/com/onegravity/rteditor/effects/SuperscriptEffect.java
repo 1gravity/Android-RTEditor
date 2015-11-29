@@ -16,13 +16,15 @@
 
 package com.onegravity.rteditor.effects;
 
-import android.text.style.SuperscriptSpan;
+import com.onegravity.rteditor.spans.SuperscriptSpan;
 
 /**
  * Superscript text
  */
-public class SuperscriptEffect extends SimpleBooleanEffect<SuperscriptSpan> {
+public class SuperscriptEffect extends SimpleBooleanEffect {
+
     public SuperscriptEffect() {
         super(SuperscriptSpan.class);
     }
+
 }

@@ -589,73 +589,109 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             if (id == R.id.toolbar_bold) {
                 mBold.setChecked(!mBold.isChecked());
                 mListener.onEffectSelected(Effects.BOLD, mBold.isChecked());
-            } else if (id == R.id.toolbar_italic) {
+            }
+
+            else if (id == R.id.toolbar_italic) {
                 mItalic.setChecked(!mItalic.isChecked());
                 mListener.onEffectSelected(Effects.ITALIC, mItalic.isChecked());
-            } else if (id == R.id.toolbar_underline) {
+            }
+
+            else if (id == R.id.toolbar_underline) {
                 mUnderline.setChecked(!mUnderline.isChecked());
                 mListener.onEffectSelected(Effects.UNDERLINE, mUnderline.isChecked());
-            } else if (id == R.id.toolbar_strikethrough) {
+            }
+
+            else if (id == R.id.toolbar_strikethrough) {
                 mStrikethrough.setChecked(!mStrikethrough.isChecked());
                 mListener.onEffectSelected(Effects.STRIKETHROUGH, mStrikethrough.isChecked());
-            } else if (id == R.id.toolbar_superscript) {
+            }
+
+            else if (id == R.id.toolbar_superscript) {
                 mSuperscript.setChecked(!mSuperscript.isChecked());
                 mListener.onEffectSelected(Effects.SUPERSCRIPT, mSuperscript.isChecked());
                 if (mSuperscript.isChecked() && mSubscript != null) {
                     mSubscript.setChecked(false);
                     mListener.onEffectSelected(Effects.SUBSCRIPT, mSubscript.isChecked());
                 }
-            } else if (id == R.id.toolbar_subscript) {
+            }
+
+            else if (id == R.id.toolbar_subscript) {
                 mSubscript.setChecked(!mSubscript.isChecked());
                 mListener.onEffectSelected(Effects.SUBSCRIPT, mSubscript.isChecked());
                 if (mSubscript.isChecked() && mSuperscript != null) {
                     mSuperscript.setChecked(false);
                     mListener.onEffectSelected(Effects.SUPERSCRIPT, mSuperscript.isChecked());
                 }
-            } else if (id == R.id.toolbar_align_left) {
+            }
+
+            else if (id == R.id.toolbar_align_left) {
                 if (mAlignLeft != null) mAlignLeft.setChecked(true);
                 if (mAlignCenter != null) mAlignCenter.setChecked(false);
                 if (mAlignRight != null) mAlignRight.setChecked(false);
                 mListener.onEffectSelected(Effects.ALIGNMENT, Layout.Alignment.ALIGN_NORMAL);
-            } else if (id == R.id.toolbar_align_center) {
+            }
+
+            else if (id == R.id.toolbar_align_center) {
                 if (mAlignLeft != null) mAlignLeft.setChecked(false);
                 if (mAlignCenter != null) mAlignCenter.setChecked(true);
                 if (mAlignRight != null) mAlignRight.setChecked(false);
                 mListener.onEffectSelected(Effects.ALIGNMENT, Layout.Alignment.ALIGN_CENTER);
-            } else if (id == R.id.toolbar_align_right) {
+            }
+
+            else if (id == R.id.toolbar_align_right) {
                 if (mAlignLeft != null) mAlignLeft.setChecked(false);
                 if (mAlignCenter != null) mAlignCenter.setChecked(false);
                 if (mAlignRight != null) mAlignRight.setChecked(true);
                 mListener.onEffectSelected(Effects.ALIGNMENT, Layout.Alignment.ALIGN_OPPOSITE);
-            } else if (id == R.id.toolbar_bullet) {
+            }
+
+            else if (id == R.id.toolbar_bullet) {
                 mBullet.setChecked(!mBullet.isChecked());
                 boolean isChecked = mBullet.isChecked();
                 mListener.onEffectSelected(Effects.BULLET, isChecked);
                 if (isChecked && mNumber != null) {
                     mNumber.setChecked(false);    // numbers will be removed by the NumberEffect.applyToSelection
                 }
-            } else if (id == R.id.toolbar_number) {
+            }
+
+            else if (id == R.id.toolbar_number) {
                 mNumber.setChecked(!mNumber.isChecked());
                 boolean isChecked = mNumber.isChecked();
                 mListener.onEffectSelected(Effects.NUMBER, isChecked);
                 if (isChecked && mBullet != null) {
                     mBullet.setChecked(false);    // bullets will be removed by the BulletEffect.applyToSelection
                 }
-            } else if (id == R.id.toolbar_inc_indent) {
+            }
+
+            else if (id == R.id.toolbar_inc_indent) {
                 mListener.onEffectSelected(Effects.INDENTATION, true);
-            } else if (id == R.id.toolbar_dec_indent) {
+            }
+
+            else if (id == R.id.toolbar_dec_indent) {
                 mListener.onEffectSelected(Effects.INDENTATION, false);
-            } else if (id == R.id.toolbar_link) {
+            }
+
+            else if (id == R.id.toolbar_link) {
                 mListener.onCreateLink();
-            } else if (id == R.id.toolbar_image) {
+            }
+
+            else if (id == R.id.toolbar_image) {
                 mListener.onPickImage();
-            } else if (id == R.id.toolbar_image_capture) {
+            }
+
+            else if (id == R.id.toolbar_image_capture) {
                 mListener.onCaptureImage();
-            } else if (id == R.id.toolbar_clear) {
+            }
+
+            else if (id == R.id.toolbar_clear) {
                 mListener.onClearFormatting();
-            } else if (id == R.id.toolbar_undo) {
+            }
+
+            else if (id == R.id.toolbar_undo) {
                 mListener.onUndo();
-            } else if (id == R.id.toolbar_redo) {
+            }
+
+            else if (id == R.id.toolbar_redo) {
                 mListener.onRedo();
             }
         }

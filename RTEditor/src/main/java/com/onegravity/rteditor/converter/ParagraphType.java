@@ -38,18 +38,16 @@ public enum ParagraphType {
     INDENTATION_OL("<ol style='list-style-type:none;'>", "</ol>", "<li style='list-style-type:none;'>", "</li>", false, true);
 
     public static ParagraphType getInstance(ParagraphStyle style) {
-        ParagraphType type;
         if (style instanceof AlignmentSpan.Standard) {
             Layout.Alignment align = ((AlignmentSpan.Standard) style).getAlignment();
-            type = align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
-                    align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
-                            ParagraphType.ALIGNMENT_RIGHT;
+            return align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
+                   align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
+                   ParagraphType.ALIGNMENT_RIGHT;
         } else {
-            type = style instanceof BulletSpan ? ParagraphType.BULLET :
-                    style instanceof NumberSpan ? ParagraphType.NUMBERING :
-                            style instanceof IntendationSpan ? ParagraphType.INDENTATION_UL : null;
+            return style instanceof BulletSpan ? ParagraphType.BULLET :
+                   style instanceof NumberSpan ? ParagraphType.NUMBERING :
+                   style instanceof IntendationSpan ? ParagraphType.INDENTATION_UL : null;
         }
-        return type;
     }
 
     final private String mStartTag;

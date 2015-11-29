@@ -21,4 +21,11 @@ package com.onegravity.rteditor.spans;
  * We need this to be able to distinguish between underlining done by the app and underlining
  * inserted by e.g. a spell checker or a keyboard with auto-complete function.
  */
-public class UnderlineSpan extends android.text.style.UnderlineSpan {}
+public class UnderlineSpan extends android.text.style.UnderlineSpan implements RTSpan<Boolean> {
+
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
+    }
+
+}

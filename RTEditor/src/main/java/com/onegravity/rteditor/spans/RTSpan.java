@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor.effects;
-
-import com.onegravity.rteditor.spans.ItalicSpan;
+package com.onegravity.rteditor.spans;
 
 /**
- * Italic text
+ * All spans that are managed through an Effect need to implement this interface.
  */
-public class ItalicEffect extends SimpleBooleanEffect {
+public interface RTSpan<V> {
 
-    public ItalicEffect() {
-        super(ItalicSpan.class);
-    }
+    public V getValue();
 
 }

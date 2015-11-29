@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor.effects;
+package com.onegravity.rteditor.spans;
 
-import com.onegravity.rteditor.spans.ItalicSpan;
+import android.os.Parcel;
 
 /**
- * Italic text
+ * Implementation for an AbsoluteSizeSpan (android.text.style.AbsoluteSizeSpan).
  */
-public class ItalicEffect extends SimpleBooleanEffect {
+public class AbsoluteSizeSpan extends android.text.style.AbsoluteSizeSpan implements RTSpan<Integer> {
 
-    public ItalicEffect() {
-        super(ItalicSpan.class);
+    public AbsoluteSizeSpan(int size) { super(size); }
+
+    public AbsoluteSizeSpan(int size, boolean dip) { super(size, dip); }
+
+    public AbsoluteSizeSpan(Parcel src) {
+        super(src);
+    }
+
+    @Override
+    public Integer getValue() {
+        return getSize();
     }
 
 }

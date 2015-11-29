@@ -16,13 +16,15 @@
 
 package com.onegravity.rteditor.effects;
 
-import android.text.style.SubscriptSpan;
+import com.onegravity.rteditor.spans.SubscriptSpan;
 
 /**
  * Subscript text
  */
-public class SubscriptEffect extends SimpleBooleanEffect<SubscriptSpan> {
+public class SubscriptEffect extends SimpleBooleanEffect {
+
     public SubscriptEffect() {
         super(SubscriptSpan.class);
     }
+
 }

@@ -60,7 +60,12 @@ public class Selection implements Serializable {
         return mStart == mEnd;
     }
 
-    public Selection expandSelection(int offsetLeft, int offsetRight) {
+    public void offset(int offsetLeft, int offsetRight) {
+        mStart = Math.max(0, mStart - offsetLeft);
+        mEnd = mEnd + offsetRight;
+    }
+
+    public Selection expand(int offsetLeft, int offsetRight) {
         int newStart = Math.max(0, mStart - offsetLeft);
         int newEnd = mEnd + offsetRight;
         return new Selection(newStart, newEnd);

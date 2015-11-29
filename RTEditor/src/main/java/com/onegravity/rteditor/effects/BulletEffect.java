@@ -37,6 +37,10 @@ import java.util.List;
  */
 public class BulletEffect extends LeadingMarginEffect {
 
+    public BulletEffect() {
+        super(BulletSpan.class);
+    }
+
     @Override
     public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
@@ -72,11 +76,6 @@ public class BulletEffect extends LeadingMarginEffect {
         for (final ParagraphSpan spanDef : spans2Process) {
             spanDef.process(str);
         }
-    }
-
-    @Override
-    protected BulletSpan[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), BulletSpan.class);
     }
 
 }

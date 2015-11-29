@@ -37,7 +37,7 @@ public class SingleParagraphStyle implements ParagraphStyle {
     public int getIndentation() {
         if (mType.isIndentation()) {
             float increment = LeadingMarginEffect.getLeadingMargingIncrement();
-            float margin = ((IntendationSpan) mStyle).getLeadingMargin();
+            float margin = ((IntendationSpan) mStyle).getValue();
             return Math.round(margin / increment);
         } else if (mType.isBullet() || mType.isNumbering()) {
             return 1;

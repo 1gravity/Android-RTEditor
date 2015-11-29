@@ -24,7 +24,7 @@ import android.view.View;
  * View it's embedded in.
  * That View is the RTEditText which implements the LinkSpanListener interface.
  */
-public class LinkSpan extends URLSpan {
+public class LinkSpan extends URLSpan implements RTSpan<String> {
 
     public interface LinkSpanListener {
         public void onClick(LinkSpan linkSpan);
@@ -39,6 +39,11 @@ public class LinkSpan extends URLSpan {
         if (view instanceof LinkSpanListener) {
             ((LinkSpanListener) view).onClick(this);
         }
+    }
+
+    @Override
+    public String getValue() {
+        return getURL();
     }
 
 }

@@ -23,7 +23,7 @@ package com.onegravity.rteditor.spans;
  * (]0, 4][4, 4] --> the leading margin of the second span is added to the ]0, 4] paragraph regardless of the Spanned.flags)
  * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one
  */
-public class IntendationSpan extends android.text.style.LeadingMarginSpan.Standard {
+public class IntendationSpan extends android.text.style.LeadingMarginSpan.Standard implements RTSpan<Integer> {
     private final int mIndentation;
     private final boolean mIgnoreSpan;
 
@@ -43,7 +43,8 @@ public class IntendationSpan extends android.text.style.LeadingMarginSpan.Standa
      * this method returns the indentation regardless of whether we want to render it or not.
      * Internally we always use this method.
      */
-    public int getLeadingMargin() {
+    @Override
+    public Integer getValue() {
         return mIndentation;
     }
 }

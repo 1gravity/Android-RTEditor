@@ -33,7 +33,7 @@ import android.text.style.LeadingMarginSpan;
  * we ignore the leading margin for the last, empty paragraph unless it's the
  * only one
  */
-public class BulletSpan implements LeadingMarginSpan {
+public class BulletSpan implements LeadingMarginSpan, RTSpan<Boolean> {
     private static Path sBulletPath = null;
 
     private final int mGapWidth;
@@ -79,4 +79,10 @@ public class BulletSpan implements LeadingMarginSpan {
         c.drawPath(sBulletPath, p);
         c.restore();
     }
+
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
+    }
+
 }

@@ -17,34 +17,33 @@
 package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.fonts.RTTypeface;
 
 import java.util.ArrayList;
 
 public class Effects {
     // character effects
-    public static final Effect<Boolean> BOLD = new BoldEffect();                        // boolean effect
-    public static final Effect<Boolean> ITALIC = new ItalicEffect();                    // boolean effect
-    public static final Effect<Boolean> UNDERLINE = new UnderlineEffect();              // boolean effect
-    public static final Effect<Boolean> STRIKETHROUGH = new StrikethroughEffect();      // boolean effect
-    public static final Effect<Boolean> SUPERSCRIPT = new SuperscriptEffect();          // boolean effect
-    public static final Effect<Boolean> SUBSCRIPT = new SubscriptEffect();              // boolean effect
-    public static final Effect<Integer> FONTSIZE = new AbsoluteSizeEffect();            // non-boolean effect
-    public static final Effect<Integer> FONTCOLOR = new ForegroundColorEffect();        // non-boolean effect
-    public static final Effect<Integer> BGCOLOR = new BackgroundColorEffect();          // non-boolean effect
-    public static final Effect<RTTypeface> TYPEFACE = new TypefaceEffect();             // non-boolean effect
-    public static final LinkEffect LINK = new LinkEffect();                             // non-boolean effect
+    public static final Effect BOLD = new BoldEffect();                           // boolean effect
+    public static final Effect ITALIC = new ItalicEffect();                       // boolean effect
+    public static final Effect UNDERLINE = new UnderlineEffect();                 // boolean effect
+    public static final Effect STRIKETHROUGH = new StrikethroughEffect();         // boolean effect
+    public static final Effect SUPERSCRIPT = new SuperscriptEffect();             // boolean effect
+    public static final Effect SUBSCRIPT = new SubscriptEffect();                 // boolean effect
+    public static final Effect FONTSIZE = new AbsoluteSizeEffect();               // non-boolean effect
+    public static final Effect FONTCOLOR = new ForegroundColorEffect();           // non-boolean effect
+    public static final Effect BGCOLOR = new BackgroundColorEffect();             // non-boolean effect
+    public static final Effect TYPEFACE = new TypefaceEffect();                   // non-boolean effect
+    public static final LinkEffect LINK = new LinkEffect();                       // non-boolean effect
 
     // paragraph effects
-    public static final BulletEffect BULLET = new BulletEffect();                       // boolean effect
-    public static final NumberEffect NUMBER = new NumberEffect();                       // boolean effect
-    public static final IndentationEffect INDENTATION = new IndentationEffect();        // boolean effect
-    public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();              // non-boolean effect
+    public static final BulletEffect BULLET = new BulletEffect();                 // boolean effect
+    public static final NumberEffect NUMBER = new NumberEffect();                 // boolean effect
+    public static final IndentationEffect INDENTATION = new IndentationEffect();  // boolean effect
+    public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();        // non-boolean effect
 
     /*
      * ALL_EFFECTS is a list of all defined effects, for simpler iteration over all effects.
      */
-    public static final ArrayList<Effect<?>> ALL_EFFECTS = new ArrayList<Effect<?>>();
+    public static final ArrayList<Effect> ALL_EFFECTS = new ArrayList<Effect>();
 
     static {
         // character effects
@@ -70,7 +69,7 @@ public class Effects {
     /*
      * FORMATTING_EFFECTS is a list of all effects which will be removed when the formatting is removed from the text.
      */
-    public static final ArrayList<Effect<?>> FORMATTING_EFFECTS = new ArrayList<Effect<?>>();
+    public static final ArrayList<Effect> FORMATTING_EFFECTS = new ArrayList<Effect>();
 
     static {
         // character effects

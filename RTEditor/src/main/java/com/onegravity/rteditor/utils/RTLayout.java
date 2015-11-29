@@ -63,6 +63,9 @@ public class RTLayout implements Serializable {
             if (groupStart < len) {
                 mParagraphs.add(new Paragraph(groupStart, len, mNrOfLines == 1, true));
             }
+            else if (len == 0) {
+                mParagraphs.add(new Paragraph(0, 0, true, true));
+            }
         }
     }
 

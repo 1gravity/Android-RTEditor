@@ -24,7 +24,7 @@ import com.onegravity.rteditor.effects.Effect;
  */
 public interface RTToolbarListener {
 
-    public <T> void onEffectSelected(Effect<T> effect, T value);
+    public <V> void onEffectSelected(Effect<V> effect, V value);
 
     public void onUndo();
 

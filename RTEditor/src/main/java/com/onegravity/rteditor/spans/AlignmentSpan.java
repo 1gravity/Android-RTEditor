@@ -14,17 +14,27 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor.effects;
+package com.onegravity.rteditor.spans;
 
-import com.onegravity.rteditor.spans.ItalicSpan;
+import android.os.Parcel;
+import android.text.Layout;
 
 /**
- * Italic text
+ * Implementation for an alignment span (left, center, right alignment)
  */
-public class ItalicEffect extends SimpleBooleanEffect {
+public class AlignmentSpan extends android.text.style.AlignmentSpan.Standard implements RTSpan<Layout.Alignment> {
 
-    public ItalicEffect() {
-        super(ItalicSpan.class);
+    public AlignmentSpan(Layout.Alignment align) {
+        super(align);
+    }
+
+    public AlignmentSpan(Parcel src) {
+        super(src);
+    }
+
+    @Override
+    public Layout.Alignment getValue() {
+       return super.getAlignment();
     }
 
 }

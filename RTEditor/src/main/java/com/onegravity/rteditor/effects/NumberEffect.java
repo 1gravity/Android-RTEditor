@@ -39,6 +39,10 @@ import java.util.List;
  */
 public class NumberEffect extends LeadingMarginEffect {
 
+    public NumberEffect() {
+        super(NumberSpan.class);
+    }
+
     @Override
     public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
@@ -58,7 +62,7 @@ public class NumberEffect extends LeadingMarginEffect {
             Object[] indentationSpans = Effects.INDENTATION.getCleanSpans(str, paragraph);
             if (indentationSpans.length > 0) {
                 for (Object span : indentationSpans) {
-                    currentIndentation += ((IntendationSpan) span).getLeadingMargin();
+                    currentIndentation += ((IntendationSpan) span).getValue();
                 }
             }
             indentations.put(lineNr, currentIndentation);
@@ -114,10 +118,5 @@ public class NumberEffect extends LeadingMarginEffect {
         for (final ParagraphSpan spanDef : spans2Process) {
             spanDef.process(str);
         }
-    }
-
-    @Override
-    protected NumberSpan[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), NumberSpan.class);
     }
 }

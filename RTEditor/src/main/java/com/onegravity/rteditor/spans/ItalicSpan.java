@@ -23,7 +23,7 @@ import android.text.style.StyleSpan;
 /**
  * Implementation for a bold span (android.text.style.StyleSpan(TypeFace.ITALIC))
  */
-public class ItalicSpan extends StyleSpan {
+public class ItalicSpan extends StyleSpan implements RTSpan<Boolean> {
 
     public ItalicSpan() {
         super(Typeface.ITALIC);
@@ -35,6 +35,11 @@ public class ItalicSpan extends StyleSpan {
 
     public ItalicSpan(Parcel src) {
         super(src);
+    }
+
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
     }
 
 }
