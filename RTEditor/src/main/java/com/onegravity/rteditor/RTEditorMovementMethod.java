@@ -78,6 +78,7 @@ public class RTEditorMovementMethod extends ArrowKeyMovementMethod {
         return super.onTouchEvent(widget, buffer, event);
     }
 
+    // TODO finding links doesn't work with right alignment and potentially other formatting options
     private int getCharIndexAt(TextView textView, MotionEvent event) {
         // get coordinates
         int x = (int) event.getX();

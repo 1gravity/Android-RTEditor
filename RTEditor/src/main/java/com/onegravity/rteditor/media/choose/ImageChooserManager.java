@@ -83,6 +83,7 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
         return true;
     }
 
+    // TODO: on Android M we need to ask the WRITE_EXTERNAL_STORAGE permission explicitly
     private boolean takePicture() {
         try {
             // Create an image file name (must be in "public area" or the camera app might not be able to access the file)

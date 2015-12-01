@@ -48,7 +48,7 @@ import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
@@ -507,7 +507,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             if (nrOfIndents > 0) {
                 int margin = nrOfIndents * LeadingMarginEffect.getLeadingMargingIncrement();
                 // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
-                IntendationSpan span = new IntendationSpan(margin, start == end, false, false);
+                IndentationSpan span = new IndentationSpan(margin, start == end, false, false);
                 mResult.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 

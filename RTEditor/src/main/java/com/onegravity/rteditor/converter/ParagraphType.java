@@ -21,7 +21,7 @@ import android.text.style.AlignmentSpan;
 import android.text.style.ParagraphStyle;
 
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
 
 /*
@@ -46,7 +46,7 @@ public enum ParagraphType {
         } else {
             return style instanceof BulletSpan ? ParagraphType.BULLET :
                    style instanceof NumberSpan ? ParagraphType.NUMBERING :
-                   style instanceof IntendationSpan ? ParagraphType.INDENTATION_UL : null;
+                   style instanceof IndentationSpan ? ParagraphType.INDENTATION_UL : null;
         }
     }
 

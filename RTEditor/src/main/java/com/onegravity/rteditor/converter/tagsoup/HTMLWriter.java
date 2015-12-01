@@ -787,7 +787,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Determine the prefix for an element or attribute name.
      * <p>
-     * TODO: this method probably needs some cleanup.
      *
      * @param uri       The Namespace URI.
      * @param qName     The qualified name (optional); this will be used to indicate
