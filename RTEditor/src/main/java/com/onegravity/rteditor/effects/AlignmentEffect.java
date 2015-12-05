@@ -38,21 +38,11 @@ import java.util.List;
  * Each call to applyToSelection will again make sure that each paragraph has again its own AlignmentSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class AlignmentEffect extends Effect<Layout.Alignment> implements ParagraphEffect {
-
-    @Override
-    public Class<? extends RTSpan> getSpanClazz() {
-        return AlignmentSpan.class;
-    }
+public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> implements ParagraphEffect {
 
     @Override
     public RTSpan<Alignment> newSpan(Alignment value) {
         return null;
-    }
-
-    @Override
-    protected Selection getExpandedSelection(RTEditText editor, int spanType) {
-        return editor.getParagraphsInSelection();
     }
 
     @Override
@@ -68,19 +58,19 @@ public class AlignmentEffect extends Effect<Layout.Alignment> implements Paragra
 
         for (Paragraph paragraph : editor.getParagraphs()) {
             // find existing alignment spans for this paragraph
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
+            List<RTSpan<Layout.Alignment>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            boolean hasExistingSpans = !existingSpans.isEmpty();
             if (hasExistingSpans)
-                for (Object span : existingSpans) {
+                for (RTSpan<Layout.Alignment> span : existingSpans) {
                     spans2Process.add(new ParagraphSpan(span, paragraph, true));
                 }
 
             // if the paragraph is selected then we sure have an alignment
             Alignment newAlignment = paragraph.isSelected(selectedParagraphs) ? alignment :
-                    hasExistingSpans ? ((AlignmentSpan.Standard) existingSpans[0]).getAlignment() : null;
+                    hasExistingSpans ? existingSpans.get(0).getValue() : null;
 
             if (newAlignment != null) {
-                spans2Process.add(new ParagraphSpan(new AlignmentSpan.Standard(newAlignment), paragraph, false));
+                spans2Process.add(new ParagraphSpan(new AlignmentSpan(newAlignment), paragraph, false));
             }
         }
 

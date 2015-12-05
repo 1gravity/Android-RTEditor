@@ -21,6 +21,7 @@ import android.text.Spannable;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -35,11 +36,7 @@ import java.util.List;
  * Each call to applyToSelection will again make sure that each paragraph has again its own BulletSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class BulletEffect extends LeadingMarginEffect {
-
-    public BulletEffect() {
-        super(BulletSpan.class);
-    }
+public class BulletEffect extends LeadingMarginEffect<BulletSpan> {
 
     @Override
     public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
@@ -50,10 +47,10 @@ public class BulletEffect extends LeadingMarginEffect {
         for (Paragraph paragraph : editor.getParagraphs()) {
 
             // find existing spans for this paragraph
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
+            List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            boolean hasExistingSpans = !existingSpans.isEmpty();
             if (hasExistingSpans) {
-                for (Object span : existingSpans) {
+                for (RTSpan<Boolean> span : existingSpans) {
                     spans2Process.add(new ParagraphSpan(span, paragraph, true));
                 }
             }
@@ -67,7 +64,7 @@ public class BulletEffect extends LeadingMarginEffect {
                 BulletSpan bulletSpan = new BulletSpan(gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
                 spans2Process.add(new ParagraphSpan(bulletSpan, paragraph, false));
 
-                // if the parapgraph has number spans, then remove it
+                // if the paragraph has number spans, then remove it
                 Effects.NUMBER.findSpans2Remove(str, paragraph, spans2Process);
             }
         }

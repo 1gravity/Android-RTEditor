@@ -27,12 +27,7 @@ import com.onegravity.rteditor.utils.Selection;
 /**
  * Links.
  */
-public class LinkEffect extends Effect<String> {
-
-    @Override
-    protected Class<? extends RTSpan> getSpanClazz() {
-        return LinkSpan.class;
-    }
+public class LinkEffect extends Effect<String, LinkSpan> {
 
     @Override
     protected RTSpan<String> newSpan(String value) {
@@ -41,10 +36,10 @@ public class LinkEffect extends Effect<String> {
 
     @Override
     public void applyToSelection(RTEditText editor, String url) {
-        Selection selection = new Selection(editor);
+        Selection selection = getSelection(editor);
         Spannable str = editor.getText();
 
-        for (RTSpan<String> span : getSpans(str, selection)) {
+        for (RTSpan<String> span : getSpans(str, selection, SpanCollectMode.EXACT)) {
             str.removeSpan(span);
         }
 

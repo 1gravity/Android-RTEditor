@@ -35,6 +35,7 @@ import com.larswerkman.holocolorpicker.SetColorChangedListenerEvent;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.RTToolbarListener;
 import com.onegravity.rteditor.effects.Effects;
+import com.onegravity.rteditor.effects.LeadingMarginEffect;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.toolbar.spinner.BGColorSpinnerItem;
@@ -664,11 +665,11 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             }
 
             else if (id == R.id.toolbar_inc_indent) {
-                mListener.onEffectSelected(Effects.INDENTATION, true);
+                mListener.onEffectSelected(Effects.INDENTATION, LeadingMarginEffect.getLeadingMargingIncrement());
             }
 
             else if (id == R.id.toolbar_dec_indent) {
-                mListener.onEffectSelected(Effects.INDENTATION, false);
+                mListener.onEffectSelected(Effects.INDENTATION, -LeadingMarginEffect.getLeadingMargingIncrement());
             }
 
             else if (id == R.id.toolbar_link) {

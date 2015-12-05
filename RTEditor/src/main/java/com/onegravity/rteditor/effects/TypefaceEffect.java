@@ -21,14 +21,9 @@ import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.spans.TypefaceSpan;
 
 /**
- * Currently not used
+ * Typeface / Fonts.
  */
-public class TypefaceEffect extends Effect<RTTypeface> {
-
-    @Override
-    protected Class<? extends RTSpan> getSpanClazz() {
-        return TypefaceSpan.class;
-    }
+public class TypefaceEffect extends Effect<RTTypeface, TypefaceSpan> {
 
     /**
      * @return If the value is Null then return Null -> remove all TypefaceSpan.

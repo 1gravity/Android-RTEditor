@@ -19,8 +19,9 @@ package com.onegravity.rteditor.effects;
 import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -32,19 +33,25 @@ import java.util.List;
  * <p>
  * LeadingMarginSpans are always applied to whole paragraphs and each paragraphs gets its "own" LeadingMarginSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
- * Each call to applyToSelection will again make sure that each paragraph has again its own LeadingMarginSpan
+ * Each call to applyToSelection will make sure that each paragraph has again its own LeadingMarginSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  * <p>
  * The Boolean parameter is used to increment, decrement the indentation
  */
-public class IndentationEffect extends LeadingMarginEffect {
+public class IndentationEffect extends Effect<Integer, IndentationSpan> implements ParagraphEffect {
 
-    public IndentationEffect() {
-        super(IntendationSpan.class);
+    @Override
+    protected RTSpan<Integer> newSpan(Integer value) {
+        return null;
     }
 
     @Override
-    public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean increment) {
+    public void applyToSelection(RTEditText editor, Integer value) {
+        Selection selection = new Selection(editor);
+        applyToSelection(editor, selection, value);
+    }
+
+    public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Integer increment) {
         final Spannable str = editor.getText();
 
         List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
@@ -53,22 +60,22 @@ public class IndentationEffect extends LeadingMarginEffect {
             int indentation = 0;
 
             // find existing indentations/spans for this paragraph
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
+            List<RTSpan<Integer>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            boolean hasExistingSpans = ! existingSpans.isEmpty();
             if (hasExistingSpans) {
-                for (Object span : existingSpans) {
+                for (RTSpan<Integer> span : existingSpans) {
                     spans2Process.add(new ParagraphSpan(span, paragraph, true));
-                    indentation += ((IntendationSpan) span).getValue();
+                    indentation += span.getValue();
                 }
             }
 
             // if the paragraph is selected inc/dec the existing indentation
-            int incIndentation = increment == null ? 0 : (increment.booleanValue() ? 1 : -1) * getLeadingMargingIncrement();
+            int incIndentation = increment == null ? 0 : increment;
             indentation += paragraph.isSelected(selectedParagraphs) ? incIndentation : 0;
 
             // if indentation>0 then apply a new span
             if (indentation > 0) {
-                IntendationSpan leadingMarginSpan = new IntendationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                IndentationSpan leadingMarginSpan = new IndentationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
                 spans2Process.add(new ParagraphSpan(leadingMarginSpan, paragraph, false));
             }
         }

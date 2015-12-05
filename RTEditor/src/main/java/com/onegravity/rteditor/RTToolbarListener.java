@@ -17,6 +17,7 @@
 package com.onegravity.rteditor;
 
 import com.onegravity.rteditor.effects.Effect;
+import com.onegravity.rteditor.spans.RTSpan;
 
 /*
  * Listener interface to listen to toolbar events like bold selected/unselected.
@@ -24,7 +25,7 @@ import com.onegravity.rteditor.effects.Effect;
  */
 public interface RTToolbarListener {
 
-    public <V> void onEffectSelected(Effect<V> effect, V value);
+    public <V extends Object, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value);
 
     public void onUndo();
 

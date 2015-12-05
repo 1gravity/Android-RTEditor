@@ -32,31 +32,23 @@ import java.util.List;
  * <p>
  * LeadingMarginSpans are always applied to whole paragraphs and each paragraphs gets its "own" LeadingMarginSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
- * Each call to applyToSelection will again make sure that each paragraph has again its own LeadingMarginSpan
+ * Each call to applyToSelection will make sure that each paragraph has again its own LeadingMarginSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  * <p>
  * The Boolean parameter is used to increment, decrement the indentation
  */
-public abstract class LeadingMarginEffect extends SimpleBooleanEffect implements ParagraphEffect {
+public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends SimpleBooleanEffect<C> implements ParagraphEffect {
 
     private static final int LEADING_MARGIN_INCREMENT = 28;
     private static int sLeadingMargingIncrement = -1;
 
     public static int getLeadingMargingIncrement() {
+        // lazy initialize sLeadingMargingIncrement
         if (sLeadingMargingIncrement == -1) {
             float density = Helper.getDisplayDensity();
             sLeadingMargingIncrement = Math.round(LEADING_MARGIN_INCREMENT * density);
         }
         return sLeadingMargingIncrement;
-    }
-
-    public LeadingMarginEffect(Class<? extends RTSpan> spanClazz) {
-        super(spanClazz);
-    }
-
-    @Override
-    protected Selection getExpandedSelection(RTEditText editor, int spanType) {
-        return editor.getParagraphsInSelection();
     }
 
     @Override
@@ -68,11 +60,9 @@ public abstract class LeadingMarginEffect extends SimpleBooleanEffect implements
     public abstract void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean value);
 
     protected void findSpans2Remove(Spannable str, Paragraph paragraph, List<ParagraphSpan> spans2Remove) {
-        Object[] spans = getSpans(str, paragraph);
-        if (spans != null) {
-            for (Object span : spans) {
-                spans2Remove.add(new ParagraphSpan(span, paragraph, true));
-            }
+        List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+        for (RTSpan<Boolean> span : spans) {
+            spans2Remove.add(new ParagraphSpan(span, paragraph, true));
         }
     }
 }

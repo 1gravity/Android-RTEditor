@@ -20,9 +20,9 @@ import android.text.Spannable;
 import android.util.SparseIntArray;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.IntendationSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -37,11 +37,7 @@ import java.util.List;
  * Each call to applyToSelection will make sure that each paragraph has again its own NumberSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class NumberEffect extends LeadingMarginEffect {
-
-    public NumberEffect() {
-        super(NumberSpan.class);
-    }
+public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
 
     @Override
     public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
@@ -59,10 +55,10 @@ public class NumberEffect extends LeadingMarginEffect {
 			 * to determine which paragraphs belong together (same indentation)
 			 */
             int currentIndentation = 0;
-            Object[] indentationSpans = Effects.INDENTATION.getCleanSpans(str, paragraph);
-            if (indentationSpans.length > 0) {
-                for (Object span : indentationSpans) {
-                    currentIndentation += ((IntendationSpan) span).getValue();
+            List<RTSpan<Integer>> indentationSpans = Effects.INDENTATION.getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            if (! indentationSpans.isEmpty()) {
+                for (RTSpan<Integer> span : indentationSpans) {
+                    currentIndentation += span.getValue();
                 }
             }
             indentations.put(lineNr, currentIndentation);
@@ -70,10 +66,10 @@ public class NumberEffect extends LeadingMarginEffect {
 			/*
 			 * Find existing NumberSpans for this paragraph
 			 */
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
+            List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            boolean hasExistingSpans = ! existingSpans.isEmpty();
             if (hasExistingSpans) {
-                for (Object span : existingSpans) {
+                for (RTSpan<Boolean> span : existingSpans) {
                     spans2Process.add(new ParagraphSpan(span, paragraph, true));
                 }
             }

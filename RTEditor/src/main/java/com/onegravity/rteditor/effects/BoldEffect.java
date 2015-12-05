@@ -21,10 +21,4 @@ import com.onegravity.rteditor.spans.BoldSpan;
 /**
  * Bold text
  */
-public class BoldEffect extends SimpleBooleanEffect {
-
-    public BoldEffect() {
-        super(BoldSpan.class);
-    }
-
-}
+public class BoldEffect extends SimpleBooleanEffect<BoldSpan> {}

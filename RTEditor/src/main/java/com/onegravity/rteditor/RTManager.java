@@ -47,6 +47,7 @@ import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.effects.ForegroundColorEffect;
 import com.onegravity.rteditor.effects.ItalicEffect;
 import com.onegravity.rteditor.effects.NumberEffect;
+import com.onegravity.rteditor.effects.SpanCollectMode;
 import com.onegravity.rteditor.effects.StrikethroughEffect;
 import com.onegravity.rteditor.effects.SubscriptEffect;
 import com.onegravity.rteditor.effects.SuperscriptEffect;
@@ -405,7 +406,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
     @Override
     /* @inheritDoc */
-    public <V> void onEffectSelected(Effect<V> effect, V value) {
+    public <V extends Object, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value) {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
             editor.applyEffect(effect, value);
@@ -458,8 +459,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             String url = null;
             String linkText = null;
 
-            RTSpan<String>[] links = Effects.LINK.getSpans(editor.getText(), new Selection(editor));
-            if (links.length == 0) {
+            List<RTSpan<String>> links = Effects.LINK.getSpans(editor.getText(), new Selection(editor), SpanCollectMode.EXACT);
+            if (links.isEmpty()) {
                 // default values if no link is found at selection
                 linkText = editor.getSelectedText();
                 try {
@@ -471,8 +472,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 mLinkSelection = editor.getSelection();
             } else {
                 // values if a link already exists
-                url = links[0].getValue();
-                linkText = getLinkText(editor, links[0]);
+                RTSpan<String> linkSpan = links.get(0);
+                url = linkSpan.getValue();
+                linkText = getLinkText(editor, linkSpan);
             }
 
             mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, url));
@@ -609,9 +611,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         List<Integer> bgColors = null;
 
         // check if effect exists in selection
-        boolean isEmpty = (start == end);
         for (Effect effect : Effects.ALL_EFFECTS) {
-            if (effect.existsInSelection(editor, isEmpty ? Spanned.SPAN_INCLUSIVE_EXCLUSIVE : Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)) {
+            if (effect.existsInSelection(editor)) {
                 if (effect instanceof BoldEffect) {
                     isBold = true;
                 } else if (effect instanceof ItalicEffect) {
@@ -629,15 +630,15 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 } else if (effect instanceof NumberEffect) {
                     isNumber = true;
                 } else if (effect instanceof AlignmentEffect) {
-                    alignments = Effects.ALIGNMENT.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    alignments = Effects.ALIGNMENT.valuesInSelection(editor);
                 } else if (effect instanceof TypefaceEffect) {
-                    typefaces = Effects.TYPEFACE.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    typefaces = Effects.TYPEFACE.valuesInSelection(editor);
                 } else if (effect instanceof AbsoluteSizeEffect) {
-                    sizes = Effects.FONTSIZE.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sizes = Effects.FONTSIZE.valuesInSelection(editor);
                 } else if (effect instanceof ForegroundColorEffect) {
-                    fontColors = Effects.FONTCOLOR.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    fontColors = Effects.FONTCOLOR.valuesInSelection(editor);
                 } else if (effect instanceof BackgroundColorEffect) {
-                    bgColors = Effects.BGCOLOR.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    bgColors = Effects.BGCOLOR.valuesInSelection(editor);
                 }
             }
         }

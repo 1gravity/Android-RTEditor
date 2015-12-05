@@ -16,20 +16,11 @@
 
 package com.onegravity.rteditor.effects;
 
-import com.onegravity.rteditor.spans.ForegroundColorSpan;
-import com.onegravity.rteditor.spans.RTSpan;
-
 /**
- * Text color
+ * Defines how spans are retrieved.
  */
-public class ForegroundColorEffect extends Effect<Integer, ForegroundColorSpan> {
-
-    /**
-     * @return If the value is Null then return Null -> remove all ForegroundColorSpan.
-     */
-    @Override
-    public RTSpan<Integer> newSpan(Integer value) {
-        return value == null ? null : new ForegroundColorSpan(value);
-    }
-
+public enum SpanCollectMode {
+    ANDROID,            // do it like Android: Spanned.getSpans(...)
+    EXACT,              // find spans exactly within the defined selection, not more not less
+    SPAN_FLAGS;         // consider the span flags when deciding whether to include a span
 }

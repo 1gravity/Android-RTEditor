@@ -20,20 +20,19 @@ import android.util.Log;
 
 import com.onegravity.rteditor.spans.RTSpan;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * Base class for all binary Effect classes (on/off) like BoldEffect or
  * ItalicEffect (text is either italic or not)
  */
-public class SimpleBooleanEffect extends Effect<Boolean> {
+abstract class SimpleBooleanEffect<C extends RTSpan<Boolean>> extends Effect<Boolean, C> {
     private Class<? extends RTSpan> mSpanClazz;
 
-    public SimpleBooleanEffect(Class<? extends RTSpan> spanClazz) {
-        mSpanClazz = spanClazz;
-    }
-
-    @Override
-    final protected Class<? extends RTSpan> getSpanClazz() {
-        return mSpanClazz;
+    public SimpleBooleanEffect() {
+        Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+        mSpanClazz = (Class<? extends RTSpan<Boolean>>) types[0];
     }
 
     /**

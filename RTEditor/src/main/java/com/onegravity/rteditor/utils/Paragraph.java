@@ -55,9 +55,9 @@ public class Paragraph extends Selection {
      */
     public boolean isSelected(Selection sel) {
         if (sel == null) return false;
-        if (sel.isEmpty()) {                                                            // selection is a point
-            boolean isCompletelyWithin = sel.start() >= start() && sel.end() < end();    // selection is completely within paragraph (not at the end)
-            boolean isWithin = sel.start() >= start() && sel.end() <= end();            // selection is within or at the end of the paragraph
+        if (sel.isEmpty()) {                                                           // selection is a point
+            boolean isCompletelyWithin = sel.start() >= start() && sel.end() < end();  // selection is completely within paragraph (not at the end)
+            boolean isWithin = sel.start() >= start() && sel.end() <= end();           // selection is within or at the end of the paragraph
             return isCompletelyWithin || (isWithin && mIsLast);
         } else {
             // at least one character in common

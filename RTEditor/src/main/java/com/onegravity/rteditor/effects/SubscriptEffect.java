@@ -21,10 +21,4 @@ import com.onegravity.rteditor.spans.SubscriptSpan;
 /**
  * Subscript text
  */
-public class SubscriptEffect extends SimpleBooleanEffect {
-
-    public SubscriptEffect() {
-        super(SubscriptSpan.class);
-    }
-
-}
+public class SubscriptEffect extends SimpleBooleanEffect<SubscriptSpan> {}

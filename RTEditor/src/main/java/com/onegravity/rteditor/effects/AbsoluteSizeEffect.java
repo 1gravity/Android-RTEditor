@@ -22,12 +22,7 @@ import com.onegravity.rteditor.spans.RTSpan;
 /**
  * Text Size
  */
-public class AbsoluteSizeEffect extends Effect<Integer> {
-
-    @Override
-    protected Class<? extends RTSpan> getSpanClazz() {
-        return AbsoluteSizeSpan.class;
-    }
+public class AbsoluteSizeEffect extends Effect<Integer, AbsoluteSizeSpan> {
 
     /**
      * @return If the value is Null, 0 or negative then return Null -> remove all AbsoluteSizeSpan.

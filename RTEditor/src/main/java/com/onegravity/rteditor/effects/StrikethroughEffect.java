@@ -21,10 +21,4 @@ import com.onegravity.rteditor.spans.StrikethroughSpan;
 /**
  * Strike-through text
  */
-public class StrikethroughEffect extends SimpleBooleanEffect {
-
-    public StrikethroughEffect() {
-        super(StrikethroughSpan.class);
-    }
-
-}
+public class StrikethroughEffect extends SimpleBooleanEffect<StrikethroughSpan> {}

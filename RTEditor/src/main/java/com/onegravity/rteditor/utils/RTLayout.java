@@ -37,19 +37,19 @@ public class RTLayout implements Serializable {
 
     private int mNrOfLines = 0;
     private ArrayList<Paragraph> mParagraphs = new ArrayList<Paragraph>();
-    ;
 
+    // todo this needs some more work to make it work properly with ParagraphEffects
     public RTLayout(Spanned spanned) {
         if (spanned != null) {
             String s = spanned.toString();
 
-            // remove the trailing line feeds
+            // (logically) remove the trailing line feeds
             int len = s.length();
-            char c = len > 0 ? s.charAt(len - 1) : '-';
+            /*char c = len > 0 ? s.charAt(len - 1) : '-';
             while (len > 0 && (c == '\n' || c == '\r')) {
                 len--;
                 if (len > 0) c = s.charAt(len - 1);
-            }
+            }*/
 
             // now find the line breaks and the according lines / paragraphs
             mNrOfLines = 1;
@@ -60,11 +60,8 @@ public class RTLayout implements Serializable {
                 groupStart = m.end();
                 mNrOfLines++;
             }
-            if (groupStart < len) {
+            if (mParagraphs.size() < mNrOfLines) {
                 mParagraphs.add(new Paragraph(groupStart, len, mNrOfLines == 1, true));
-            }
-            else if (len == 0) {
-                mParagraphs.add(new Paragraph(0, 0, true, true));
             }
         }
     }
@@ -83,13 +80,23 @@ public class RTLayout implements Serializable {
 
     public int getLineStart(int line) {
         return mNrOfLines == 0 || line < 0 ? 0 :
-                line < mNrOfLines ? mParagraphs.get(line).start() :
-                        mParagraphs.get(mNrOfLines - 1).end() - 1;
+               line < mNrOfLines ? mParagraphs.get(line).start() :
+               mParagraphs.get(mNrOfLines - 1).end() - 1;
     }
 
     public int getLineEnd(int line) {
         return mNrOfLines == 0 || line < 0 ? 0 :
-                line < mNrOfLines ? mParagraphs.get(line).end() :
-                        mParagraphs.get(mNrOfLines - 1).end() - 1;
+               line < mNrOfLines ? mParagraphs.get(line).end() :
+               mParagraphs.get(mNrOfLines - 1).end() - 1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        int line = 1;
+        for (Paragraph p : mParagraphs) {
+            s.append(line++ + ": " + p.start() + "-" + p.end() + (p.isLast() ? "" : ", "));
+        }
+        return s.toString();
     }
 }

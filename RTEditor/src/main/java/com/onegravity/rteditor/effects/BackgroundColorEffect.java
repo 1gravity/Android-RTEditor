@@ -22,12 +22,7 @@ import com.onegravity.rteditor.spans.RTSpan;
 /**
  * Background color
  */
-public class BackgroundColorEffect extends Effect<Integer> {
-
-    @Override
-    public Class<? extends RTSpan> getSpanClazz() {
-        return BackgroundColorSpan.class;
-    }
+public class BackgroundColorEffect extends Effect<Integer, BackgroundColorSpan> {
 
     /**
      * @return If the value is Null then return Null -> remove all BackgroundColorSpan.

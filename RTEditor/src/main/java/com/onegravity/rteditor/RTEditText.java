@@ -45,6 +45,7 @@ import com.onegravity.rteditor.effects.ParagraphEffect;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.LinkSpan.LinkSpanListener;
 import com.onegravity.rteditor.spans.MediaSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.RTLayout;
 import com.onegravity.rteditor.utils.Selection;
@@ -553,7 +554,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     protected void onSelectionChanged(int start, int end) {
         if (mOldSelStart != start || mOldSelEnd != end) {
             mOldSelStart = start;
-            mOldSelStart = end;
+            mOldSelEnd = end;
 
             mTextSelected = (end > start);
 
@@ -580,7 +581,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      * You get the Effect object via the static data members (e.g., RTEditText.BOLD).
      * The value for most effects is a Boolean, indicating whether to add or remove the effect.
      */
-    public <V> void applyEffect(Effect<V> effect, V value) {
+    public <V extends Object, C extends RTSpan<V>> void applyEffect(Effect<V, C> effect, V value) {
         if (mUseRTFormatting && !mIsSelectionChanging && !mIsSaving) {
             Spannable oldSpannable = mIgnoreTextChange ? null : cloneSpannable();
 
@@ -593,7 +594,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
                 if (mListener != null && !mIgnoreTextChange) {
                     Spannable newSpannable = cloneSpannable();
                     mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
-                            getSelectionStart(), getSelectionEnd());
+                                            getSelectionStart(), getSelectionEnd());
                 }
                 mLayoutChanged = true;
             }

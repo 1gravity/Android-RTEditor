@@ -25,24 +25,26 @@ import com.onegravity.rteditor.utils.Paragraph;
  * This is a temporary container for paragraph spans and their meta information
  * that will be processed later (added to or removed from a Spannable)
  */
-public class ParagraphSpan {
+public class ParagraphSpan<V extends Object> {
     final private Object mSpan;
     final private Paragraph mParagraph;
     final private boolean mRemove;
 
-    public ParagraphSpan(Object span, Paragraph paragraph, boolean remove) {
+    public ParagraphSpan(RTSpan<V> span, Paragraph paragraph, boolean remove) {
         mSpan = span;
         mParagraph = paragraph;
         mRemove = remove;
     }
 
+    // todo this needs some more work to make it work properly with ParagraphEffects
     public void process(Spannable str) {
         if (mRemove) {
             str.removeSpan(mSpan);
         } else {
             int start = mParagraph.start();
             int end = mParagraph.end();
-            int flags = mParagraph.isEmpty() || mParagraph.isLast() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
+            int flags = mParagraph.isLast() && mParagraph.isEmpty() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE :
+                        Spanned.SPAN_INCLUSIVE_INCLUSIVE;
             str.setSpan(mSpan, start, end, flags);
         }
     }
