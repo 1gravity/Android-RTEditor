@@ -22,7 +22,6 @@ import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.AlignmentSpan;
-import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
@@ -40,6 +39,8 @@ import java.util.List;
  */
 public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> implements ParagraphEffect {
 
+    private ParagraphSpanProcessor<Layout.Alignment> mSpans2Process = new ParagraphSpanProcessor();
+
     @Override
     public RTSpan<Alignment> newSpan(Alignment value) {
         return null;
@@ -54,7 +55,7 @@ public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> imp
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Layout.Alignment alignment) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+        List<ParagraphSpanProcessor> spans2Process = new ArrayList<ParagraphSpanProcessor>();
 
         for (Paragraph paragraph : editor.getParagraphs()) {
             // find existing alignment spans for this paragraph
@@ -62,7 +63,7 @@ public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> imp
             boolean hasExistingSpans = !existingSpans.isEmpty();
             if (hasExistingSpans)
                 for (RTSpan<Layout.Alignment> span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
+                    mSpans2Process.addParagraphSpan(span, paragraph, true);
                 }
 
             // if the paragraph is selected then we sure have an alignment
@@ -70,14 +71,12 @@ public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> imp
                     hasExistingSpans ? existingSpans.get(0).getValue() : null;
 
             if (newAlignment != null) {
-                spans2Process.add(new ParagraphSpan(new AlignmentSpan(newAlignment), paragraph, false));
+                mSpans2Process.addParagraphSpan(new AlignmentSpan(newAlignment), paragraph, false);
             }
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
+        mSpans2Process.process(str);
     }
 
 }

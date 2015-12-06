@@ -19,7 +19,6 @@ package com.onegravity.rteditor.effects;
 import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
@@ -59,10 +58,10 @@ public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends Sim
 
     public abstract void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean value);
 
-    protected void findSpans2Remove(Spannable str, Paragraph paragraph, List<ParagraphSpan> spans2Remove) {
+    protected void findSpans2Remove(Spannable str, Paragraph paragraph, ParagraphSpanProcessor<Boolean> spans2Remove) {
         List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
         for (RTSpan<Boolean> span : spans) {
-            spans2Remove.add(new ParagraphSpan(span, paragraph, true));
+            spans2Remove.addParagraphSpan(span, paragraph, true);
         }
     }
 }

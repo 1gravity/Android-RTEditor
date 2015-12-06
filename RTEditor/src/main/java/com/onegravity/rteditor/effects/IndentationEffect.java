@@ -20,7 +20,6 @@ import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.IndentationSpan;
-import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
@@ -40,6 +39,8 @@ import java.util.List;
  */
 public class IndentationEffect extends Effect<Integer, IndentationSpan> implements ParagraphEffect {
 
+    private ParagraphSpanProcessor<Integer> mSpans2Process = new ParagraphSpanProcessor();
+
     @Override
     protected RTSpan<Integer> newSpan(Integer value) {
         return null;
@@ -54,7 +55,7 @@ public class IndentationEffect extends Effect<Integer, IndentationSpan> implemen
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Integer increment) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+        List<ParagraphSpanProcessor> spans2Process = new ArrayList<ParagraphSpanProcessor>();
 
         for (Paragraph paragraph : editor.getParagraphs()) {
             int indentation = 0;
@@ -64,7 +65,7 @@ public class IndentationEffect extends Effect<Integer, IndentationSpan> implemen
             boolean hasExistingSpans = ! existingSpans.isEmpty();
             if (hasExistingSpans) {
                 for (RTSpan<Integer> span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
+                    mSpans2Process.addParagraphSpan(span, paragraph, true);
                     indentation += span.getValue();
                 }
             }
@@ -76,14 +77,12 @@ public class IndentationEffect extends Effect<Integer, IndentationSpan> implemen
             // if indentation>0 then apply a new span
             if (indentation > 0) {
                 IndentationSpan leadingMarginSpan = new IndentationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                spans2Process.add(new ParagraphSpan(leadingMarginSpan, paragraph, false));
+                mSpans2Process.addParagraphSpan(leadingMarginSpan, paragraph, false);
             }
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
+        mSpans2Process.process(str);
     }
 
 }

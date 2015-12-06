@@ -21,12 +21,10 @@ import android.util.SparseIntArray;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.NumberSpan;
-import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,11 +37,11 @@ import java.util.List;
  */
 public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
 
+    private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
+
     @Override
     public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
-
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
 
         int lineNr = 1;
         SparseIntArray indentations = new SparseIntArray();
@@ -70,7 +68,7 @@ public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
             boolean hasExistingSpans = ! existingSpans.isEmpty();
             if (hasExistingSpans) {
                 for (RTSpan<Boolean> span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
+                    mSpans2Process.addParagraphSpan(span, paragraph, true);
                 }
             }
 
@@ -101,18 +99,16 @@ public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
 
                 int gap = getLeadingMargingIncrement();
                 NumberSpan numberSpan = new NumberSpan(nr++, gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                spans2Process.add(new ParagraphSpan(numberSpan, paragraph, false));
+                mSpans2Process.addParagraphSpan(numberSpan, paragraph, false);
 
                 // if the paragraph has bullet spans, then remove it
-                Effects.BULLET.findSpans2Remove(str, paragraph, spans2Process);
+                Effects.BULLET.findSpans2Remove(str, paragraph, mSpans2Process);
             }
 
             lineNr++;
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
+        mSpans2Process.process(str);
     }
 }

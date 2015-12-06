@@ -20,12 +20,10 @@ import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,25 +31,27 @@ import java.util.List;
  * <p>
  * BulletSpans are always applied to whole paragraphs and each paragraphs gets its "own" BulletSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
- * Each call to applyToSelection will again make sure that each paragraph has again its own BulletSpan
+ * Each call to applyToSelection will make sure that each paragraph has again its own BulletSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
 public class BulletEffect extends LeadingMarginEffect<BulletSpan> {
 
+    private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
+
     @Override
-    public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
+    public synchronized void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+        mSpans2Process.clear();
 
         for (Paragraph paragraph : editor.getParagraphs()) {
 
-            // find existing spans for this paragraph
+            // find existing spans for this paragraph and add them to spans2Process to be removed
             List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
             boolean hasExistingSpans = !existingSpans.isEmpty();
             if (hasExistingSpans) {
                 for (RTSpan<Boolean> span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
+                    mSpans2Process.addParagraphSpan(span, paragraph, true);
                 }
             }
 
@@ -62,17 +62,15 @@ public class BulletEffect extends LeadingMarginEffect<BulletSpan> {
             if (hasBullet) {
                 int gap = getLeadingMargingIncrement();
                 BulletSpan bulletSpan = new BulletSpan(gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                spans2Process.add(new ParagraphSpan(bulletSpan, paragraph, false));
+                mSpans2Process.addParagraphSpan(bulletSpan, paragraph, false);
 
                 // if the paragraph has number spans, then remove it
-                Effects.NUMBER.findSpans2Remove(str, paragraph, spans2Process);
+                Effects.NUMBER.findSpans2Remove(str, paragraph, mSpans2Process);
             }
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
+        mSpans2Process.process(str);
     }
 
 }

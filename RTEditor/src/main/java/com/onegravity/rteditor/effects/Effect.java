@@ -42,6 +42,8 @@ import java.util.List;
  */
 abstract public class Effect<V extends Object, C extends RTSpan<V>> {
 
+    final private boolean mIsParagraphEffect;
+
     /*
      * Spanned.getSpans(int, int, Class) unfortunately doesn't respect the mark/point flags.
      * The SpanCollector allows us to implement and use different getSpan methods depending on the
@@ -49,6 +51,10 @@ abstract public class Effect<V extends Object, C extends RTSpan<V>> {
      * the Effect.
      */
     private SpanCollector<V> mSpanCollector;
+
+    protected Effect() {
+        mIsParagraphEffect = this instanceof ParagraphEffect;
+    }
 
     /**
      * Create an RTSpan for this effect.
@@ -194,7 +200,7 @@ abstract public class Effect<V extends Object, C extends RTSpan<V>> {
      * selection because ParagraphEffects always operate on whole paragraphs.
      */
     final protected Selection getSelection(RTEditText editor) {
-        if (this instanceof ParagraphEffect) {
+        if (mIsParagraphEffect) {
             return editor.getParagraphsInSelection();
         } else {
             return new Selection(editor);
