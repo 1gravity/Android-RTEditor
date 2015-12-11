@@ -19,7 +19,7 @@ package com.onegravity.rteditor.effects;
 import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
@@ -40,7 +40,7 @@ import java.util.List;
 public class IndentationEffect extends LeadingMarginEffect {
 
     public IndentationEffect() {
-        super(IntendationSpan.class);
+        super(IndentationSpan.class);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class IndentationEffect extends LeadingMarginEffect {
             if (hasExistingSpans) {
                 for (Object span : existingSpans) {
                     spans2Process.add(new ParagraphSpan(span, paragraph, true));
-                    indentation += ((IntendationSpan) span).getValue();
+                    indentation += ((IndentationSpan) span).getValue();
                 }
             }
 
@@ -68,7 +68,7 @@ public class IndentationEffect extends LeadingMarginEffect {
 
             // if indentation>0 then apply a new span
             if (indentation > 0) {
-                IntendationSpan leadingMarginSpan = new IntendationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                IndentationSpan leadingMarginSpan = new IndentationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
                 spans2Process.add(new ParagraphSpan(leadingMarginSpan, paragraph, false));
             }
         }

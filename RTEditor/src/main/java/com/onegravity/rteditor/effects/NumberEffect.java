@@ -20,7 +20,7 @@ import android.text.Spannable;
 import android.util.SparseIntArray;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.utils.Paragraph;
@@ -62,7 +62,7 @@ public class NumberEffect extends LeadingMarginEffect {
             Object[] indentationSpans = Effects.INDENTATION.getCleanSpans(str, paragraph);
             if (indentationSpans.length > 0) {
                 for (Object span : indentationSpans) {
-                    currentIndentation += ((IntendationSpan) span).getValue();
+                    currentIndentation += ((IndentationSpan) span).getValue();
                 }
             }
             indentations.put(lineNr, currentIndentation);
