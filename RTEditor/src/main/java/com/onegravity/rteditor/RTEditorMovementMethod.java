@@ -44,7 +44,7 @@ public class RTEditorMovementMethod extends ArrowKeyMovementMethod {
 
     private static Rect sLineBounds = new Rect();
 
-    public static MovementMethod getInstance() {
+    public static synchronized  MovementMethod getInstance() {
         if (sInstance == null) {
             sInstance = new RTEditorMovementMethod();
         }
