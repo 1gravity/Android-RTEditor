@@ -139,7 +139,7 @@ public abstract class Helper {
      * @return True if the text direction is right-to-left, false otherwiese.
      */
     public static boolean isRTL(CharSequence s, int start, int end) {
-        if (s.length() == 0) {
+        if (s == null || s.length() == 0) {
             // empty string --> determine the direction from the default language
             return isRTL(Locale.getDefault());
         }
@@ -150,7 +150,6 @@ public abstract class Helper {
             if (start == end) {
                 end = Math.min(s.length(), ++end);
             }
-
         }
 
         try {
