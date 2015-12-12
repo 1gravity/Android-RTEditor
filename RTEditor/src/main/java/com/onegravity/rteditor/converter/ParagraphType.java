@@ -17,9 +17,9 @@
 package com.onegravity.rteditor.converter;
 
 import android.text.Layout;
-import android.text.style.AlignmentSpan;
 import android.text.style.ParagraphStyle;
 
+import com.onegravity.rteditor.spans.AlignmentSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
@@ -38,8 +38,8 @@ public enum ParagraphType {
     INDENTATION_OL("<ol style='list-style-type:none;'>", "</ol>", "<li style='list-style-type:none;'>", "</li>", false, true);
 
     public static ParagraphType getInstance(ParagraphStyle style) {
-        if (style instanceof AlignmentSpan.Standard) {
-            Layout.Alignment align = ((AlignmentSpan.Standard) style).getAlignment();
+        if (style instanceof AlignmentSpan) {
+            Layout.Alignment align = ((AlignmentSpan) style).getValue();
             return align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
                    align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
                    ParagraphType.ALIGNMENT_RIGHT;

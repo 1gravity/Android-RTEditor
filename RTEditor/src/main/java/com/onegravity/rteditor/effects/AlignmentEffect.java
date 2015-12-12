@@ -24,6 +24,7 @@ import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.AlignmentSpan;
 import com.onegravity.rteditor.spans.ParagraphSpan;
 import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -77,10 +78,11 @@ public class AlignmentEffect extends Effect<Layout.Alignment> implements Paragra
 
             // if the paragraph is selected then we sure have an alignment
             Alignment newAlignment = paragraph.isSelected(selectedParagraphs) ? alignment :
-                    hasExistingSpans ? ((AlignmentSpan.Standard) existingSpans[0]).getAlignment() : null;
+                    hasExistingSpans ? ((AlignmentSpan) existingSpans[0]).getValue() : null;
 
             if (newAlignment != null) {
-                spans2Process.add(new ParagraphSpan(new AlignmentSpan.Standard(newAlignment), paragraph, false));
+                boolean isRTL = Helper.isRTL(str, paragraph.start(), paragraph.end());
+                spans2Process.add(new ParagraphSpan(new AlignmentSpan(newAlignment, isRTL), paragraph, false));
             }
         }
 

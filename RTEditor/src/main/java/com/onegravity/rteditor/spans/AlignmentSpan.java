@@ -19,13 +19,30 @@ package com.onegravity.rteditor.spans;
 import android.os.Parcel;
 import android.text.Layout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Implementation for an alignment span (left, center, right alignment)
  */
 public class AlignmentSpan extends android.text.style.AlignmentSpan.Standard implements RTSpan<Layout.Alignment> {
 
-    public AlignmentSpan(Layout.Alignment align) {
-        super(align);
+    /*
+     * Map alignment directions for RTL languages (Hebrew, Arabic etc.)
+     */
+    private static Map<Layout.Alignment, Layout.Alignment> sRTLMapping = new HashMap<>();
+    static {
+        sRTLMapping.put(Layout.Alignment.ALIGN_CENTER, Layout.Alignment.ALIGN_CENTER);
+        sRTLMapping.put(Layout.Alignment.ALIGN_NORMAL, Layout.Alignment.ALIGN_OPPOSITE);
+        sRTLMapping.put(Layout.Alignment.ALIGN_OPPOSITE, Layout.Alignment.ALIGN_NORMAL);
+    }
+
+    private boolean mIsRTL;
+
+    public AlignmentSpan(Layout.Alignment align, boolean isRTL) {
+        super(isRTL ? sRTLMapping.get(align) : align);
+
+        mIsRTL = isRTL;
     }
 
     public AlignmentSpan(Parcel src) {
@@ -34,7 +51,8 @@ public class AlignmentSpan extends android.text.style.AlignmentSpan.Standard imp
 
     @Override
     public Layout.Alignment getValue() {
-       return super.getAlignment();
+        Layout.Alignment align = getAlignment();
+        return mIsRTL ? sRTLMapping.get(align) : align;
     }
 
 }
