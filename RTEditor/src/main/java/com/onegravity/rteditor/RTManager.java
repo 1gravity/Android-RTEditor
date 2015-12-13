@@ -60,6 +60,7 @@ import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Selection;
 
 import java.net.MalformedURLException;
@@ -656,7 +657,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
             // alignment (left, center, right)
             if (alignments == null) {
-                toolbar.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+                boolean isRTL = Helper.isRTL(editor.getText(), start, end);
+                toolbar.setAlignment(isRTL ? Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL);
             } else {
                 toolbar.setAlignments(alignments);
             }

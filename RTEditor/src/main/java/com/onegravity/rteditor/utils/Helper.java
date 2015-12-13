@@ -32,6 +32,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.Bidi;
+import java.util.Locale;
 
 /**
  * Miscellaneous helper methods
@@ -126,4 +128,43 @@ public abstract class Helper {
 
         return url;
     }
+
+    /**
+     * This method determines if the direction of a substring is right-to-left.
+     * If the string is empty that determination is based on the default system language determined
+     * by Locale.getDefault().
+     * The method can handle invalid substring definitions (start > end and similar cases), in which
+     * case the method returns False.
+     *
+     * @return True if the text direction is right-to-left, false otherwiese.
+     */
+    public static boolean isRTL(CharSequence s, int start, int end) {
+        if (s == null || s.length() == 0) {
+            // empty string --> determine the direction from the default language
+            return isRTL(Locale.getDefault());
+        }
+
+        if (start == end) {
+            // if no character is selected we need to expand the selection
+            start = Math.max(0, --start);
+            if (start == end) {
+                end = Math.min(s.length(), ++end);
+            }
+        }
+
+        try {
+            Bidi bidi = new Bidi(s.subSequence(start, end).toString(), Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
+            return ! bidi.baseIsLeftToRight();
+        }
+        catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    private static boolean isRTL(Locale locale) {
+        int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
 }

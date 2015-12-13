@@ -23,6 +23,7 @@ import android.text.Spannable;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.AlignmentSpan;
 import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -71,7 +72,8 @@ public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> imp
                     hasExistingSpans ? existingSpans.get(0).getValue() : null;
 
             if (newAlignment != null) {
-                mSpans2Process.addParagraphSpan(new AlignmentSpan(newAlignment), paragraph, false);
+                boolean isRTL = Helper.isRTL(str, paragraph.start(), paragraph.end());
+                mSpans2Process.addParagraphSpan(new AlignmentSpan(newAlignment, isRTL), paragraph, false);
             }
         }
 

@@ -22,7 +22,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.AlignmentSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
@@ -30,7 +29,6 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
-import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -44,14 +42,16 @@ import com.onegravity.rteditor.converter.tagsoup.Parser;
 import com.onegravity.rteditor.effects.LeadingMarginEffect;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
+import com.onegravity.rteditor.spans.AlignmentSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 import com.onegravity.rteditor.utils.Helper;
 
 import org.xml.sax.Attributes;
@@ -381,17 +381,18 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
         mResult.removeSpan(obj);
         if (start != end) {
-            if (!checkDuplicateSpan(mResult, start, AlignmentSpan.Standard.class)) {
+            if (!checkDuplicateSpan(mResult, start, AlignmentSpan.class)) {
                 Div divObj = (Div) obj;
                 Layout.Alignment align = divObj.mAlign.equalsIgnoreCase("center") ? Layout.Alignment.ALIGN_CENTER :
-                        divObj.mAlign.equalsIgnoreCase("right") ? Layout.Alignment.ALIGN_OPPOSITE : null;
+                        divObj.mAlign.equalsIgnoreCase("right") ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL;
                 if (align != null) {
                     if (mResult.charAt(end - 1) != '\n') {
                         // yes we need that linefeed, or we will get crashes
                         mResult.append('\n');
                     }
                     // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
-                    mResult.setSpan(new AlignmentSpan.Standard(align), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    boolean isRTL = Helper.isRTL(mResult, start, end);
+                    mResult.setSpan(new AlignmentSpan(align, isRTL), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
         }
