@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @param <C> is the RTSpan<V> used by the Effect (e.g. BoldEffect uses BoldSpan)
  */
-abstract public class Effect<V extends Object, C extends RTSpan<V>> {
+abstract public class Effect<V, C extends RTSpan<V>> {
 
     final private boolean mIsParagraphEffect;
 

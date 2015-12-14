@@ -25,7 +25,7 @@ import com.onegravity.rteditor.spans.RTSpan;
  */
 public interface RTToolbarListener {
 
-    public <V extends Object, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value);
+    public <C extends RTSpan<V>, V> void onEffectSelected(Effect<V, C> effect, V value);
 
     public void onUndo();
 

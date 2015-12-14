@@ -17,28 +17,40 @@
 package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.RTEditText;
+import com.onegravity.rteditor.fonts.RTTypeface;
+import com.onegravity.rteditor.spans.AbsoluteSizeSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.onegravity.rteditor.spans.BoldSpan;
+import com.onegravity.rteditor.spans.ForegroundColorSpan;
+import com.onegravity.rteditor.spans.ItalicSpan;
+import com.onegravity.rteditor.spans.LinkSpan;
+import com.onegravity.rteditor.spans.StrikethroughSpan;
+import com.onegravity.rteditor.spans.SubscriptSpan;
+import com.onegravity.rteditor.spans.SuperscriptSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import java.util.ArrayList;
 
 public class Effects {
     // character effects
-    public static final Effect BOLD = new BoldEffect();                           // boolean effect
-    public static final Effect ITALIC = new ItalicEffect();                       // boolean effect
-    public static final Effect UNDERLINE = new UnderlineEffect();                 // boolean effect
-    public static final Effect STRIKETHROUGH = new StrikethroughEffect();         // boolean effect
-    public static final Effect SUPERSCRIPT = new SuperscriptEffect();             // boolean effect
-    public static final Effect SUBSCRIPT = new SubscriptEffect();                 // boolean effect
-    public static final Effect FONTSIZE = new AbsoluteSizeEffect();               // non-boolean effect
-    public static final Effect FONTCOLOR = new ForegroundColorEffect();           // non-boolean effect
-    public static final Effect BGCOLOR = new BackgroundColorEffect();             // non-boolean effect
-    public static final Effect TYPEFACE = new TypefaceEffect();                   // non-boolean effect
-    public static final LinkEffect LINK = new LinkEffect();                       // non-boolean effect
+    public static final Effect<Boolean, BoldSpan> BOLD = new BoldEffect();                             // boolean effect
+    public static final Effect<Boolean, ItalicSpan> ITALIC = new ItalicEffect();                       // boolean effect
+    public static final Effect<Boolean, UnderlineSpan> UNDERLINE = new UnderlineEffect();              // boolean effect
+    public static final Effect<Boolean, StrikethroughSpan> STRIKETHROUGH = new StrikethroughEffect();  // boolean effect
+    public static final Effect<Boolean, SuperscriptSpan> SUPERSCRIPT = new SuperscriptEffect();        // boolean effect
+    public static final Effect<Boolean, SubscriptSpan> SUBSCRIPT = new SubscriptEffect();              // boolean effect
+    public static final Effect<Integer, AbsoluteSizeSpan> FONTSIZE = new AbsoluteSizeEffect();         // non-boolean effect
+    public static final Effect<Integer, ForegroundColorSpan> FONTCOLOR = new ForegroundColorEffect();  // non-boolean effect
+    public static final Effect<Integer, BackgroundColorSpan> BGCOLOR = new BackgroundColorEffect();    // non-boolean effect
+    public static final Effect<RTTypeface, TypefaceSpan> TYPEFACE = new TypefaceEffect();              // non-boolean effect
+    public static final Effect<String, LinkSpan> LINK = new LinkEffect();                              // non-boolean effect
 
     // paragraph effects
-    public static final BulletEffect BULLET = new BulletEffect();                 // boolean effect
-    public static final NumberEffect NUMBER = new NumberEffect();                 // boolean effect
-    public static final IndentationEffect INDENTATION = new IndentationEffect();  // boolean effect
-    public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();        // non-boolean effect
+    public static final BulletEffect BULLET = new BulletEffect();                                      // boolean effect
+    public static final NumberEffect NUMBER = new NumberEffect();                                      // boolean effect
+    public static final IndentationEffect INDENTATION = new IndentationEffect();                       // boolean effect
+    public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();                             // non-boolean effect
 
     /*
      * ALL_EFFECTS is a list of all defined effects, for simpler iteration over all effects.

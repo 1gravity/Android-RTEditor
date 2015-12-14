@@ -407,7 +407,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
     @Override
     /* @inheritDoc */
-    public <V extends Object, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value) {
+    public <C extends RTSpan<V>, V> void onEffectSelected(Effect<V, C> effect, V value) {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
             editor.applyEffect(effect, value);
