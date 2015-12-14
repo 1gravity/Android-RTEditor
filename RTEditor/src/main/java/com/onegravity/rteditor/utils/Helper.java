@@ -131,12 +131,12 @@ public abstract class Helper {
 
     /**
      * This method determines if the direction of a substring is right-to-left.
-     * If the string is empty that determination is based on the default system language determined
-     * by Locale.getDefault().
-     * The method can handle invalid substring definitions (start > end and similar cases), in which
-     * case the method returns False.
+     * If the string is empty that determination is based on the default system language
+     * Locale.getDefault().
+     * The method can handle invalid substring definitions (start > end etc.), in which case the
+     * method returns False.
      *
-     * @return True if the text direction is right-to-left, false otherwiese.
+     * @return True if the text direction is right-to-left, false otherwise.
      */
     public static boolean isRTL(CharSequence s, int start, int end) {
         if (s == null || s.length() == 0) {

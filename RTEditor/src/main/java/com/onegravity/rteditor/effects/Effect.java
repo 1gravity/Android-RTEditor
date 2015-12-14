@@ -30,15 +30,14 @@ import java.util.List;
 
 /**
  * Base class for all effects.
- * An "effect" is a particular type of styling to apply to the selected text in
- * a rich text editor. Most of them are wrappers around the corresponding
- * CharacterStyle or ParagraphStyle classes (e.g. BulletSpan).
+ * An "effect" is a particular type of styling to apply to the selected text in a rich text editor.
+ * Most of them are wrappers around the corresponding CharacterStyle (Bold, Italic, font size etc.)
+ * or ParagraphStyle classes (e.g. BulletSpan).
  *
  * @param <V> is the sort of configuration information that the effect needs.
- *           Many will be Effect<Boolean>, meaning the effect is a toggle (on or off),
- *           such as boldface.
+ *           Many will be Effect<Boolean>, meaning the effect is a toggle (on or off), such as bold.
  *
- * @param <C> is the span class extending RTSpan<V>
+ * @param <C> is the RTSpan<V> used by the Effect (e.g. BoldEffect uses BoldSpan)
  */
 abstract public class Effect<V extends Object, C extends RTSpan<V>> {
 
@@ -156,6 +155,9 @@ abstract public class Effect<V extends Object, C extends RTSpan<V>> {
      */
     public void applyToSelection(RTEditText editor, V value) {
         Selection selection = getSelection(editor);
+        // SPAN_INCLUSIVE_INCLUSIVE is default for empty spans
+        int flags = selection.isEmpty() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
+
         Spannable str = editor.getText();
 
         // we expand the selection to "catch" identical leading and trailing styles
@@ -166,10 +168,12 @@ abstract public class Effect<V extends Object, C extends RTSpan<V>> {
             if (spanStart < selection.start()) {
                 // process preceding spans
                 if (sameSpan) {
+                    // we have a preceding span --> use SPAN_EXCLUSIVE_INCLUSIVE instead of SPAN_INCLUSIVE_INCLUSIVE
+                    flags = Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
                     selection.offset(selection.start() - spanStart, 0);
                 }
                 else {
-                    str.setSpan(newSpan(span.getValue()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    str.setSpan(newSpan(span.getValue()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
             int spanEnd = str.getSpanEnd(span);
@@ -188,7 +192,6 @@ abstract public class Effect<V extends Object, C extends RTSpan<V>> {
         if (value != null) {
             RTSpan<V> newSpan = newSpan(value);
             if (newSpan != null) {
-                int flags = selection.isEmpty() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
                 str.setSpan(newSpan, selection.start(), selection.end(), flags);
             }
         }
