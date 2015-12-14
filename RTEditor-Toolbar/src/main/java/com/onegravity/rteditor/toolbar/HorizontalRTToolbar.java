@@ -48,7 +48,6 @@ import com.onegravity.rteditor.toolbar.spinner.SpinnerItemAdapter;
 import com.onegravity.rteditor.toolbar.spinner.SpinnerItems;
 import com.onegravity.rteditor.utils.Helper;
 
-import java.util.List;
 import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -411,16 +410,6 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             mAlignCenter.setChecked(alignment == Layout.Alignment.ALIGN_CENTER);
         if (mAlignRight != null)
             mAlignRight.setChecked(alignment == Layout.Alignment.ALIGN_OPPOSITE);
-    }
-
-    @Override
-    public void setAlignments(List<Layout.Alignment> alignments) {
-        if (mAlignLeft != null)
-            mAlignLeft.setChecked(alignments.contains(Layout.Alignment.ALIGN_NORMAL));
-        if (mAlignCenter != null)
-            mAlignCenter.setChecked(alignments.contains(Layout.Alignment.ALIGN_CENTER));
-        if (mAlignRight != null)
-            mAlignRight.setChecked(alignments.contains(Layout.Alignment.ALIGN_OPPOSITE));
     }
 
     @Override

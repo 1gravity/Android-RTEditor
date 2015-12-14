@@ -656,11 +656,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             toolbar.setNumber(isNumber);
 
             // alignment (left, center, right)
-            if (alignments == null) {
+            if (alignments != null && alignments.size() == 1) {
+                toolbar.setAlignment(alignments.get(0));
+            } else {
                 boolean isRTL = Helper.isRTL(editor.getText(), start, end);
                 toolbar.setAlignment(isRTL ? Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL);
-            } else {
-                toolbar.setAlignments(alignments);
             }
 
             // fonts

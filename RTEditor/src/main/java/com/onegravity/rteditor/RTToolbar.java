@@ -19,10 +19,7 @@ package com.onegravity.rteditor;
 import android.text.Layout;
 import android.view.ViewGroup;
 
-import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.fonts.RTTypeface;
-
-import java.util.List;
 
 /**
  * An interface describing a rich text toolbar.
@@ -83,8 +80,6 @@ public interface RTToolbar {
     public void setNumber(boolean enabled);
 
     public void setAlignment(Layout.Alignment alignment);
-
-    public void setAlignments(List<Layout.Alignment> alignments);
 
     public void setFont(RTTypeface typeface);
 
