@@ -49,7 +49,7 @@ public class Effects {
     // paragraph effects
     public static final BulletEffect BULLET = new BulletEffect();                                      // boolean effect
     public static final NumberEffect NUMBER = new NumberEffect();                                      // boolean effect
-    public static final IndentationEffect INDENTATION = new IndentationEffect();                       // boolean effect
+    public static final IndentationEffect INDENTATION = new IndentationEffect();                       // non-boolean effect
     public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();                             // non-boolean effect
 
     /*
