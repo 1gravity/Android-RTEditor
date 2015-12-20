@@ -32,11 +32,13 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.onegravity.rteditor.utils.Helper;
-import com.onegravity.rteditor.utils.validator.EmailValidator;
-import com.onegravity.rteditor.utils.validator.UrlValidator;
 
 import java.lang.ref.SoftReference;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.greenrobot.event.EventBus;
 
@@ -101,8 +103,49 @@ public class LinkFragment extends DialogFragment {
         }
     }
 
-    private static final UrlValidator sUrlValidator = new UrlValidator(UrlValidator.ALLOW_2_SLASHES + UrlValidator.ALLOW_ALL_SCHEMES);
-    private static final EmailValidator sEmailValidator = EmailValidator.getInstance(false);
+    /**
+     * Use this to find the URI scheme
+     */
+    Pattern SCHEME = Pattern.compile("^([a-zA-Z][a-zA-Z\\+\\.\\-]*):.*$");
+
+    /**
+     *  Check the most important schemes according to:
+     *  http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
+     */
+    private static Set<String> sSchemes = new HashSet<String>();
+    static {
+        sSchemes.add("attachment");
+        sSchemes.add("bitcoin");
+        sSchemes.add("callto");
+        sSchemes.add("cid");
+        sSchemes.add("data");
+        sSchemes.add("dns");
+        sSchemes.add("file");
+        sSchemes.add("ftp");
+        sSchemes.add("git");
+        sSchemes.add("http");
+        sSchemes.add("https");
+        sSchemes.add("imap");
+        sSchemes.add("ldap");
+        sSchemes.add("ldaps");
+        sSchemes.add("mailto");
+        sSchemes.add("market");
+        sSchemes.add("news");
+        sSchemes.add("nfs");
+        sSchemes.add("nntp");
+        sSchemes.add("pop");
+        sSchemes.add("proxy");
+        sSchemes.add("sftp");
+        sSchemes.add("skype");
+        sSchemes.add("smb");
+        sSchemes.add("sms");
+        sSchemes.add("smtp");
+        sSchemes.add("snmp");
+        sSchemes.add("ssh");
+        sSchemes.add("svn");
+        sSchemes.add("tel");
+        sSchemes.add("telnet");
+    }
 
     private SoftReference<Activity> mActivity;
 
@@ -115,8 +158,7 @@ public class LinkFragment extends DialogFragment {
         return fragment;
     }
 
-    public LinkFragment() {
-    }
+    public LinkFragment() {}
 
     @Override
     public final void onAttach(Activity activity) {
@@ -139,13 +181,11 @@ public class LinkFragment extends DialogFragment {
         Bundle args = getArguments();
 
         // link address
-        String tmp = "http://";
         final String address = args.getString(LINK_ADDRESS);
+        String tmp = "";
         if (address != null && ! address.isEmpty()) {
             try {
-                Uri uri = Uri.parse( Helper.decodeQuery(address) );
-                // if we have an email address remove the mailto: part for editing purposes
-                tmp = startsWithMailto(address) ? uri.getSchemeSpecificPart() : uri.toString();
+                tmp = Uri.parse( Helper.decodeQuery(address) ).toString();
             } catch (Exception ignore) {}
         }
         final String url = tmp;
@@ -201,18 +241,13 @@ public class LinkFragment extends DialogFragment {
         // retrieve link address and do some cleanup
         final String address = addressView.getText().toString().trim();
 
-        boolean isEmail = sEmailValidator.isValid(address);
-        boolean isUrl = sUrlValidator.isValid(address);
-        if (requiredFieldValid(addressView) && (isUrl || isEmail)) {
+        //boolean isEmail = sEmailValidator.isValid(address);
+        //boolean isUrl = sUrlValidator.isValid(address);
+        if (requiredFieldValid(addressView) && schemeIsValid(address)) {
             // valid url or email address
 
             // encode address
             String newAddress = Helper.encodeQuery(address);
-
-            // add mailto: for email addresses
-            if (isEmail && !startsWithMailto(newAddress)) {
-                newAddress = "mailto:" + newAddress;
-            }
 
             // use the original address text as link text if the user didn't enter anything
             String linkText = textView.getText().toString();
@@ -223,14 +258,24 @@ public class LinkFragment extends DialogFragment {
             EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(linkText, newAddress), false));
             try { dialog.dismiss(); } catch (Exception ignore) {}
         } else {
-            // invalid address (neither a url nor an email address
+            // invalid Uri
             String errorMessage = getString(R.string.rte_invalid_link, address);
             addressView.setError(errorMessage);
         }
     }
 
-    private boolean startsWithMailto(String address) {
-        return address != null && address.toLowerCase(Locale.getDefault()).startsWith("mailto:");
+    private boolean schemeIsValid(String address) {
+        String scheme = getScheme(address);
+        return scheme == null || sSchemes.contains(scheme);
+    }
+
+    private String getScheme(String address) {
+        String lcAddress = address.toLowerCase(Locale.getDefault());
+        Matcher m = SCHEME.matcher(lcAddress);
+        if (m.find()) {
+            return m.group(1);
+        }
+        return null;
     }
 
     @Override
