@@ -32,11 +32,14 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.onegravity.rteditor.utils.Helper;
+import com.onegravity.rteditor.utils.validator.EmailValidator;
+import com.onegravity.rteditor.utils.validator.UrlValidator;
+import com.onegravity.rteditor.utils.validator.Validator;
 
 import java.lang.ref.SoftReference;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Set;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,44 +110,69 @@ public class LinkFragment extends DialogFragment {
      * Use this to find the URI scheme
      */
     Pattern SCHEME = Pattern.compile("^([a-zA-Z][a-zA-Z\\+\\.\\-]*):.*$");
+    
+    private static final UrlValidator sUrlValidator = new UrlValidator(UrlValidator.ALLOW_2_SLASHES + UrlValidator.ALLOW_ALL_SCHEMES);
 
+    /**
+     * Validator for emails.
+     * Wrapper for EmailValidator to remove the leading mailto: scheme.
+     */
+    private static final Validator sEmailValidator = new Validator() {
+        private EmailValidator sRealEmailValidator = EmailValidator.getInstance(false);
+        @Override
+        public boolean isValid(String value) {
+            value = value.substring(7);
+            return sRealEmailValidator.isValid(value);
+        }
+    };
+
+    /**
+     * Validator that does nothing and always returns true
+     */
+    private static final Validator sValidator = new Validator() {
+        @Override
+        public boolean isValid(String value) {
+            return true;
+        }
+    };
+    
     /**
      *  Check the most important schemes according to:
      *  http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
      */
-    private static Set<String> sSchemes = new HashSet<String>();
+    private static Map<String, Validator> sSchemes = new HashMap<String, Validator>();
     static {
-        sSchemes.add("attachment");
-        sSchemes.add("bitcoin");
-        sSchemes.add("callto");
-        sSchemes.add("cid");
-        sSchemes.add("data");
-        sSchemes.add("dns");
-        sSchemes.add("file");
-        sSchemes.add("ftp");
-        sSchemes.add("git");
-        sSchemes.add("http");
-        sSchemes.add("https");
-        sSchemes.add("imap");
-        sSchemes.add("ldap");
-        sSchemes.add("ldaps");
-        sSchemes.add("mailto");
-        sSchemes.add("market");
-        sSchemes.add("news");
-        sSchemes.add("nfs");
-        sSchemes.add("nntp");
-        sSchemes.add("pop");
-        sSchemes.add("proxy");
-        sSchemes.add("sftp");
-        sSchemes.add("skype");
-        sSchemes.add("smb");
-        sSchemes.add("sms");
-        sSchemes.add("smtp");
-        sSchemes.add("snmp");
-        sSchemes.add("ssh");
-        sSchemes.add("svn");
-        sSchemes.add("tel");
-        sSchemes.add("telnet");
+        sSchemes.put("attachment", sValidator);
+        sSchemes.put("bitcoin", sValidator);
+        sSchemes.put("callto", sValidator);
+        sSchemes.put("cid", sValidator);
+        sSchemes.put("data", sValidator);
+        sSchemes.put("dns", sValidator);
+        sSchemes.put("file", sValidator);
+        sSchemes.put("ftp", sValidator);
+        sSchemes.put("git", sValidator);
+        sSchemes.put("http", sUrlValidator);
+        sSchemes.put("https", sUrlValidator);
+        sSchemes.put("imap", sValidator);
+        sSchemes.put("ldap", sValidator);
+        sSchemes.put("ldaps", sValidator);
+        sSchemes.put("mailto", sEmailValidator);
+        sSchemes.put("market", sValidator);
+        sSchemes.put("news", sValidator);
+        sSchemes.put("nfs", sValidator);
+        sSchemes.put("nntp", sValidator);
+        sSchemes.put("pop", sValidator);
+        sSchemes.put("proxy", sValidator);
+        sSchemes.put("sftp", sValidator);
+        sSchemes.put("skype", sValidator);
+        sSchemes.put("smb", sValidator);
+        sSchemes.put("sms", sValidator);
+        sSchemes.put("smtp", sValidator);
+        sSchemes.put("snmp", sValidator);
+        sSchemes.put("ssh", sValidator);
+        sSchemes.put("svn", sValidator);
+        sSchemes.put("tel", sValidator);
+        sSchemes.put("telnet", sValidator);
     }
 
     private SoftReference<Activity> mActivity;
@@ -241,11 +269,11 @@ public class LinkFragment extends DialogFragment {
         // retrieve link address and do some cleanup
         final String address = addressView.getText().toString().trim();
 
-        //boolean isEmail = sEmailValidator.isValid(address);
-        //boolean isUrl = sUrlValidator.isValid(address);
-        if (requiredFieldValid(addressView) && schemeIsValid(address)) {
-            // valid url or email address
+        // validate Uri
+        String scheme = getScheme(address);
+        Validator validator = scheme != null ? sSchemes.get(scheme) : sValidator;
 
+        if (requiredFieldValid(addressView) && validator != null && validator.isValid(address)) {
             // encode address
             String newAddress = Helper.encodeQuery(address);
 
@@ -264,11 +292,10 @@ public class LinkFragment extends DialogFragment {
         }
     }
 
-    private boolean schemeIsValid(String address) {
-        String scheme = getScheme(address);
-        return scheme == null || sSchemes.contains(scheme);
-    }
-
+    /**
+     * @return The scheme if the address has a scheme according to the regex:
+     * starts with a-z then a-z+. or -, ending with a :, returns null otherwise
+     */
     private String getScheme(String address) {
         String lcAddress = address.toLowerCase(Locale.getDefault());
         Matcher m = SCHEME.matcher(lcAddress);
