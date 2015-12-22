@@ -21,4 +21,4 @@ import com.onegravity.rteditor.spans.UnderlineSpan;
 /**
  * Underlined text
  */
-public class UnderlineEffect extends SimpleBooleanEffect<UnderlineSpan> {}
+public class UnderlineEffect extends BooleanEffect<UnderlineSpan> {}

@@ -27,10 +27,10 @@ import java.lang.reflect.Type;
  * Base class for all binary Effect classes (on/off) like BoldEffect or
  * ItalicEffect (text is either italic or not)
  */
-abstract class SimpleBooleanEffect<C extends RTSpan<Boolean>> extends Effect<Boolean, C> {
-    private Class<? extends RTSpan> mSpanClazz;
+abstract class BooleanEffect<C extends RTSpan<Boolean>> extends Effect<Boolean, C> {
+    private Class<? extends RTSpan<Boolean>> mSpanClazz;
 
-    public SimpleBooleanEffect() {
+    protected BooleanEffect() {
         Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
         mSpanClazz = (Class<? extends RTSpan<Boolean>>) types[0];
     }
@@ -43,9 +43,9 @@ abstract class SimpleBooleanEffect<C extends RTSpan<Boolean>> extends Effect<Boo
         try {
             return value ? mSpanClazz.newInstance() : null;
         } catch (IllegalAccessException e) {
-            Log.e(getClass().getSimpleName(), "Exception instantiating " + getClass().getSimpleName(), e);
+            Log.e(getClass().getSimpleName(), "Exception instantiating " + mSpanClazz.getSimpleName(), e);
         } catch (InstantiationException e) {
-            Log.e(getClass().getSimpleName(), "Exception instantiating " + getClass().getSimpleName(), e);
+            Log.e(getClass().getSimpleName(), "Exception instantiating " + mSpanClazz.getSimpleName(), e);
         }
 
         return null;

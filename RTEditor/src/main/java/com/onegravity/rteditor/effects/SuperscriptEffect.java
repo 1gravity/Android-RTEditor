@@ -21,4 +21,4 @@ import com.onegravity.rteditor.spans.SuperscriptSpan;
 /**
  * Superscript text
  */
-public class SuperscriptEffect extends SimpleBooleanEffect<SuperscriptSpan> {}
+public class SuperscriptEffect extends BooleanEffect<SuperscriptSpan> {}

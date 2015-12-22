@@ -36,7 +36,7 @@ import java.util.List;
  * <p>
  * The Boolean parameter is used to increment, decrement the indentation
  */
-public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends SimpleBooleanEffect<C> implements ParagraphEffect {
+public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends BooleanEffect<C> implements ParagraphEffect {
 
     private static final int LEADING_MARGIN_INCREMENT = 28;
     private static int sLeadingMargingIncrement = -1;
