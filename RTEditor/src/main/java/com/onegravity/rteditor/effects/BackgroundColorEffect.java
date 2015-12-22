@@ -17,19 +17,8 @@
 package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
-import com.onegravity.rteditor.spans.RTSpan;
 
 /**
  * Background color
  */
-public class BackgroundColorEffect extends Effect<Integer, BackgroundColorSpan> {
-
-    /**
-     * @return If the value is Null then return Null -> remove all BackgroundColorSpan.
-     */
-    @Override
-    public RTSpan<Integer> newSpan(Integer value) {
-        return value == null ? null : new BackgroundColorSpan(value);
-    }
-
-}
+public class BackgroundColorEffect extends IntegerEffect<BackgroundColorSpan> {}

@@ -17,19 +17,8 @@
 package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.spans.AbsoluteSizeSpan;
-import com.onegravity.rteditor.spans.RTSpan;
 
 /**
  * Text Size
  */
-public class AbsoluteSizeEffect extends Effect<Integer, AbsoluteSizeSpan> {
-
-    /**
-     * @return If the value is Null, 0 or negative then return Null -> remove all AbsoluteSizeSpan.
-     */
-    @Override
-    protected RTSpan<Integer> newSpan(Integer value) {
-        return value == null || value <= 0 ? null : new AbsoluteSizeSpan(value);
-    }
-
-}
+public class AbsoluteSizeEffect extends IntegerEffect<AbsoluteSizeSpan> {}
