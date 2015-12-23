@@ -17,6 +17,7 @@
 package com.onegravity.rteditor.effects;
 
 import android.text.Spannable;
+import android.text.Spanned;
 
 import com.onegravity.rteditor.utils.Selection;
 
@@ -27,16 +28,61 @@ public class ParagraphSpanCollector<V> extends SpanCollector<V> {
     }
 
     @Override
-    protected boolean isAMatch(Spannable str, Selection sel, Object span, SpanCollectMode mode) {
+    protected boolean isAttached(Spannable str, Selection sel, Object span, SpanCollectMode mode) {
         int spanStart = str.getSpanStart(span);
-        int spanEnd = str.getSpanEnd(span);
+        int spanEnd = str.getSpanEnd(span) - 1;
+        int selStart = sel.start();
+        int selEnd = sel.end() - 1;
 
         // point span at the end of the selection and at the end of the text
         if (spanStart == spanEnd && spanStart == sel.end() && spanEnd == str.length()) {
             return false;
         }
 
-        return super.isAMatch(str, sel, span, mode);
-    }
+        // [start, end] define the intersection of span and selection
+        int start = Math.max(spanStart, selStart);
+        int end = Math.min(spanEnd, selEnd);
 
+        if (start > end) {
+            // 1) no character in common and not adjacent
+            // [span]...|selection| or |selection|...[span]
+            return false;
+        }
+        else if (start < end) {
+            // 2) at least one character in common:
+            // [span]
+            //  [     span    ]
+            //    |selection|
+            //      [span]
+            //            [span]
+            return true;
+        }
+        else if ((spanStart > selStart && spanEnd < selEnd) ||   // point span within selection
+                (selStart > spanStart && selEnd < spanEnd)) {    // point selection within span
+            // 3) point span within selection or point selection within span (within, not adjacent)
+            //    |selection|
+            //        []
+            //    [span     ]
+            //        ||
+            return true;
+        }
+        else if (mode == SpanCollectMode.EXACT) {
+            // 4) adjacent MatchMode.EXACT
+            return false;
+        }
+        else {
+            // 5) adjacent MatchMode.SPAN_FLAGS
+            int flags = str.getSpanFlags(span) & Spanned.SPAN_POINT_MARK_MASK;
+            if (spanEnd == selStart) {
+                // 5.1) [span][selection] -> span must include at the end
+                return isOneFlagSet(flags, Spanned.SPAN_EXCLUSIVE_INCLUSIVE, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            else {
+                // 5.2) [selection][span] -> span must include at the start
+                return isOneFlagSet(flags, Spanned.SPAN_INCLUSIVE_EXCLUSIVE, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+        }
+
+
+    }
 }

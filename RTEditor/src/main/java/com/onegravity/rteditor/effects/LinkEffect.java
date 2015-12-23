@@ -39,11 +39,17 @@ public class LinkEffect extends CharacterEffect<String, LinkSpan> {
         Selection selection = getSelection(editor);
         Spannable str = editor.getText();
 
-        for (RTSpan<String> span : getSpans(str, selection, SpanCollectMode.EXACT)) {
-            str.removeSpan(span);
+        if (url == null) {
+            // adjacent links need to be removed --> expand the selection by [1, 1]
+            for (RTSpan<String> span : getSpans(str, selection.offset(1, 1), SpanCollectMode.EXACT)) {
+                str.removeSpan(span);
+            }
         }
+        else {
+            for (RTSpan<String> span : getSpans(str, selection, SpanCollectMode.EXACT)) {
+                str.removeSpan(span);
+            }
 
-        if (url != null) {
             // if url is Null then the link won't be set meaning existing links will be removed
             str.setSpan(newSpan(url), selection.start(), selection.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

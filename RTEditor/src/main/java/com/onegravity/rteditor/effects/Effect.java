@@ -94,12 +94,12 @@ abstract public class Effect<V, C extends RTSpan<V>> {
 
     /**
      * Equivalent to the Spanned.getSpans(int, int, Class<T>) method.
-     * Return the markup objects (spans) attached to the specified slice of this Spannable.
+     * Return the markup objects (spans) attached to the specified slice of a Spannable.
      * The type of the spans is defined in the SpanCollector.
      *
      * @param str The Spannable to search for spans.
      * @param selection The selection within the Spannable to search for spans.
-     * @param mode details see SpanCollectMode .
+     * @param mode details see SpanCollectMode.
      *
      * @return the list of spans in this Spannable/Selection, never Null
      */

@@ -68,9 +68,7 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
 
         Spannable str = editor.getText();
 
-        // we expand the selection to "catch" identical leading and trailing styles
-        Selection expandedSelection = selection.expand(1, 1);
-        for (RTSpan<V> span : getSpans(str, expandedSelection, SpanCollectMode.EXACT)) {
+        for (RTSpan<V> span : getSpans(str, selection, SpanCollectMode.SPAN_FLAGS)) {
             boolean sameSpan = span.getValue().equals( value );
             int spanStart = str.getSpanStart(span);
             if (spanStart < selection.start()) {

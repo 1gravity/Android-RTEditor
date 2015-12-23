@@ -17,7 +17,6 @@
 package com.onegravity.rteditor.effects;
 
 import android.text.Spannable;
-import android.text.Spanned;
 
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
@@ -58,7 +57,7 @@ import java.util.List;
  *
  * @param <V> the Effect's configuration information.
  */
-public abstract class SpanCollector<V extends Object> {
+public abstract class SpanCollector<V> {
 
     private Class<? extends RTSpan> mSpanClazz;
 
@@ -66,86 +65,58 @@ public abstract class SpanCollector<V extends Object> {
         mSpanClazz = spanClazz;
     }
 
-    public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
+    /**
+     * Equivalent to the Spanned.getSpans(int, int, Class<T>) method.
+     * Return the markup objects (spans) attached to the specified slice of a Spannable.
+     * The type of the spans is defined in the SpanCollector.
+     *
+     * @param str The Spannable to search for spans.
+     * @param selection The selection within the Spannable to search for spans.
+     * @param mode details see SpanCollectMode.
+     *
+     * @return the list of spans in this Spannable/Selection, never Null
+     */
+    final public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
+        RTSpan<V>[] spans = getSpansAndroid(str, selection.newSelection(1, 1));
+
         if (mode == SpanCollectMode.ANDROID) {
-            RTSpan<V>[] spans = getSpansAndroid(str, selection);
             return Arrays.asList(spans);
         }
 
-        RTSpan<V>[] spans = getSpansAndroid(str, selection);
         List<RTSpan<V>> result = new ArrayList<RTSpan<V>>();
         for (RTSpan<V> span : spans) {
-            if (isAMatch(str, selection, span, mode)) {
+            if (isAttached(str, selection, span, mode)) {
                 result.add(span);
             }
         }
         return result;
     }
 
+    /**
+     * Return an array of the markup objects attached to the specified slice of a Spannable and whose
+     * type is the specified type or a subclass of it (see Spanned.getSpans(int, int, Class<T>)).
+     */
     final protected RTSpan<V>[] getSpansAndroid(Spannable str, Selection selection) {
         RTSpan<V>[] spans = str.getSpans(selection.start(), selection.end(), mSpanClazz);
-        if (spans == null) spans = (RTSpan<V>[]) Array.newInstance(mSpanClazz);
-        return spans;
+        return spans == null ? (RTSpan<V>[]) Array.newInstance(mSpanClazz) : spans;
     }
 
-    protected boolean isAMatch(Spannable str, Selection sel, Object span, SpanCollectMode mode) {
-        int spanStart = str.getSpanStart(span);
-        int spanEnd = str.getSpanEnd(span);
-
-        // [start, end] define the intersection of span and selection
-        int start = Math.max(spanStart, sel.start());
-        int end = Math.min(spanEnd, sel.end());
-
-        if (start > end) {
-            // 1) no character in common and not adjacent
-            // [span]...|selection| or |selection|...[span]
-            return false;
-        }
-        else if (start < end) {
-            // 2) at least one character in common:
-            // [span]
-            //  [     span    ]
-            //    |selection|
-            //      [span]
-            //            [span]
-            return true;
-        }
-        else if ((spanStart > sel.start() && spanEnd < sel.end()) ||
-                 (sel.start() > spanStart && sel.end() < spanEnd)) {
-            // 3) point span within the selection or point selection within span
-            //    |selection|
-            //        []
-            //    [span     ]
-            //        ||
-            return true;
-        }
-        else if (mode == SpanCollectMode.EXACT) {
-            // 4) adjacent MatchMode.EXACT
-            return false;
-        }
-        else {
-            // 5) adjacent MatchMode.SPAN_FLAGS
-            int flags = str.getSpanFlags(span) & Spanned.SPAN_POINT_MARK_MASK;
-            if (spanEnd == sel.start()) {
-                // 5.1) [span][selection] -> span must include at the end
-                return isFlag(flags, Spanned.SPAN_EXCLUSIVE_INCLUSIVE) ||
-                       isFlag(flags, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            }
-            /*else if (spanStart == spanEnd) {
-                // point span
-                return false;
-            }*/
-            else {
-                // 5.2) [selection][span] -> span must include at the start
-                return isFlag(flags, Spanned.SPAN_INCLUSIVE_EXCLUSIVE) ||
-                       isFlag(flags, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+    /**
+     * @return True if the flags contain at least one of the values, False otherwise.
+     */
+    final protected boolean isOneFlagSet(int flags, int...value) {
+        for (int flag : value) {
+            if ((flags & flag) == flag) {
+                return true;
             }
         }
-
+        return false;
     }
 
-    protected boolean isFlag(int flags, int flag) {
-        return (flags & flag) == flag;
-    }
+    /**
+     * @return True if the span is indeed attached to the specified slice of a Spannable,
+     * False otherwise
+     */
+    protected abstract boolean isAttached(Spannable str, Selection sel, Object span, SpanCollectMode mode);
 
 }
