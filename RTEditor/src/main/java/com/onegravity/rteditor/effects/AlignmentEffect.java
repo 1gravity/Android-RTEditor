@@ -38,21 +38,11 @@ import java.util.List;
  * Each call to applyToSelection will again make sure that each paragraph has again its own AlignmentSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class AlignmentEffect extends Effect<Layout.Alignment, AlignmentSpan> implements ParagraphEffect {
+public class AlignmentEffect extends ParagraphEffect<Layout.Alignment, AlignmentSpan> {
 
     private ParagraphSpanProcessor<Layout.Alignment> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public RTSpan<Alignment> newSpan(Alignment value) {
-        return null;
-    }
-
-    @Override
-    public void applyToSelection(RTEditText editor, Layout.Alignment alignment) {
-        Selection selection = new Selection(editor);
-        applyToSelection(editor, selection, alignment);
-    }
-
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Layout.Alignment alignment) {
         final Spannable str = editor.getText();
 

@@ -41,7 +41,6 @@ import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
-import com.onegravity.rteditor.effects.ParagraphEffect;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.LinkSpan.LinkSpanListener;
 import com.onegravity.rteditor.spans.MediaSpan;
@@ -586,9 +585,6 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
             Spannable oldSpannable = mIgnoreTextChange ? null : cloneSpannable();
 
             effect.applyToSelection(this, value);
-            if (effect instanceof ParagraphEffect) {
-                Effects.cleanupParagraphs(this);
-            }
 
             synchronized (this) {
                 if (mListener != null && !mIgnoreTextChange) {

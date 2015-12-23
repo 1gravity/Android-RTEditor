@@ -18,11 +18,9 @@ package com.onegravity.rteditor.effects;
 
 import android.text.Spannable;
 
-import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
-import com.onegravity.rteditor.utils.Selection;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ import java.util.List;
  * <p>
  * The Boolean parameter is used to increment, decrement the indentation
  */
-public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends BooleanEffect<C> implements ParagraphEffect {
+public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends ParagraphEffect<Boolean, C> {
 
     private static final int LEADING_MARGIN_INCREMENT = 28;
     private static int sLeadingMargingIncrement = -1;
@@ -50,18 +48,11 @@ public abstract class LeadingMarginEffect<C extends RTSpan<Boolean>> extends Boo
         return sLeadingMargingIncrement;
     }
 
-    @Override
-    public void applyToSelection(RTEditText editor, Boolean value) {
-        Selection selection = new Selection(editor);
-        applyToSelection(editor, selection, value);
-    }
-
-    public abstract void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean value);
-
     protected void findSpans2Remove(Spannable str, Paragraph paragraph, ParagraphSpanProcessor<Boolean> spans2Remove) {
         List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
         for (RTSpan<Boolean> span : spans) {
             spans2Remove.addParagraphSpan(span, paragraph, true);
         }
     }
+
 }

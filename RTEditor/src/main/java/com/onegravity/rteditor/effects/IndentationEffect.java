@@ -30,27 +30,15 @@ import java.util.List;
 /**
  * Text indentation.
  * <p>
- * LeadingMarginSpans are always applied to whole paragraphs and each paragraphs gets its "own" LeadingMarginSpan (1:1).
+ * IndentationSpan are always applied to whole paragraphs and each paragraphs gets its "own" IndentationSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
- * Each call to applyToSelection will make sure that each paragraph has again its own LeadingMarginSpan
+ * Each call to applyToSelection will make sure that each paragraph has again its own IndentationSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  * <p>
- * The Boolean parameter is used to increment, decrement the indentation
  */
-public class IndentationEffect extends Effect<Integer, IndentationSpan> implements ParagraphEffect {
+public class IndentationEffect extends ParagraphEffect<Integer, IndentationSpan> {
 
     private ParagraphSpanProcessor<Integer> mSpans2Process = new ParagraphSpanProcessor();
-
-    @Override
-    protected RTSpan<Integer> newSpan(Integer value) {
-        return null;
-    }
-
-    @Override
-    public void applyToSelection(RTEditText editor, Integer value) {
-        Selection selection = new Selection(editor);
-        applyToSelection(editor, selection, value);
-    }
 
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Integer increment) {
         final Spannable str = editor.getText();

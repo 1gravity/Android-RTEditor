@@ -27,11 +27,11 @@ import com.onegravity.rteditor.utils.Selection;
 /**
  * Links.
  */
-public class LinkEffect extends Effect<String, LinkSpan> {
+public class LinkEffect extends CharacterEffect<String, LinkSpan> {
 
     @Override
     protected RTSpan<String> newSpan(String value) {
-        return null;
+        return new LinkSpan(value);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class LinkEffect extends Effect<String, LinkSpan> {
 
         if (url != null) {
             // if url is Null then the link won't be set meaning existing links will be removed
-            str.setSpan(new LinkSpan(url), selection.start(), selection.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            str.setSpan(newSpan(url), selection.start(), selection.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 

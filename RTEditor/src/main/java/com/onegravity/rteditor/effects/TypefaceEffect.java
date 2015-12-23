@@ -23,7 +23,7 @@ import com.onegravity.rteditor.spans.TypefaceSpan;
 /**
  * Typeface / Fonts.
  */
-public class TypefaceEffect extends Effect<RTTypeface, TypefaceSpan> {
+public class TypefaceEffect extends CharacterEffect<RTTypeface, TypefaceSpan> {
 
     /**
      * @return If the value is Null then return Null -> remove all TypefaceSpan.

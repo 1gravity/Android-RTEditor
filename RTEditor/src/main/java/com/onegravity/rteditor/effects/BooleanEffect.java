@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
  * Base class for all binary Effect classes (on/off) like BoldEffect or
  * ItalicEffect (text is either italic or not)
  */
-abstract class BooleanEffect<C extends RTSpan<Boolean>> extends Effect<Boolean, C> {
+abstract class BooleanEffect<C extends RTSpan<Boolean>> extends CharacterEffect<Boolean, C> {
     private Class<? extends RTSpan<Boolean>> mSpanClazz;
 
     protected BooleanEffect() {
