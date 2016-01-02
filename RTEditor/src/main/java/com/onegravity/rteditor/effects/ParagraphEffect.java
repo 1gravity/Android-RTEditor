@@ -16,15 +16,9 @@
 
 package com.onegravity.rteditor.effects;
 
-import android.text.Spannable;
-
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * ParagraphEffect are always applied to whole paragraphs, like bullet points or alignment.
@@ -33,7 +27,10 @@ import java.util.List;
  */
 abstract class ParagraphEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
 
-    private SpanCollector<V> mSpanCollector;
+    @Override
+    final protected SpanCollector<V> newSpanCollector(Class<? extends RTSpan<V>> spanClazz) {
+        return new ParagraphSpanCollector<V>(spanClazz);
+    }
 
     /**
      * @return the start and end of the paragraph(s) encompassing the current selection because
@@ -42,21 +39,6 @@ abstract class ParagraphEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
     @Override
     final protected Selection getSelection(RTEditText editor) {
         return editor.getParagraphsInSelection();
-    }
-
-    @Override
-    final public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
-        initSpanCollector();
-        return mSpanCollector.getSpans(str, selection, mode);
-    }
-
-    private void initSpanCollector() {
-        // lazy initialize the SpanCollector
-        if (mSpanCollector == null) {
-            Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
-            Class<? extends RTSpan<V>> spanClazz = (Class<? extends RTSpan<V>>) types[types.length - 1];
-            mSpanCollector = new ParagraphSpanCollector<V>(spanClazz);
-        }
     }
 
     @Override

@@ -22,6 +22,8 @@ import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,8 @@ import java.util.List;
  * @param <C> is the RTSpan<V> used by the Effect (e.g. BoldEffect uses BoldSpan)
  */
 abstract public class Effect<V, C extends RTSpan<V>> {
+
+    private SpanCollector<V> mSpanCollector;
 
     /**
      * Check whether the effect exists in the currently selected text of the active RTEditText.
@@ -88,11 +92,6 @@ abstract public class Effect<V, C extends RTSpan<V>> {
     }
 
     /**
-     * @return the Selection for the specified RTEditText.
-     */
-    abstract protected Selection getSelection(RTEditText editor);
-
-    /**
      * Equivalent to the Spanned.getSpans(int, int, Class<T>) method.
      * Return the markup objects (spans) attached to the specified slice of a Spannable.
      * The type of the spans is defined in the SpanCollector.
@@ -103,7 +102,26 @@ abstract public class Effect<V, C extends RTSpan<V>> {
      *
      * @return the list of spans in this Spannable/Selection, never Null
      */
-    public abstract List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode);
+    final public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
+        if (mSpanCollector == null) {
+            // lazy initialize the SpanCollector
+            Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+            Class<? extends RTSpan<V>> spanClazz = (Class<? extends RTSpan<V>>) types[types.length - 1];
+            mSpanCollector = newSpanCollector(spanClazz);
+        }
+
+        return mSpanCollector.getSpans(str, selection, mode);
+    }
+
+    /**
+     * @return a new SpanCollector for this effect
+     */
+    abstract protected SpanCollector<V> newSpanCollector(Class<? extends RTSpan<V>> spanClazz);
+
+    /**
+     * @return the Selection for the specified RTEditText.
+     */
+    abstract protected Selection getSelection(RTEditText editor);
 
     /**
      * Apply this effect to the selection.

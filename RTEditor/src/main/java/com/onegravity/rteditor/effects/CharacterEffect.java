@@ -23,35 +23,19 @@ import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-
 /**
  * CharacterEffects are always applied to the current selection, like bold text or typeface.
  */
 abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
 
-    private SpanCollector<V> mSpanCollector;
+    @Override
+    final protected SpanCollector<V> newSpanCollector(Class<? extends RTSpan<V>> spanClazz) {
+        return new CharacterSpanCollector<V>(spanClazz);
+    }
 
     @Override
     final protected Selection getSelection(RTEditText editor) {
         return new Selection(editor);
-    }
-
-    @Override
-    final public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
-        initSpanCollector();
-        return mSpanCollector.getSpans(str, selection, mode);
-    }
-
-    private void initSpanCollector() {
-        // lazy initialize the SpanCollector
-        if (mSpanCollector == null) {
-            Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
-            Class<? extends RTSpan<V>> spanClazz = (Class<? extends RTSpan<V>>) types[types.length - 1];
-            mSpanCollector = new CharacterSpanCollector<V>(spanClazz);
-        }
     }
 
     /**
@@ -61,7 +45,7 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
      * @param editor The editor to apply the effect to (current selection)
      * @param value The value to apply (depends on the Effect)
      */
-    public void applyToSelection(RTEditText editor, V value) {
+     public void applyToSelection(RTEditText editor, V value) {
         Selection selection = getSelection(editor);
         // SPAN_INCLUSIVE_INCLUSIVE is default for empty spans
         int flags = selection.isEmpty() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
