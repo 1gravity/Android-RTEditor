@@ -47,13 +47,13 @@ import java.util.List;
  * The span flags (SPAN_EXCLUSIVE_INCLUSIVE etc.) have no impact!
  *
  * (exception SPAN_EXCLUSIVE_EXCLUSIVE for point spans because those can't have a length of 0 and
- *  will be automatically be removed:
+ *  will be removed automatically:
  *  http://developer.android.com/reference/android/text/Spanned.html#SPAN_EXCLUSIVE_EXCLUSIVE)
  *
  * Sometimes we need to find or ignore adjacent spans depending on the span flags, the position of a
  * span, the selection (last line, empty lines...) and the type of span (character, paragraph).
  *
- * This class allows us to implement different getSpan methods.
+ * This class allows us to implement different getSpan methods that honor the span flags.
  *
  * @param <V> the Effect's configuration information.
  */
@@ -96,7 +96,7 @@ public abstract class SpanCollector<V> {
      * Return an array of the markup objects attached to the specified slice of a Spannable and whose
      * type is the specified type or a subclass of it (see Spanned.getSpans(int, int, Class<T>)).
      */
-    final protected RTSpan<V>[] getSpansAndroid(Spannable str, Selection selection) {
+    private RTSpan<V>[] getSpansAndroid(Spannable str, Selection selection) {
         RTSpan<V>[] spans = str.getSpans(selection.start(), selection.end(), mSpanClazz);
         return spans == null ? (RTSpan<V>[]) Array.newInstance(mSpanClazz) : spans;
     }
@@ -115,7 +115,7 @@ public abstract class SpanCollector<V> {
 
     /**
      * @return True if the span is indeed attached to the specified slice of a Spannable,
-     * False otherwise
+     * False otherwise.
      */
     protected abstract boolean isAttached(Spannable str, Selection sel, Object span, SpanCollectMode mode);
 

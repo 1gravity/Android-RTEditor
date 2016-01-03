@@ -39,7 +39,6 @@ import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.HTMLSchema;
 import com.onegravity.rteditor.converter.tagsoup.Parser;
-import com.onegravity.rteditor.effects.LeadingMarginEffect;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.spans.AlignmentSpan;
@@ -497,16 +496,16 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             int nrOfIndents = list.mNrOfIndents;
             if (!list.mIsIndentation) {
                 nrOfIndents--;
-                int gap = LeadingMarginEffect.getLeadingMargingIncrement();
+                int margin = Helper.getLeadingMarging();
                 // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
                 Object span = list instanceof UL ?
-                        new BulletSpan(gap, start == end, false, false) :
-                        new NumberSpan(1, gap, start == end, false, false);
+                        new BulletSpan(margin, start == end, false, false) :
+                        new NumberSpan(1, margin, start == end, false, false);
                 mResult.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             if (nrOfIndents > 0) {
-                int margin = nrOfIndents * LeadingMarginEffect.getLeadingMargingIncrement();
+                int margin = nrOfIndents * Helper.getLeadingMarging();
                 // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
                 IndentationSpan span = new IndentationSpan(margin, start == end, false, false);
                 mResult.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

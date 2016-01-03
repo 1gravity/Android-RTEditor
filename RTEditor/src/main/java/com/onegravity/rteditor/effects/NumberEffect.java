@@ -20,8 +20,10 @@ import android.text.Spannable;
 import android.util.SparseIntArray;
 
 import com.onegravity.rteditor.RTEditText;
+import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
 import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -35,13 +37,15 @@ import java.util.List;
  * Each call to applyToSelection will make sure that each paragraph has again its own NumberSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
+public class NumberEffect extends ParagraphEffect<Boolean, BulletSpan> {
 
     private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
+    public synchronized void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
+
+        mSpans2Process.clear();
 
         int lineNr = 1;
         SparseIntArray indentations = new SparseIntArray();
@@ -97,8 +101,8 @@ public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
                 }
                 numbers.put(lineNr, nr);
 
-                int gap = getLeadingMargingIncrement();
-                NumberSpan numberSpan = new NumberSpan(nr++, gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                int margin = Helper.getLeadingMarging();
+                NumberSpan numberSpan = new NumberSpan(nr++, margin, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
                 mSpans2Process.addParagraphSpan(numberSpan, paragraph, false);
 
                 // if the paragraph has bullet spans, then remove it
@@ -111,4 +115,12 @@ public class NumberEffect extends LeadingMarginEffect<NumberSpan> {
         // add or remove spans
         mSpans2Process.process(str);
     }
+
+    void findSpans2Remove(Spannable str, Paragraph paragraph, ParagraphSpanProcessor<Boolean> spans2Remove) {
+        List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+        for (RTSpan<Boolean> span : spans) {
+            spans2Remove.addParagraphSpan(span, paragraph, true);
+        }
+    }
+
 }

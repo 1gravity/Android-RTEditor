@@ -21,6 +21,7 @@ import android.text.Spannable;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -34,7 +35,7 @@ import java.util.List;
  * Each call to applyToSelection will make sure that each paragraph has again its own BulletSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class BulletEffect extends LeadingMarginEffect<BulletSpan> {
+public class BulletEffect extends ParagraphEffect<Boolean, BulletSpan> {
 
     private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
@@ -60,8 +61,8 @@ public class BulletEffect extends LeadingMarginEffect<BulletSpan> {
 
             // if we have a bullet then apply a new span
             if (hasBullet) {
-                int gap = getLeadingMargingIncrement();
-                BulletSpan bulletSpan = new BulletSpan(gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                int margin = Helper.getLeadingMarging();
+                BulletSpan bulletSpan = new BulletSpan(margin, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
                 mSpans2Process.addParagraphSpan(bulletSpan, paragraph, false);
 
                 // if the paragraph has number spans, then remove it
@@ -71,6 +72,13 @@ public class BulletEffect extends LeadingMarginEffect<BulletSpan> {
 
         // add or remove spans
         mSpans2Process.process(str);
+    }
+
+    void findSpans2Remove(Spannable str, Paragraph paragraph, ParagraphSpanProcessor<Boolean> spans2Remove) {
+        List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+        for (RTSpan<Boolean> span : spans) {
+            spans2Remove.addParagraphSpan(span, paragraph, true);
+        }
     }
 
 }

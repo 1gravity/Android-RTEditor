@@ -18,8 +18,8 @@ package com.onegravity.rteditor.converter;
 
 import android.text.style.ParagraphStyle;
 
-import com.onegravity.rteditor.effects.LeadingMarginEffect;
 import com.onegravity.rteditor.spans.IndentationSpan;
+import com.onegravity.rteditor.utils.Helper;
 
 /*
  * This is a helper class for converting from Spanned to HTML and back.
@@ -36,9 +36,9 @@ public class SingleParagraphStyle implements ParagraphStyle {
 
     public int getIndentation() {
         if (mType.isIndentation()) {
-            float increment = LeadingMarginEffect.getLeadingMargingIncrement();
-            float margin = ((IndentationSpan) mStyle).getValue();
-            return Math.round(margin / increment);
+            float margin = Helper.getLeadingMarging();
+            float indentation = ((IndentationSpan) mStyle).getValue();
+            return Math.round(indentation / margin);
         } else if (mType.isBullet() || mType.isNumbering()) {
             return 1;
         }
