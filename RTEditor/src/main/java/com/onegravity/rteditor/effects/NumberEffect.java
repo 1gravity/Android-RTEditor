@@ -20,7 +20,6 @@ import android.text.Spannable;
 import android.util.SparseIntArray;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Helper;
@@ -37,7 +36,7 @@ import java.util.List;
  * Each call to applyToSelection will make sure that each paragraph has again its own NumberSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class NumberEffect extends ParagraphEffect<Boolean, BulletSpan> {
+public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
 
     private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
