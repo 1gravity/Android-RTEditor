@@ -76,5 +76,6 @@ android {
 }
 
 dependencies {
-    compile 'com.1gravity:android-rteditor:1.2.1'
+    compile project(':RTEditor')
+    compile project(':RTEditor-Toolbar')
 }
