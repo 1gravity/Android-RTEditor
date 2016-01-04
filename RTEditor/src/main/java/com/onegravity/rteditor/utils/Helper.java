@@ -43,6 +43,9 @@ public abstract class Helper {
     private static float sDensity = Float.MAX_VALUE;
     private static float sDensity4Fonts = Float.MAX_VALUE;
 
+    private static final int LEADING_MARGIN = 28;
+    private static int sLeadingMarging = -1;
+
     public static void closeQuietly(Closeable closeable) {
         IOUtils.closeQuietly(closeable);
     }
@@ -93,6 +96,14 @@ public abstract class Helper {
     private static float getFontScale() {
         Configuration config = RTApi.getApplicationContext().getResources().getConfiguration();
         return config.fontScale;
+    }
+
+    public static int getLeadingMarging() {
+        if (sLeadingMarging == -1) {
+            float density = Helper.getDisplayDensity();
+            sLeadingMarging = Math.round(LEADING_MARGIN * density);
+        }
+        return sLeadingMarging;
     }
 
     /**
