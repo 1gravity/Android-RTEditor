@@ -73,13 +73,13 @@ Make sure to call setTheme before setContentView (or set the theme in the manife
 ####**Manifest**
 
 The image functionality (inserting images and inserting camera pictures) requires the two following definitions in the manifest:
-
+``` xml
     <activity
         android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
 
     <activity
         android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
-
+```	
 The 3 main components
 ---------------------
 ####**RTEditText**
