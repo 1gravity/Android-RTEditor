@@ -41,17 +41,17 @@ Setup
 ####**Dependencies**
 
 Add this to your Gradle build file:
-
+``` groovy
     dependencies {
         compile 'com.1gravity:android-rteditor:1.2.1'
     }
-
+```
 Because the library uses [a Material design library](https://github.com/afollestad/material-dialogs), you need to add the following code to your app's build.gradle file (allprojects block):  
-
+``` groovy
     repositories {
         maven { url "https://jitpack.io" }
     }
-
+```
 ####**Theming**
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
@@ -59,7 +59,7 @@ You need to use a theme based on either RTE_ThemeLight or RTE_ThemeDark or defin
 
 Make sure to call setTheme before setContentView (or set the theme in the manifest):
 
-
+``` java
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -69,29 +69,29 @@ Make sure to call setTheme before setContentView (or set the theme in the manife
 	
 	    // set layout
 	    setContentView(R.layout.your_layout);
-
+```
 ####**Manifest**
 
 The image functionality (inserting images and inserting camera pictures) requires the two following definitions in the manifest:
-
+``` xml
     <activity
         android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
 
     <activity
         android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
-
+```	
 The 3 main components
 ---------------------
 ####**RTEditText**
 is the EditText drop in component. Add it to your layout like you would EditText:
-	
+``` xml
 	<com.onegravity.rteditor.RTEditText
 	    android:id="@+id/rtEditText"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:imeOptions="actionDone|flagNoEnterAction"
 	    android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
-	
+```	
 In code you would typically use methods to set and get the text content:
 
 * set text: <code>RTEditText.setRichTextEditing(true, "My content");</code>
@@ -99,12 +99,12 @@ In code you would typically use methods to set and get the text content:
 
 ####**RTToolbar**
 is an interface for the toolbar used to apply text and paragraph formatting and other features listed above. The actual RTToolbar implementation is in a separate module and is a scrollable ribbon but alternative implementations aren't too hard to realize (popup, action buttons, floating buttons...). The toolbar implementation is easy to integrate into your layout:
-
+``` xml
 	<include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
-
+```
 
  or if you want to have two ribbons for character and paragraph formatting:
-
+``` xml
 	<LinearLayout
 	    android:id="@+id/rte_toolbar_container"
 	    android:orientation="vertical"
@@ -115,7 +115,7 @@ is an interface for the toolbar used to apply text and paragraph formatting and 
 	    <include layout="@layout/rte_toolbar_paragraph" />
 	
 	</LinearLayout>
-
+```
 
 Note that inflating the toolbar might take a moment (noticable) on certain devices because the included icons are high-resolution and each one comes in three different states (pressed, checked, normal). There's no workaround for this except using different icons with lower resolution.
 
@@ -125,7 +125,7 @@ In code you'd typically not interact with the toolbar (see RTManager below for t
 is the glue that holds the rich text editors (RTEditText), the toolbar and your app together. Each rich text editor and each toolbar needs to be registered with the RTManager before they are functional. Multiple editors and multiple toolbars can be registered. The RTManager is instantiated by your app in code usually in the onCreate passing in an RTApi object that gives the rich text editor access to its context (your app).
 A typical initialization process looks like this (normally in the onCreate method):
 
-
+``` java
 	// create RTManager
 	RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this, true));
 	RTManager rtManager = new RTManager(rtApi, savedInstanceState);
@@ -141,7 +141,7 @@ A typical initialization process looks like this (normally in the onCreate metho
 	RTEditText rtEditText = (RTEditText) findViewById(R.id.rtEditText);
 	rtManager.registerEditor(rtEditText, true);
 	rtEditText.setRichTextEditing(true, message);
-
+```
 
 To retrieve the edited text in html format you'd do:
 
@@ -149,7 +149,7 @@ To retrieve the edited text in html format you'd do:
 
 
 The RTManager also needs to be called in onSaveInstanceState and in onDestroy:
-
+``` java
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 	    super.onSaveInstanceState(outState);
@@ -166,7 +166,7 @@ The RTManager also needs to be called in onSaveInstanceState and in onDestroy:
 	    
 	    mRTManager.onDestroy(isFinishing());
 	}
-
+```
 The isSaved parameter passed into RTManager.onDestroy(boolean) is important. If it's true then media files inserted into the text (images at the moment) will remain untouched.
 If the parameter is false (text content is dismissed), media files will be deleted. Note that the rich text editor copies the original file to a dedicated area according to the MediaFactory configuration, meaning the original will remain untouched.
 
@@ -175,9 +175,9 @@ RTApi
 
 If you read the previous section ("The 3 main components") you might have noticed the RTApi object.
 The RTApi is a convenience class giving the various rich text editor components access to the application context and to RTProxy and RTMediaFactory methods.
-
+``` java
 	RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this, true));
-
+```
 
 ####**Context**
 
