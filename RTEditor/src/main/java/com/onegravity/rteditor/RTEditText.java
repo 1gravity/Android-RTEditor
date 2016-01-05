@@ -25,6 +25,7 @@ import android.text.SpanWatcher;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ParagraphStyle;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -84,12 +85,16 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     // used to check if selection has changed
     private int mOldSelStart = -1;
     private int mOldSelEnd = -1;
+    // we don't want to call Effects.cleanupParagraphs() if the paragraphs are already up to date
+    private boolean mParagraphsAreUp2Date;
+    // while Effects.cleanupParagraphs() is called, we ignore changes that would alter mParagraphsAreUp2Date
+    private boolean mIgnoreParagraphChanges;
 
     /* Used for the undo / redo functions */
 
     // if True then text changes are not registered for undo/redo
     // we need this during the actual undo/redo operation (or an undo would create a change event itself)
-    private boolean mIgnoreTextChange;
+    private boolean mIgnoreTextChanges;
 
     private int mSelStartBefore;        // selection start before text changed
     private int mSelEndBefore;          // selection end before text changed
@@ -377,6 +382,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
 
     public void resetHasChanged() {
         mTextChanged = false;
+        setParagraphsAreUp2Date(false);
     }
 
     /**
@@ -385,7 +391,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      * undo would create a change event itself).
      */
     synchronized void ignoreTextChanges() {
-        mIgnoreTextChange = true;
+        mIgnoreTextChanges = true;
     }
 
     /**
@@ -393,7 +399,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      * This is needed for the undo/redo functionality.
      */
     synchronized void registerTextChanges() {
-        mIgnoreTextChange = false;
+        mIgnoreTextChanges = false;
     }
 
     @Override
@@ -401,7 +407,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     public synchronized void beforeTextChanged(CharSequence s, int start, int count, int after) {
         // we use a String to get a static copy of the CharSequence (the CharSequence changes when the text changes...)
         String oldText = mOldText == null ? "" : mOldText;
-        if (!mIgnoreTextChange && !s.toString().equals(oldText)) {
+        if (!mIgnoreTextChanges && !s.toString().equals(oldText)) {
             mSelStartBefore = getSelectionStart();
             mSelEndBefore = getSelectionEnd();
             mOldText = s.toString();
@@ -422,13 +428,14 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     public synchronized void afterTextChanged(Editable s) {
         String theText = s.toString();
         String newText = mNewText == null ? "" : mNewText;
-        if (mListener != null && !mIgnoreTextChange && !newText.equals(theText)) {
+        if (mListener != null && !mIgnoreTextChanges && !newText.equals(theText)) {
             Spannable newSpannable = cloneSpannable();
             mListener.onTextChanged(this, mOldSpannable, newSpannable, mSelStartBefore, mSelEndBefore, getSelectionStart(), getSelectionEnd());
             mNewText = theText;
         }
         mLayoutChanged = true;
         mTextChanged = true;
+        setParagraphsAreUp2Date(false);
         addSpanWatcher();
     }
 
@@ -436,18 +443,27 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     /* SpanWatcher */
     public void onSpanAdded(Spannable text, Object what, int start, int end) {
         mTextChanged = true;
+        if (what instanceof RTSpan && what instanceof ParagraphStyle) {
+            setParagraphsAreUp2Date(false);
+        }
     }
 
     @Override
     /* SpanWatcher */
     public void onSpanChanged(Spannable text, Object what, int ostart, int oend, int nstart, int nend) {
         mTextChanged = true;
+        if (what instanceof RTSpan && what instanceof ParagraphStyle) {
+            setParagraphsAreUp2Date(false);
+        }
     }
 
     @Override
     /* SpanWatcher */
     public void onSpanRemoved(Spannable text, Object what, int start, int end) {
         mTextChanged = true;
+        if (what instanceof RTSpan && what instanceof ParagraphStyle) {
+            setParagraphsAreUp2Date(false);
+        }
     }
 
     /**
@@ -457,6 +473,12 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         Spannable spannable = getText();
         if (spannable.getSpans(0, spannable.length(), getClass()) != null) {
             spannable.setSpan(this, 0, spannable.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+    }
+
+    synchronized private void setParagraphsAreUp2Date(boolean value) {
+        if (! mIgnoreParagraphChanges) {
+            mParagraphsAreUp2Date = value;
         }
     }
 
@@ -561,8 +583,11 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
 
             if (mUseRTFormatting) {
 
-                if (!mIsSaving) {
+                if (!mIsSaving && !mParagraphsAreUp2Date) {
+                    mIgnoreParagraphChanges = true;
                     Effects.cleanupParagraphs(this);
+                    mIgnoreParagraphChanges = false;
+                    setParagraphsAreUp2Date(true);
                 }
 
                 if (mListener != null) {
@@ -582,12 +607,12 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      */
     public <V extends Object, C extends RTSpan<V>> void applyEffect(Effect<V, C> effect, V value) {
         if (mUseRTFormatting && !mIsSelectionChanging && !mIsSaving) {
-            Spannable oldSpannable = mIgnoreTextChange ? null : cloneSpannable();
+            Spannable oldSpannable = mIgnoreTextChanges ? null : cloneSpannable();
 
             effect.applyToSelection(this, value);
 
             synchronized (this) {
-                if (mListener != null && !mIgnoreTextChange) {
+                if (mListener != null && !mIgnoreTextChanges) {
                     Spannable newSpannable = cloneSpannable();
                     mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
                                             getSelectionStart(), getSelectionEnd());
