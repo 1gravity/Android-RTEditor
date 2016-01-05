@@ -41,17 +41,17 @@ Setup
 ####**Dependencies**
 
 Add this to your Gradle build file:
-
+``` groovy
     dependencies {
         compile 'com.1gravity:android-rteditor:1.2.1'
     }
-
+```
 Because the library uses [a Material design library](https://github.com/afollestad/material-dialogs), you need to add the following code to your app's build.gradle file (allprojects block):  
-
+``` groovy
     repositories {
         maven { url "https://jitpack.io" }
     }
-
+```
 ####**Theming**
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
