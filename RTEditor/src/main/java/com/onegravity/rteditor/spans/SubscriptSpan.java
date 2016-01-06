@@ -16,18 +16,12 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.os.Parcel;
-
 /**
  * Implementation for a subscript span (android.text.style.SubscriptSpan).
  */
 public class SubscriptSpan extends android.text.style.SubscriptSpan implements RTSpan<Boolean> {
 
     public SubscriptSpan() { super(); }
-
-    public SubscriptSpan(Parcel src) {
-        super(src);
-    }
 
     @Override
     public Boolean getValue() {

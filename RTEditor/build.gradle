@@ -39,6 +39,10 @@ android {
 }
 
 dependencies {
+    // use this to compile/run locally
+    //compile project(':ColorPicker')
+
+    // or use this to use the latest published library
     compile 'com.1gravity:android-rteditor-colorpicker:1.2.1'
 }
 

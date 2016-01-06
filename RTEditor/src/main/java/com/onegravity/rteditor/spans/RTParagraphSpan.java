@@ -16,21 +16,11 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.graphics.Typeface;
-import android.text.style.StyleSpan;
-
 /**
- * Implementation for a bold span (android.text.style.StyleSpan(TypeFace.ITALIC))
+ * All paragraph spans that are managed through an Effect need to implement this interface.
  */
-public class ItalicSpan extends StyleSpan implements RTSpan<Boolean> {
+public interface RTParagraphSpan<V> {
 
-    public ItalicSpan() {
-        super(Typeface.ITALIC);
-    }
-
-    @Override
-    public Boolean getValue() {
-        return Boolean.TRUE;
-    }
+    public RTParagraphSpan<V> createClone();
 
 }

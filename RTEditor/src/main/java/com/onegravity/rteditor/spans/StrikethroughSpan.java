@@ -16,18 +16,12 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.os.Parcel;
-
 /**
  * Implementation for a strike-through span (android.text.style.StrikethroughSpan).
  */
 public class StrikethroughSpan extends android.text.style.StrikethroughSpan implements RTSpan<Boolean> {
 
     public StrikethroughSpan() { super(); }
-
-    public StrikethroughSpan(Parcel src) {
-        super(src);
-    }
 
     @Override
     public Boolean getValue() {

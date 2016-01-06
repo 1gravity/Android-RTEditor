@@ -40,45 +40,33 @@ public class BulletEffect extends ParagraphEffect<Boolean, BulletSpan> {
     private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public synchronized void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
+    public synchronized void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
 
         mSpans2Process.clear();
 
         for (Paragraph paragraph : editor.getParagraphs()) {
-
-            // find existing spans for this paragraph and add them to spans2Process to be removed
+            // find existing BulletSpan and add them to mSpans2Process to be removed
             List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
-            boolean hasExistingSpans = !existingSpans.isEmpty();
-            if (hasExistingSpans) {
-                for (RTSpan<Boolean> span : existingSpans) {
-                    mSpans2Process.addParagraphSpan(span, paragraph, true);
-                }
-            }
+            mSpans2Process.removeSpans(existingSpans, paragraph);
 
             // if the paragraph is selected then we sure have a bullet
+            boolean hasExistingSpans = !existingSpans.isEmpty();
             boolean hasBullet = paragraph.isSelected(selectedParagraphs) ? enable : hasExistingSpans;
 
             // if we have a bullet then apply a new span
             if (hasBullet) {
                 int margin = Helper.getLeadingMarging();
                 BulletSpan bulletSpan = new BulletSpan(margin, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                mSpans2Process.addParagraphSpan(bulletSpan, paragraph, false);
+                mSpans2Process.addSpan(bulletSpan, paragraph);
 
-                // if the paragraph has number spans, then remove it
+                // if the paragraph has number spans, then remove them
                 Effects.NUMBER.findSpans2Remove(str, paragraph, mSpans2Process);
             }
         }
 
         // add or remove spans
         mSpans2Process.process(str);
-    }
-
-    void findSpans2Remove(Spannable str, Paragraph paragraph, ParagraphSpanProcessor<Boolean> spans2Remove) {
-        List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
-        for (RTSpan<Boolean> span : spans) {
-            spans2Remove.addParagraphSpan(span, paragraph, true);
-        }
     }
 
 }

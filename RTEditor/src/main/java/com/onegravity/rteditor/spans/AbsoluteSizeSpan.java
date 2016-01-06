@@ -16,20 +16,12 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.os.Parcel;
-
 /**
  * Implementation for an AbsoluteSizeSpan (android.text.style.AbsoluteSizeSpan).
  */
 public class AbsoluteSizeSpan extends android.text.style.AbsoluteSizeSpan implements RTSpan<Integer> {
 
     public AbsoluteSizeSpan(int size) { super(size); }
-
-    public AbsoluteSizeSpan(int size, boolean dip) { super(size, dip); }
-
-    public AbsoluteSizeSpan(Parcel src) {
-        super(src);
-    }
 
     @Override
     public Integer getValue() {

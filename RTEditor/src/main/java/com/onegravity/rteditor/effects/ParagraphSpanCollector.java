@@ -19,25 +19,41 @@ package com.onegravity.rteditor.effects;
 import android.text.Spannable;
 import android.text.Spanned;
 
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
 
-public class ParagraphSpanCollector<V> extends SpanCollector<V> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public ParagraphSpanCollector(Class spanClazz) {
+class ParagraphSpanCollector<V> extends SpanCollector<V> {
+
+    ParagraphSpanCollector(Class<? extends RTSpan<V>> spanClazz) {
         super(spanClazz);
     }
 
     @Override
-    protected boolean isAttached(Spannable str, Selection sel, Object span, SpanCollectMode mode) {
-        int spanStart = str.getSpanStart(span);
-        int spanEnd = str.getSpanEnd(span) - 1;
-        int selStart = sel.start();
-        int selEnd = sel.end() - 1;
+    final protected List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
+        List<RTSpan<V>> result = new ArrayList<RTSpan<V>>();
 
-        // point span at the end of the selection and at the end of the text
-        if (spanStart == spanEnd && spanStart == sel.end() && spanEnd == str.length()) {
-            return false;
+        RTSpan<V>[] spans = getSpansAndroid(str, selection.start(), selection.end());
+        for (RTSpan<V> span : spans) {
+            if (isAttached(str, selection, span, mode)) {
+                result.add(span);
+            }
         }
+
+        return result;
+    }
+
+    /**
+     * Note: a ParagraphSpan is always applied to a paragraph (including the crlf)
+     * --> it will never be a point unless the cursor is in the last empty line!
+     */
+    private boolean isAttached(Spannable str, Selection selection, Object span, SpanCollectMode mode) {
+        int spanStart = str.getSpanStart(span);
+        int spanEnd = str.getSpanEnd(span);
+        int selStart = selection.start();
+        int selEnd = selection.end();
 
         // [start, end] define the intersection of span and selection
         int start = Math.max(spanStart, selStart);
@@ -67,11 +83,13 @@ public class ParagraphSpanCollector<V> extends SpanCollector<V> {
             return true;
         }
         else if (mode == SpanCollectMode.EXACT) {
-            // 4) adjacent MatchMode.EXACT
-            return false;
+            // 4) adjacent SpanCollectMode.EXACT
+            // 4.1) point span + point selection --> match
+            // 4.2) else --> no match
+            return spanStart == selStart && spanEnd == selEnd && selStart == selEnd;
         }
         else {
-            // 5) adjacent MatchMode.SPAN_FLAGS
+            // 5) adjacent SpanCollectMode.SPAN_FLAGS
             int flags = str.getSpanFlags(span) & Spanned.SPAN_POINT_MARK_MASK;
             if (spanEnd == selStart) {
                 // 5.1) [span][selection] -> span must include at the end
@@ -82,7 +100,6 @@ public class ParagraphSpanCollector<V> extends SpanCollector<V> {
                 return isOneFlagSet(flags, Spanned.SPAN_INCLUSIVE_EXCLUSIVE, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
         }
-
-
     }
+
 }

@@ -66,19 +66,9 @@ public class Selection implements Serializable {
         return this;
     }
 
-    public Selection newSelection(int offsetLeft, int offsetRight) {
-        int newStart = Math.max(0, mStart - offsetLeft);
-        int newEnd = mEnd + offsetRight;
-        return new Selection(newStart, newEnd);
-    }
-
-    public void union(Selection other) {
-        mStart = Math.min(mStart, other.mStart);
-        mEnd = Math.max(mEnd, other.mEnd);
-    }
-
     @Override
     public String toString() {
         return "[" + mStart + ", " + mEnd + "]";
     }
+
 }

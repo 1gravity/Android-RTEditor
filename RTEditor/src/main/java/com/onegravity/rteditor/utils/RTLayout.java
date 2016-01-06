@@ -42,7 +42,6 @@ public class RTLayout implements Serializable {
     private int mNrOfLines = 0;
     private final ArrayList<Paragraph> mParagraphs = new ArrayList<Paragraph>();
 
-    // todo this needs some more work to make it work properly with ParagraphEffects
     public RTLayout(Spanned spanned) {
         if (spanned != null) {
             String s = spanned.toString();

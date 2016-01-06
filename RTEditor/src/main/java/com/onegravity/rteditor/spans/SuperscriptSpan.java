@@ -16,18 +16,12 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.os.Parcel;
-
 /**
  * Implementation for a superscript span (android.text.style.SuperscriptSpan).
  */
 public class SuperscriptSpan extends android.text.style.SuperscriptSpan implements RTSpan<Boolean> {
 
     public SuperscriptSpan() { super(); }
-
-    public SuperscriptSpan(Parcel src) {
-        super(src);
-    }
 
     @Override
     public Boolean getValue() {

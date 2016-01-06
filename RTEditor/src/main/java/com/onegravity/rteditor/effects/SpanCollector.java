@@ -22,8 +22,6 @@ import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,11 +55,11 @@ import java.util.List;
  *
  * @param <V> the Effect's configuration information.
  */
-public abstract class SpanCollector<V> {
+abstract class SpanCollector<V> {
 
-    private Class<? extends RTSpan> mSpanClazz;
+    private Class<? extends RTSpan<V>> mSpanClazz;
 
-    protected SpanCollector(Class<? extends RTSpan> spanClazz) {
+    protected SpanCollector(Class<? extends RTSpan<V>> spanClazz) {
         mSpanClazz = spanClazz;
     }
 
@@ -76,28 +74,14 @@ public abstract class SpanCollector<V> {
      *
      * @return the list of spans in this Spannable/Selection, never Null
      */
-    final public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
-        RTSpan<V>[] spans = getSpansAndroid(str, selection.newSelection(1, 1));
-
-        if (mode == SpanCollectMode.ANDROID) {
-            return Arrays.asList(spans);
-        }
-
-        List<RTSpan<V>> result = new ArrayList<RTSpan<V>>();
-        for (RTSpan<V> span : spans) {
-            if (isAttached(str, selection, span, mode)) {
-                result.add(span);
-            }
-        }
-        return result;
-    }
+    protected abstract List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode);
 
     /**
      * Return an array of the markup objects attached to the specified slice of a Spannable and whose
      * type is the specified type or a subclass of it (see Spanned.getSpans(int, int, Class<T>)).
      */
-    private RTSpan<V>[] getSpansAndroid(Spannable str, Selection selection) {
-        RTSpan<V>[] spans = str.getSpans(selection.start(), selection.end(), mSpanClazz);
+    final protected RTSpan<V>[] getSpansAndroid(Spannable str, int selStart, int selEnd) {
+        RTSpan<V>[] spans = str.getSpans(selStart, selEnd, mSpanClazz);
         return spans == null ? (RTSpan<V>[]) Array.newInstance(mSpanClazz) : spans;
     }
 
@@ -112,11 +96,5 @@ public abstract class SpanCollector<V> {
         }
         return false;
     }
-
-    /**
-     * @return True if the span is indeed attached to the specified slice of a Spannable,
-     * False otherwise.
-     */
-    protected abstract boolean isAttached(Spannable str, Selection sel, Object span, SpanCollectMode mode);
 
 }

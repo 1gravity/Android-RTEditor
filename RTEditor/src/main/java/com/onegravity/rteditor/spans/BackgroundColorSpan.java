@@ -16,8 +16,6 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.os.Parcel;
-
 /**
  * Implementation for a background color span (android.text.style.BackgroundColorSpan)
  */
@@ -25,10 +23,6 @@ public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan 
 
     public BackgroundColorSpan(int color) {
         super(color);
-    }
-
-    public BackgroundColorSpan(Parcel src) {
-        super(src);
     }
 
     @Override

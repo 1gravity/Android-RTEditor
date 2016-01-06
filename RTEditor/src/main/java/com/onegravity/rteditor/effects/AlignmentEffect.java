@@ -27,7 +27,6 @@ import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,24 +45,22 @@ public class AlignmentEffect extends ParagraphEffect<Layout.Alignment, Alignment
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Layout.Alignment alignment) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpanProcessor> spans2Process = new ArrayList<ParagraphSpanProcessor>();
+        mSpans2Process.clear();
 
         for (Paragraph paragraph : editor.getParagraphs()) {
-            // find existing alignment spans for this paragraph
+            // find existing AlignmentSpan and add them to mSpans2Process to be removed
             List<RTSpan<Layout.Alignment>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
-            boolean hasExistingSpans = !existingSpans.isEmpty();
-            if (hasExistingSpans)
-                for (RTSpan<Layout.Alignment> span : existingSpans) {
-                    mSpans2Process.addParagraphSpan(span, paragraph, true);
-                }
+            mSpans2Process.removeSpans(existingSpans, paragraph);
 
             // if the paragraph is selected then we sure have an alignment
+            boolean hasExistingSpans = !existingSpans.isEmpty();
             Alignment newAlignment = paragraph.isSelected(selectedParagraphs) ? alignment :
-                    hasExistingSpans ? existingSpans.get(0).getValue() : null;
+                                     hasExistingSpans ? existingSpans.get(0).getValue() : null;
 
             if (newAlignment != null) {
                 boolean isRTL = Helper.isRTL(str, paragraph.start(), paragraph.end());
-                mSpans2Process.addParagraphSpan(new AlignmentSpan(newAlignment, isRTL), paragraph, false);
+                AlignmentSpan alignmentSpan = new AlignmentSpan(newAlignment, isRTL);
+                mSpans2Process.addSpan(alignmentSpan, paragraph);
             }
         }
 

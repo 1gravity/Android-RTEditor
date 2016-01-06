@@ -20,7 +20,6 @@ package com.onegravity.rteditor.effects;
  * Defines how spans are collected.
  */
 public enum SpanCollectMode {
-    ANDROID,        // do it like Android: Spanned.getSpans(Class)
     EXACT,          // find spans exactly within the defined selection (don't use span flags)
     SPAN_FLAGS;     // consider the span flags when deciding whether to include a span
 }

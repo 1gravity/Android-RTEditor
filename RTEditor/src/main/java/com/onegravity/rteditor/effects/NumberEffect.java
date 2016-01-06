@@ -41,7 +41,7 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
     private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public synchronized void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
+    public synchronized void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
 
         mSpans2Process.clear();
@@ -56,7 +56,7 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
 			 * to determine which paragraphs belong together (same indentation)
 			 */
             int currentIndentation = 0;
-            List<RTSpan<Integer>> indentationSpans = Effects.INDENTATION.getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            List<RTSpan<Integer>> indentationSpans = Effects.INDENTATION.getSpans(str, paragraph, SpanCollectMode.EXACT);
             if (! indentationSpans.isEmpty()) {
                 for (RTSpan<Integer> span : indentationSpans) {
                     currentIndentation += span.getValue();
@@ -64,20 +64,14 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
             }
             indentations.put(lineNr, currentIndentation);
 
-			/*
-			 * Find existing NumberSpans for this paragraph
-			 */
+            // find existing NumberSpans and add them to mSpans2Process to be removed
             List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
-            boolean hasExistingSpans = ! existingSpans.isEmpty();
-            if (hasExistingSpans) {
-                for (RTSpan<Boolean> span : existingSpans) {
-                    mSpans2Process.addParagraphSpan(span, paragraph, true);
-                }
-            }
+            mSpans2Process.removeSpans(existingSpans, paragraph);
 
 			/*
 			 * If the paragraph is selected then we sure have a number
 			 */
+            boolean hasExistingSpans = ! existingSpans.isEmpty();
             boolean hasNumber = paragraph.isSelected(selectedParagraphs) ? enable : hasExistingSpans;
 
 			/*
@@ -102,9 +96,9 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
 
                 int margin = Helper.getLeadingMarging();
                 NumberSpan numberSpan = new NumberSpan(nr++, margin, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                mSpans2Process.addParagraphSpan(numberSpan, paragraph, false);
+                mSpans2Process.addSpan(numberSpan, paragraph);
 
-                // if the paragraph has bullet spans, then remove it
+                // if the paragraph has bullet spans, then remove them
                 Effects.BULLET.findSpans2Remove(str, paragraph, mSpans2Process);
             }
 
@@ -113,13 +107,6 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
 
         // add or remove spans
         mSpans2Process.process(str);
-    }
-
-    void findSpans2Remove(Spannable str, Paragraph paragraph, ParagraphSpanProcessor<Boolean> spans2Remove) {
-        List<RTSpan<Boolean>> spans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
-        for (RTSpan<Boolean> span : spans) {
-            spans2Remove.addParagraphSpan(span, paragraph, true);
-        }
     }
 
 }

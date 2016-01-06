@@ -17,7 +17,6 @@
 package com.onegravity.rteditor.spans;
 
 import android.graphics.Typeface;
-import android.os.Parcel;
 import android.text.style.StyleSpan;
 
 /**
@@ -27,14 +26,6 @@ public class BoldSpan extends StyleSpan implements RTSpan<Boolean> {
 
     public BoldSpan() {
         super(Typeface.BOLD);
-    }
-
-    public BoldSpan(int style) {
-        super(Typeface.BOLD);
-    }
-
-    public BoldSpan(Parcel src) {
-        super(src);
     }
 
     @Override

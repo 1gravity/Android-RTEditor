@@ -105,17 +105,27 @@ public class Effects {
     }
 
     /**
-     * This important method makes sure that all paragraph effects are applied
-     * to whole paragraphs. While it's optimized for performance it's still an
-     * expensive operation so it shouldn't be called too often.
+     * This important method makes sure that all paragraph effects are applied to whole paragraphs.
+     * While it's optimized for performance it's still an expensive operation so it shouldn't be
+     * called too often.
      *
-     * @param editor The rich text editor to cleanup the paragraphs for
+     * @param exclude if an Effect has just been applied, there's no need to cleanup that Effect.
      */
-    public static void cleanupParagraphs(RTEditText editor) {
-        Effects.ALIGNMENT.applyToSelection(editor, null, null);
-        Effects.INDENTATION.applyToSelection(editor, null, null);
-        Effects.BULLET.applyToSelection(editor, null, null);
-        Effects.NUMBER.applyToSelection(editor, null, null);
+    public static void cleanupParagraphs(RTEditText editor, Effect...exclude) {
+        cleanupParagraphs(editor, Effects.ALIGNMENT, exclude);
+        cleanupParagraphs(editor, Effects.INDENTATION, exclude);
+        cleanupParagraphs(editor, Effects.BULLET, exclude);
+        cleanupParagraphs(editor, Effects.NUMBER, exclude);
+    }
+
+    private static void cleanupParagraphs(RTEditText editor, ParagraphEffect effect, Effect...exclude) {
+        for (Effect e : exclude) {
+            if (effect == e) {
+                return;
+            }
+        }
+
+        effect.applyToSelection(editor, null, null);
     }
 
 }

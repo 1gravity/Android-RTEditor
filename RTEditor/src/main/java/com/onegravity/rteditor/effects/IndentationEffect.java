@@ -24,7 +24,6 @@ import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,29 +42,31 @@ public class IndentationEffect extends ParagraphEffect<Integer, IndentationSpan>
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Integer increment) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpanProcessor> spans2Process = new ArrayList<ParagraphSpanProcessor>();
+        mSpans2Process.clear();
 
         for (Paragraph paragraph : editor.getParagraphs()) {
-            int indentation = 0;
 
-            // find existing indentations/spans for this paragraph
-            List<RTSpan<Integer>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
-            boolean hasExistingSpans = ! existingSpans.isEmpty();
-            if (hasExistingSpans) {
-                for (RTSpan<Integer> span : existingSpans) {
-                    mSpans2Process.addParagraphSpan(span, paragraph, true);
-                    indentation += span.getValue();
-                }
+            // find existing IndentationSpan and add them to mSpans2Process to be removed
+            List<RTSpan<Integer>> existingSpans = getSpans(str, paragraph, SpanCollectMode.EXACT);
+            mSpans2Process.removeSpans(existingSpans, paragraph);
+
+            // compute the indentation
+            int indentation = 0;
+            for (RTSpan<Integer> span : existingSpans) {
+                indentation += span.getValue();
+                // Only consider the first span since the span flags (SPAN_EXCLUSIVE_INCLUSIVE)
+                // can lead to a paragraph having two IndentationSpans after hitting enter/return.
+                break;
             }
 
             // if the paragraph is selected inc/dec the existing indentation
             int incIndentation = increment == null ? 0 : increment;
             indentation += paragraph.isSelected(selectedParagraphs) ? incIndentation : 0;
 
-            // if indentation>0 then apply a new span
+            // if we have an indentation then apply a new span
             if (indentation > 0) {
                 IndentationSpan leadingMarginSpan = new IndentationSpan(indentation, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                mSpans2Process.addParagraphSpan(leadingMarginSpan, paragraph, false);
+                mSpans2Process.addSpan(leadingMarginSpan, paragraph);
             }
         }
 

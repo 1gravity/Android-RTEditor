@@ -43,9 +43,9 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
      * If value is Null then the effect will be removed from the current selection.
      *
      * @param editor The editor to apply the effect to (current selection)
-     * @param value The value to apply (depends on the Effect)
+     * @param value  The value to apply (depends on the Effect)
      */
-     public void applyToSelection(RTEditText editor, V value) {
+    public void applyToSelection(RTEditText editor, V value) {
         Selection selection = getSelection(editor);
         // SPAN_INCLUSIVE_INCLUSIVE is default for empty spans
         int flags = selection.isEmpty() ? Spanned.SPAN_INCLUSIVE_INCLUSIVE : Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
@@ -53,7 +53,7 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
         Spannable str = editor.getText();
 
         for (RTSpan<V> span : getSpans(str, selection, SpanCollectMode.SPAN_FLAGS)) {
-            boolean sameSpan = span.getValue().equals( value );
+            boolean sameSpan = span.getValue().equals(value);
             int spanStart = str.getSpanStart(span);
             if (spanStart < selection.start()) {
                 // process preceding spans
@@ -61,8 +61,7 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
                     // we have a preceding span --> use SPAN_EXCLUSIVE_INCLUSIVE instead of SPAN_INCLUSIVE_INCLUSIVE
                     flags = Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
                     selection.offset(selection.start() - spanStart, 0);
-                }
-                else {
+                } else {
                     str.setSpan(newSpan(span.getValue()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
@@ -71,8 +70,7 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
                 // process succeeding spans
                 if (sameSpan) {
                     selection.offset(0, spanEnd - selection.end());
-                }
-                else {
+                } else {
                     str.setSpan(newSpan(span.getValue()), selection.end(), spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 }
             }
