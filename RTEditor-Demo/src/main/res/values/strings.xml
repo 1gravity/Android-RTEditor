@@ -34,5 +34,10 @@
     <string name="save_as_failure">Text could not be saved: %s</string>
     <string name="load_failure_1">This isn\'t a valid rich text editor file</string>
     <string name="load_failure_2">This isn\'t a valid rich text editor file: %s</string>
-    
+
+    <string name="permission_denied">Permission denied</string>
+    <string name="permission_denied_storage">Without this permission you can\'t insert camera pictures. Are you sure you want to deny this permission?</string>
+    <string name="permission_deny">Deny</string>
+    <string name="permission_retry">Re-try</string>
+
 </resources>
