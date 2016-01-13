@@ -1,5 +1,8 @@
 # Android-RTEditor
 
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Demo App](https://github.com/1gravity/Android-RTEditor/tree/master/art/Demo App-1.2.0-orange.svg)](https://play.google.com/store/apps/details?id=com.onegravity.rteditor.demo)
+
 The Android RTEditor is a rich text editor component for Android that can be used as a drop in for EditText.
 
 ![Images](http://www.1gravity.com/images/richtexteditor.png)
