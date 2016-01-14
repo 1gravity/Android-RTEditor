@@ -150,9 +150,6 @@ protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
 
     mRTManager.onSaveInstanceState(outState);
-
-    outState.putBoolean("mUseDarkTheme", mUseDarkTheme);
-    outState.putBoolean("mSplitToolbar", mSplitToolbar);
 }
 
 @Override
