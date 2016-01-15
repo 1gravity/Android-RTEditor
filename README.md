@@ -203,7 +203,7 @@ The fonts can be put anywhere in the assets folder (root or subdirectories). Sin
 
 Note that loading the fonts can take a moment. That's why you should pre-load them in your Application class:
 ```
-    FontManager.preLoadFonts(Context) {
+    FontManager.preLoadFonts(Context);
 ```
 
 Demo project
