@@ -16,7 +16,6 @@
 
 package com.onegravity.rteditor;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +36,7 @@ import com.onegravity.rteditor.LinkFragment.LinkEvent;
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.media.RTImage;
+import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.effects.AbsoluteSizeEffect;
 import com.onegravity.rteditor.effects.AlignmentEffect;
 import com.onegravity.rteditor.effects.BackgroundColorEffect;
@@ -55,10 +55,10 @@ import com.onegravity.rteditor.effects.TypefaceEffect;
 import com.onegravity.rteditor.effects.UnderlineEffect;
 import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
+import com.onegravity.rteditor.media.choose.MediaEvent;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
-import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Selection;
@@ -229,37 +229,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         mToolbars.clear();
 
         mRTApi = null;
-    }
-
-    /**
-     * Must be called from the Activity's onActivityResult method to be able to
-     * process the rich text editor specific calls (e.g. when picking an image
-     * to insert).
-     *
-     * @param requestCode The integer request code originally supplied to
-     *                    startActivityForResult(), allowing you to identify who this
-     *                    result came from.
-     * @param resultCode  The integer result code returned by the child activity through
-     *                    its setResult().
-     * @param data        An Intent, which can return result data to the caller (various
-     *                    data can be attached to Intent "extras").
-     * @return True if the call was consumed in this component, False otherwise
-     */
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && data != null) {
-
-            if (requestCode == MediaAction.PICK_PICTURE.requestCode() ||
-                    requestCode == MediaAction.CAPTURE_PICTURE.requestCode()) {
-
-                RTImage image = (RTImage) data.getSerializableExtra(Constants.RESULT_MEDIA);
-                insertImage(image);
-                return true;
-
-            }
-
-        }
-
-        return false;
     }
 
     // ****************************************** Public Methods *******************************************
@@ -727,6 +696,16 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             mLinkSelection = editor.getSelection();
         }
         return linkText;
+    }
+
+    /**
+     * Media file was picked -> process the result.
+     */
+    public void onEventMainThread(MediaEvent event) {
+        RTMedia media = event.getMedia();
+        if (media instanceof RTImage) {
+            insertImage( (RTImage) media );
+        }
     }
 
     /**

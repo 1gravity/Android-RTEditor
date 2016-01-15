@@ -1,6 +1,5 @@
 package com.onegravity.rteditor.demo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -98,14 +97,6 @@ public class RTEditorFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         mRTManager.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mRTManager != null && mRTManager.onActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

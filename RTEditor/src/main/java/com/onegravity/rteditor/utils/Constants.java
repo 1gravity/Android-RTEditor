@@ -43,10 +43,4 @@ public abstract class Constants {
 
     public final static int CROP_IMAGE = 107;
 
-    /*
-     * Extra in the Intent sent back to the rich text editor
-     * when picking a media file. It's a serialized Media object.
-     */
-    public static final String RESULT_MEDIA = "RTE_RESULT_MEDIA";
-
 }

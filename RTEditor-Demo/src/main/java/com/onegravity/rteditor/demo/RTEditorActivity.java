@@ -147,12 +147,6 @@ public class RTEditorActivity extends RTEditorBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mRTManager != null && mRTManager.onActivityResult(requestCode, resultCode, data)) {
-            // The call to RTManager.onActivityResult is needed because images are picked in a
-            // separate Activity and a reference is sent back in the Intent data to be inserted into
-            // the rich text.
-            return;
-        }
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null && data.getData().getPath() != null) {
             String filePath = data.getData().getPath();
 

@@ -89,13 +89,6 @@ public class RTEditorActivityWithFragment extends RTEditorBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mFragment != null) {
-            // When picking an image to be inserted into the rich text (separate Activity), a
-            // reference to the picked image is sent back in the Intent data and we need to
-            // "forward" that callback to the fragment.
-            // There are less hacky ways to do this of course...
-            mFragment.onActivityResult(requestCode, resultCode, data);
-        }
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null && data.getData().getPath() != null) {
             String filePath = data.getData().getPath();
 

@@ -35,6 +35,8 @@ import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 
+import de.greenrobot.event.EventBus;
+
 public class MediaChooserActivity extends MonitoredActivity implements
         ImageChooserListener,
         AudioChooserListener,
@@ -138,8 +140,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
             } else if (requestCode == Constants.CROP_IMAGE) {
                 String path = data.getStringExtra(CropImageActivity.IMAGE_DESTINATION_FILE);
                 if (path != null && mSelectedMedia instanceof RTImage) {
-                    Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-                    setResult(RESULT_OK, resultIntent);
+                    EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
             }
@@ -178,8 +179,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
                     // start activity CropImageActivity
                     startActivityForResult(intent, Constants.CROP_IMAGE);
                 } else {
-                    Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-                    setResult(RESULT_OK, resultIntent);
+                    EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
             }
