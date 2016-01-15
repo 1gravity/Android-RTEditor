@@ -143,7 +143,7 @@ To retrieve the edited text in html format you'd do:
 String text = rtEditText.getText(RTFormat.HTML);
 ```
 
-The RTManager also needs to be called in onSaveInstanceState and in onDestroy:
+The RTManager also needs to be called in onSaveInstanceState, in onDestroy and in onActivityResult:
 ```
 @Override
 protected void onSaveInstanceState(Bundle outState) {
@@ -158,6 +158,15 @@ public void onDestroy() {
     
     mRTManager.onDestroy(isFinishing());
 }
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (mRTManager != null && mRTManager.onActivityResult(requestCode, resultCode, data)) {
+        // The call to RTManager.onActivityResult is needed because images are picked in a
+        // separate Activity and a reference is sent back in the Intent data to be inserted into
+        // the rich text.
+        return;
+    }
 ```
 
 The isSaved parameter passed into RTManager.onDestroy(boolean) is important. If it's true then media files inserted into the text (images at the moment) will remain untouched.
