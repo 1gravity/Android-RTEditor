@@ -16,16 +16,9 @@
 
 package com.onegravity.rteditor.demo;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
@@ -44,16 +36,11 @@ import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.media.MediaUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RichTextEditor extends AppCompatActivity {
+public class RTEditorActivity extends RTEditorBaseActivity {
 
     private static final int REQUEST_LOAD_FILE = 1;
     private static final int REQUEST_SAVE_FILE = 2;
-
-    private static final int REQUEST_PERMISSION = 3;
-    private static final String PREFERENCE_PERMISSION_DENIED = "PREFERENCE_PERMISSION_DENIED";
 
     private RTManager mRTManager;
     private EditText mSubjectField;
@@ -65,23 +52,21 @@ public class RichTextEditor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // read extras
-        String subject = "";
+        // read parameters
+        String subject = null;
         String message = null;
         String signature = null;
         if (savedInstanceState == null) {
             Intent intent = getIntent();
-            subject = getStringExtra(intent, "subject");
-            message = getStringExtra(intent, "message");
-            signature = getStringExtra(intent, "signature");
-            mUseDarkTheme = intent.getBooleanExtra("mUseDarkTheme", false);
-            mSplitToolbar = intent.getBooleanExtra("mSplitToolbar", false);
+            subject = getStringExtra(intent, PARAM_SUBJECT);
+            message = getStringExtra(intent, PARAM_MESSAGE);
+            signature = getStringExtra(intent, PARAM_SIGNATURE);
+            mUseDarkTheme = intent.getBooleanExtra(PARAM_DARK_THEME, false);
+            mSplitToolbar = intent.getBooleanExtra(PARAM_SPLIT_TOOLBAR, false);
         } else {
-            subject = savedInstanceState.getString("subject", "");
-            mUseDarkTheme = savedInstanceState.getBoolean("mUseDarkTheme", false);
-            mSplitToolbar = savedInstanceState.getBoolean("mSplitToolbar", false);
-            boolean tmp = savedInstanceState.getBoolean("mRequestPermissionsInProcess", false);
-            mRequestPermissionsInProcess.set(tmp);
+            subject = savedInstanceState.getString(PARAM_SUBJECT, "");
+            mUseDarkTheme = savedInstanceState.getBoolean(PARAM_DARK_THEME, false);
+            mSplitToolbar = savedInstanceState.getBoolean(PARAM_SPLIT_TOOLBAR, false);
         }
 
         // set theme
@@ -91,6 +76,8 @@ public class RichTextEditor extends AppCompatActivity {
 
         // set layout
         setContentView(mSplitToolbar ? R.layout.rte_demo_2 : R.layout.rte_demo_1);
+
+        setTitle(R.string.title_activity);
 
         // initialize rich text manager
         RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this, true));
@@ -135,13 +122,6 @@ public class RichTextEditor extends AppCompatActivity {
         }
 
         mRTMessageField.requestFocus();
-
-        checkPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE});
-    }
-
-    private String getStringExtra(Intent intent, String key) {
-        String s = intent.getStringExtra(key);
-        return s == null ? "" : s;
     }
 
     @Override
@@ -159,17 +139,18 @@ public class RichTextEditor extends AppCompatActivity {
         mRTManager.onSaveInstanceState(outState);
 
         String subject = mSubjectField.getText().toString();
-        if (subject != null) outState.putString("subject", subject);
+        if (subject != null) outState.putString(PARAM_SUBJECT, subject);
 
-        outState.putBoolean("mUseDarkTheme", mUseDarkTheme);
-        outState.putBoolean("mSplitToolbar", mSplitToolbar);
-
-        outState.putBoolean("mRequestPermissionsInProcess", mRequestPermissionsInProcess.get());
+        outState.putBoolean(PARAM_DARK_THEME, mUseDarkTheme);
+        outState.putBoolean(PARAM_SPLIT_TOOLBAR, mSplitToolbar);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mRTManager != null && mRTManager.onActivityResult(requestCode, resultCode, data)) {
+            // The call to RTManager.onActivityResult is needed because images are picked in a
+            // separate Activity and a reference is sent back in the Intent data to be inserted into
+            // the rich text.
             return;
         }
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null && data.getData().getPath() != null) {
@@ -251,6 +232,9 @@ public class RichTextEditor extends AppCompatActivity {
         item = menu.findItem(R.id.split_toolbar);
         item.setTitle(mSplitToolbar ? R.string.menu_single_toolbar : R.string.menu_split_toolbar);
 
+        item = menu.findItem(R.id.editor_activity);
+        if (item != null) item.setVisible(false);
+
         return true;
     }
 
@@ -271,111 +255,31 @@ public class RichTextEditor extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.theme) {
             mUseDarkTheme = !mUseDarkTheme;
-            restart();
+            startAndFinish(getClass());
             return true;
         } else if (itemId == R.id.split_toolbar) {
             mSplitToolbar = !mSplitToolbar;
-            restart();
+            startAndFinish(getClass());
+            return true;
+        } else if (itemId == R.id.editor_fragment) {
+            startAndFinish(RTEditorActivityWithFragment.class);
             return true;
         }
         return false;
     }
 
-    private void restart() {
+    private void startAndFinish(Class<? extends Activity> clazz) {
         String subject = mSubjectField.getText().toString();
         String message = mRTMessageField.getText(RTFormat.HTML);
         String signature = mRTSignatureField.getText(RTFormat.HTML);
-        Intent intent = new Intent(this, getClass())
-                .putExtra("mUseDarkTheme", mUseDarkTheme)
-                .putExtra("mSplitToolbar", mSplitToolbar)
-                .putExtra("subject", subject)
-                .putExtra("message", message)
-                .putExtra("signature", signature);
+        Intent intent = new Intent(this, clazz)
+                .putExtra(PARAM_DARK_THEME, mUseDarkTheme)
+                .putExtra(PARAM_SPLIT_TOOLBAR, mSplitToolbar)
+                .putExtra(PARAM_SUBJECT, subject)
+                .putExtra(PARAM_MESSAGE, message)
+                .putExtra(PARAM_SIGNATURE, signature);
         startActivity(intent);
         finish();
     }
 
-    // ****************************************** Check Storage Permissions *******************************************
-
-    private AtomicBoolean mRequestPermissionsInProcess = new AtomicBoolean();
-
-    private void checkPermissions(String[] permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkPermissionInternal(permissions);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean checkPermissionInternal(String[] permissions) {
-        ArrayList<String> requestPerms = new ArrayList<String>();
-        for (String permission : permissions) {
-            if (checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED && !userDeniedPermissionAfterRationale(permission)) {
-                requestPerms.add(permission);
-            }
-        }
-        if (requestPerms.size() > 0 && ! mRequestPermissionsInProcess.getAndSet(true)) {
-            //  We do not have this essential permission, ask for it
-            requestPermissions(requestPerms.toArray(new String[requestPerms.size()]), REQUEST_PERMISSION);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSION) {
-            for (int i = 0, len = permissions.length; i < len; i++) {
-                String permission = permissions[i];
-                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permission)) {
-                        showRationale(permission, R.string.permission_denied_storage);
-                    }
-                }
-            }
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private void showRationale(final String permission, int promptResId) {
-        if (shouldShowRequestPermissionRationale(permission) && !userDeniedPermissionAfterRationale(permission)) {
-
-            //  Notify the user of the reduction in functionality and possibly exit (app dependent)
-            MaterialDialog dialog = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.permission_denied))
-                    .content(promptResId)
-                    .positiveText(R.string.permission_deny)
-                    .negativeText(R.string.permission_retry)
-                    .autoDismiss(false)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            try { dialog.dismiss(); } catch (Exception ignore) { }
-                            setUserDeniedPermissionAfterRationale(permission);
-                            mRequestPermissionsInProcess.set(false);
-                        }
-
-                        @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            try { dialog.dismiss(); } catch (Exception ignore) { }
-                            mRequestPermissionsInProcess.set(false);
-                            checkPermissions(new String[]{permission});
-                        }
-                    })
-                    .show();
-        }
-        else {
-            mRequestPermissionsInProcess.set(false);
-        }
-    }
-
-    private boolean userDeniedPermissionAfterRationale(String permission) {
-        SharedPreferences sharedPrefs = getSharedPreferences(getClass().getSimpleName(), Context.MODE_PRIVATE);
-        return sharedPrefs.getBoolean(PREFERENCE_PERMISSION_DENIED + permission, false);
-    }
-
-    private void setUserDeniedPermissionAfterRationale(String permission) {
-        SharedPreferences.Editor editor = getSharedPreferences(getClass().getSimpleName(), Context.MODE_PRIVATE).edit();
-        editor.putBoolean(PREFERENCE_PERMISSION_DENIED + permission, true).commit();
-    }
 }

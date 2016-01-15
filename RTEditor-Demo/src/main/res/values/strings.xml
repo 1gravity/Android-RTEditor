@@ -17,7 +17,9 @@
 <resources>
 
     <string name="app_name">RT Editor Demo</string>
-    
+    <string name="title_activity">RT Editor Activity</string>
+    <string name="title_fragment">RT Editor Fragment</string>
+
     <string name="label_subject">Subject</string>
     <string name="label_message">Message</string>
     <string name="label_signature">Signature</string>
@@ -28,7 +30,9 @@
     <string name="menu_light_theme">Light theme</string>
     <string name="menu_single_toolbar">Single toolbar</string>
     <string name="menu_split_toolbar">Split toolbar</string>
-    
+    <string name="menu_fragment">Use Fragment</string>
+    <string name="menu_activity">Use Activity</string>
+
     <string name="save_as">Save as…</string>
     <string name="save_as_success">Text saved as %s</string>
     <string name="save_as_failure">Text could not be saved: %s</string>

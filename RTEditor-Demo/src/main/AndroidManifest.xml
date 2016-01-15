@@ -34,12 +34,22 @@
         android:theme="@style/ThemeLight">
 
         <activity
-            android:name="com.onegravity.rteditor.demo.RichTextEditor">
+            android:name="com.onegravity.rteditor.demo.RTEditorActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />/>
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name="com.onegravity.rteditor.demo.RTEditorActivityWithFragment">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.EMBED" />
             </intent-filter>
 
         </activity>

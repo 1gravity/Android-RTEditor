@@ -41,12 +41,26 @@
         app:showAsAction="never"
         android:orderInCategory="3"
         android:alphabeticShortcut="t"/>
-    
-    <item
+
+	<item
 		android:id="@+id/split_toolbar"
 		android:title="@string/menu_split_toolbar"
-        app:showAsAction="never"
-        android:orderInCategory="4"
-        android:alphabeticShortcut="c"/>
-    
+		app:showAsAction="never"
+		android:orderInCategory="4"
+		android:alphabeticShortcut="c"/>
+
+	<item
+		android:id="@+id/editor_fragment"
+		android:title="@string/menu_fragment"
+		app:showAsAction="never"
+		android:orderInCategory="5"
+		android:alphabeticShortcut="f"/>
+
+	<item
+		android:id="@+id/editor_activity"
+		android:title="@string/menu_activity"
+		app:showAsAction="never"
+		android:orderInCategory="6"
+		android:alphabeticShortcut="f"/>
+
 </menu>
