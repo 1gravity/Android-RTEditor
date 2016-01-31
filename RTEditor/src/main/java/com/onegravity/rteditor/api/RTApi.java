@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.util.AndroidRuntimeException;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.util.DialogUtils;
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMediaSource;
@@ -63,6 +65,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
      */
     private static Object sTheLock = new Object();    // synchronize access to sAppContext
     private static Context sAppContext;
+    private static boolean sDarkTheme;
 
     /**
      * Return the context of the single, global Application object for the
@@ -81,6 +84,14 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         }
     }
 
+    /**
+     * Since we can't use the application context to retrieve the current theme,
+     * we retrieve the theme from the Activity context when the object is initialized.
+     */
+    public static boolean useDarkTheme() {
+        return sDarkTheme;
+    }
+
 	/*
 	 * Constructor
 	 */
@@ -97,6 +108,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         synchronized (sTheLock) {
             sAppContext = context.getApplicationContext();
         }
+        sDarkTheme = DialogUtils.resolveBoolean(context, R.attr.md_dark_theme, false);
 
         mRTProxy = rtProxy;
         mMediaFactory = mediaFactory;

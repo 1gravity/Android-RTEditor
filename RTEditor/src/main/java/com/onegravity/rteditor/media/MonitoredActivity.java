@@ -22,6 +22,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.onegravity.rteditor.R;
+import com.onegravity.rteditor.api.RTApi;
+
 import java.util.ArrayList;
 
 public class MonitoredActivity extends AppCompatActivity {
@@ -81,6 +84,9 @@ public class MonitoredActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set theme
+        setTheme(RTApi.useDarkTheme() ? R.style.RTE_BaseThemeDark : R.style.RTE_BaseThemeLight);
 
         if (!isFinishing()) {
             mHandler = new Handler();

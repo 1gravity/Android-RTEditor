@@ -16,11 +16,6 @@
 
 package com.onegravity.rteditor.media.crop;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,6 +41,11 @@ import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.media.MediaUtils;
 import com.onegravity.rteditor.media.MonitoredActivity;
 import com.onegravity.rteditor.utils.Helper;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * The activity can crop specific region of interest from an image.
@@ -88,7 +88,7 @@ public class CropImageActivity extends MonitoredActivity {
     boolean mSaving; // Whether the "save" button is already clicked.
     HighlightView mCrop;
 
-    // These options specifiy the output image size and whether we should
+    // These options specify the output image size and whether we should
     // scale the output to fit it (or just crop it).
     private boolean mScaleUp = true;
 
