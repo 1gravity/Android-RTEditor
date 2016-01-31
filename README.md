@@ -57,6 +57,17 @@ repositories {
 }
 ```
 
+####**Manifest**
+
+Add these two Activity definitions to your manifest:
+```
+<activity
+    android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
+
+<activity
+    android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
+```
+
 ####**Theming**
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
