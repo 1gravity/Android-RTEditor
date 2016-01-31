@@ -67,7 +67,7 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
     
-    <style name="RTE_VerticalDivider">
+    <style name="RTE_ToolbarVerticalDivider">
         <item name="android:layout_width">1dip</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginTop">5dp</item>

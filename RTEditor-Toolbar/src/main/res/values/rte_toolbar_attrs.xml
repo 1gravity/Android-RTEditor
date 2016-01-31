@@ -47,7 +47,7 @@
         <attr name="rte_icToolbarRedo" format="reference" />
         <attr name="rte_icToolbarClear" format="reference" />
         
-        <attr name="rte_VerticalDivider" format="reference" />
+        <attr name="rte_ToolbarVerticalDivider" format="reference" />
 	</declare-styleable>
 	
     <declare-styleable name="ToolbarButton">

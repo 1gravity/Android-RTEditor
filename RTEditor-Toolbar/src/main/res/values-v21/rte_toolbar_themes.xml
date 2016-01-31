@@ -17,11 +17,11 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="RTE_BaseThemeLight" parent="Theme.AppCompat.Light">
+    <style name="RTE_ToolbarBaseThemeLight" parent="RTE_BaseThemeLight">
         <item name="rte_ToolbarSpinnerSelectedColor">#ffeeeeee</item>
     </style>
 
-    <style name="RTE_BaseThemeDark" parent="Theme.AppCompat">
+    <style name="RTE_ToolbarBaseThemeDark" parent="RTE_BaseThemeDark">
         <item name="rte_ToolbarSpinnerSelectedColor">#ff303030</item>
     </style>
     
