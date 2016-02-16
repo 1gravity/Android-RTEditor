@@ -40,6 +40,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeListener {
 
@@ -279,7 +280,7 @@ public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeLis
      * Set a OnColorChangedListener to get notified when the color
      * selected by the user has changed.
      */
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(SetColorChangedListenerEvent event) {
         if (event.getId() == mId) {
             int screenOrientation = Util.getScreenOrientation(mContext);
