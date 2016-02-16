@@ -38,7 +38,7 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
         transitive = true
     }
-    compile 'de.greenrobot:eventbus:2.4.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 
 apply from: '../android-artifacts.gradle'

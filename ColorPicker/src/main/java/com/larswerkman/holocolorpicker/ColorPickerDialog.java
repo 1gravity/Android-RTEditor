@@ -38,7 +38,7 @@ import android.widget.TabHost.TabSpec;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeListener {
 
@@ -278,6 +278,7 @@ public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeLis
      * Set a OnColorChangedListener to get notified when the color
      * selected by the user has changed.
      */
+    @Subscribe
     public void onEventMainThread(SetColorChangedListenerEvent event) {
         if (event.getId() == mId) {
             int screenOrientation = Util.getScreenOrientation(mContext);
