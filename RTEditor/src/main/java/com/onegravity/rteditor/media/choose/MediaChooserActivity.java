@@ -35,7 +35,7 @@ import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 public class MediaChooserActivity extends MonitoredActivity implements
         ImageChooserListener,

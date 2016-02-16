@@ -38,6 +38,7 @@ import android.widget.TabHost.TabSpec;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeListener {

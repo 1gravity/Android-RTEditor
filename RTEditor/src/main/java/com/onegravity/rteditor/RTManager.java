@@ -63,13 +63,14 @@ import com.onegravity.rteditor.utils.Constants.MediaAction;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Selection;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * The RTManager manages the different components:
@@ -701,6 +702,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     /**
      * Media file was picked -> process the result.
      */
+    @Subscribe
     public void onEventMainThread(MediaEvent event) {
         RTMedia media = event.getMedia();
         if (media instanceof RTImage) {
@@ -711,6 +713,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     /**
      * LinkFragment has closed -> process the result.
      */
+    @Subscribe
     public void onEventMainThread(LinkEvent event) {
         final String fragmentTag = event.getFragmentTag();
         mRTApi.removeFragment(fragmentTag);

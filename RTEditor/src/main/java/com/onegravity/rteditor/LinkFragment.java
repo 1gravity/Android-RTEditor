@@ -35,10 +35,10 @@ import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.validator.EmailValidator;
 import com.onegravity.rteditor.utils.validator.UrlValidator;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.ref.SoftReference;
 import java.util.Locale;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * A DialogFragment to add, modify or remove links from Spanned text.
