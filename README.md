@@ -35,7 +35,7 @@ It also supports the following <b>paragraph formatting</b>:
 </ul>
 
 * [Links](http://www.1gravity.com)
-* Images: [![Images](http://www.1gravity.com/smiley.jpg)](https://www.1gravity.com)
+* Images: [![Images](http://www.1gravity.com/images/ANDROID.png)](http://www.1gravity.com)
 * Undo/Redo
 
 
