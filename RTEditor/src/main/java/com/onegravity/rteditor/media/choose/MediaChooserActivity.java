@@ -140,7 +140,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
             } else if (requestCode == Constants.CROP_IMAGE) {
                 String path = data.getStringExtra(CropImageActivity.IMAGE_DESTINATION_FILE);
                 if (path != null && mSelectedMedia instanceof RTImage) {
-                    EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
+                    EventBus.getDefault().postSticky( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
             }
@@ -179,7 +179,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
                     // start activity CropImageActivity
                     startActivityForResult(intent, Constants.CROP_IMAGE);
                 } else {
-                    EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
+                    EventBus.getDefault().postSticky( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
             }

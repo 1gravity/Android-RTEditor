@@ -238,9 +238,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     /**
      * Register a rich text editor.
      * <p>
-     * Before using the editor it needs to be registered to an RTManager. Using
-     * means any calls to the editor (setText will fail if the editor isn't
-     * registered)! Must be called from the ui thread.
+     * Before using the editor it needs to be registered to an RTManager.
+     * Using means any calls to the editor (setText will fail if the editor isn't registered)!
+     * MUST be called from the ui thread.
      *
      * @param editor The rich text editor to register.
      */
@@ -478,43 +478,35 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    /* called from onActivityResult() */
-    private void insertImage(final RTImage image) {
-        mRTApi.runOnUiThread(new Runnable() {
+    /* called from onEventMainThread(MediaEvent) */
+    private void insertImage(final RTEditText editor, final RTImage image) {
+        if (image != null && editor != null) {
+            Selection selection = new Selection(editor);
+            Editable str = editor.getText();
 
-            @Override
-            public void run() {
-                RTEditText editor = mEditors.get(mActiveEditor);
-                if (image != null && editor != null) {
-                    Selection selection = new Selection(editor);
-                    Editable str = editor.getText();
+            // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
+            // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
+            str.insert(selection.start(), "\uFFFC");
 
-                    // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
-                    // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
-                    str.insert(selection.start(), "\uFFFC");
+            try {
+                // now add the actual image and inform the RTOperationManager about the operation
+                Spannable oldSpannable = editor.cloneSpannable();
 
-                    try {
-                        // now add the actual image and inform the RTOperationManager about the operation
-                        Spannable oldSpannable = editor.cloneSpannable();
+                ImageSpan imageSpan = new ImageSpan(image, false);
+                str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                int selStartAfter = editor.getSelectionStart();
+                int selEndAfter = editor.getSelectionEnd();
+                editor.onAddMedia(image);
 
-                        ImageSpan imageSpan = new ImageSpan(image, false);
-                        str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        int selStartAfter = editor.getSelectionStart();
-                        int selEndAfter = editor.getSelectionEnd();
-                        editor.onAddMedia(image);
+                Spannable newSpannable = editor.cloneSpannable();
 
-                        Spannable newSpannable = editor.cloneSpannable();
-
-                        mOPManager.executed(editor, new RTOperationManager.TextChangeOperation(oldSpannable, newSpannable,
-                                selection.start(), selection.end(), selStartAfter, selEndAfter));
-                    } catch (OutOfMemoryError e) {
-                        str.delete(selection.start(), selection.end() + 1);
-                        mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
-                    }
-                }
+                mOPManager.executed(editor, new RTOperationManager.TextChangeOperation(oldSpannable, newSpannable,
+                        selection.start(), selection.end(), selStartAfter, selEndAfter));
+            } catch (OutOfMemoryError e) {
+                str.delete(selection.start(), selection.end() + 1);
+                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
             }
-
-        });
+        }
     }
 
     private RTEditText getActiveEditor() {
@@ -527,6 +519,18 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     // ****************************************** RTEditTextListener *******************************************
+
+    @Override
+    public void onRestoredInstanceState(RTEditText editor) {
+        /*
+         * We need to process pending sticky MediaEvents once the editors are registered with the
+         * RTManager and are fully restored.
+         */
+        MediaEvent event = EventBus.getDefault().getStickyEvent(MediaEvent.class);
+        if (event != null) {
+            onEventMainThread(event);
+        }
+    }
 
     @Override
 	/* @inheritDoc */
@@ -703,11 +707,13 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     /**
      * Media file was picked -> process the result.
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MediaEvent event) {
+        RTEditText editor = mEditors.get(mActiveEditor);
         RTMedia media = event.getMedia();
-        if (media instanceof RTImage) {
-            insertImage( (RTImage) media );
+        if (editor != null && media instanceof RTImage) {
+            insertImage(editor, (RTImage) media);
+            EventBus.getDefault().removeStickyEvent(event);
         }
     }
 

@@ -524,6 +524,10 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         else {
             super.onRestoreInstanceState(state);
         }
+
+        if (mListener != null) {
+            mListener.onRestoredInstanceState(this);
+        }
     }
 
     private static class SavedState extends BaseSavedState {

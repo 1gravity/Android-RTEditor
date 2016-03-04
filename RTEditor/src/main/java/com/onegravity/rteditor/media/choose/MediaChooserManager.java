@@ -119,7 +119,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
         mOriginalFile = null;
         if (data != null && data.getDataString() != null) {
             try {
-                mOriginalFile = MediaUtils.determineOriginalFile(RTApi.getApplicationContext(), data.getData());
+                mOriginalFile = MediaUtils.determineOriginalFile(mActivity.getApplicationContext(), data.getData());
             } catch (IllegalArgumentException e) {
                 onError(e.getMessage());
             }

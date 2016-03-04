@@ -26,6 +26,14 @@ import com.onegravity.rteditor.spans.LinkSpan;
 public interface RTEditTextListener {
 
     /**
+     * When delivering MediaEvents to the RTManager, the RTEditText might not have its state fully
+     * restored and the event can't be processed yet.
+     * This method signals that the RTEditText is fully operational now --> process pending/sticky
+     * MediaEvents.
+     */
+    void onRestoredInstanceState(RTEditText editor);
+
+    /**
      * If this EditText changes focus the listener will be informed through this method.
      */
     void onFocusChanged(RTEditText editor, boolean focused);
