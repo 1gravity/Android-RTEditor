@@ -714,6 +714,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         if (editor != null && media instanceof RTImage) {
             insertImage(editor, (RTImage) media);
             EventBus.getDefault().removeStickyEvent(event);
+            mActiveEditor = Integer.MAX_VALUE;
         }
     }
 
