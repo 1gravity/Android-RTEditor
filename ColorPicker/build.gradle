@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.5@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
         transitive = true
     }
     compile 'org.greenrobot:eventbus:3.0.0'
