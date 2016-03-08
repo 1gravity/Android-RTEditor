@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Emanuel Moecklin
+ * Copyright 2012 Lars Werkman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,4 +14,11 @@
  * limitations under the License.
  */
 
-include ':RTEditor-Demo', ':RTEditor-Toolbar', ':RTEditor', ':'
+package com.onegravity.rteditor.toolbar.colorpicker;
+
+/**
+ * An interface that is called whenever the color is changed.
+ */
+public interface OnColorChangedListener {
+    public void onColorChanged(int color);
+}

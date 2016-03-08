@@ -39,11 +39,10 @@ android {
 }
 
 dependencies {
-    // use this to compile/run locally
-    //compile project(':ColorPicker')
-
-    // or this to use the latest published library
-    compile 'com.1gravity:android-rteditor-colorpicker:1.4.1'
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
+        transitive = true
+    }
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 
 apply from: '../android-artifacts.gradle'
