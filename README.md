@@ -46,7 +46,7 @@ Setup
 Add this to your Gradle build file:
 ```
 dependencies {
-    compile 'com.1gravity:android-rteditor:1.4.1'
+    compile 'com.1gravity:android-rteditor:1.5.0'
 }
 ```
 
@@ -65,6 +65,7 @@ Add these two Activity definitions to your manifest:
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
 You need to use a theme based on either RTE_ThemeLight or RTE_ThemeDark or define all rich text editor attributes (rte_toolbar_themes.xml) in your own theme. 
+These two themes inherit from Theme.AppCompat.Light / Theme.AppCompat.
 
 Make sure to call setTheme before setContentView (or set the theme in the manifest):
 
@@ -207,7 +208,7 @@ The fonts can be put anywhere in the assets folder (root or subdirectories). Sin
 
 Note that loading the fonts can take a moment. That's why you should pre-load them in your Application class:
 ```
-    FontManager.preLoadFonts(Context);
+FontManager.preLoadFonts(Context);
 ```
 
 Demo project
