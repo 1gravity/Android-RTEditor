@@ -24,13 +24,11 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.validator.EmailValidator;
 import com.onegravity.rteditor.utils.validator.UrlValidator;
@@ -161,43 +159,39 @@ public class LinkFragment extends DialogFragment {
             textView.setText(linkText);
         }
 
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(mActivity.get())
-                .title(R.string.rte_create_a_link)
-                .customView(view, true)
-                .cancelable(false)
-                .autoDismiss(false)
-                .positiveText(android.R.string.ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity.get())
+                .setTitle(R.string.rte_create_a_link)
+                .setView(view)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         // OK button
                         validate(dialog, addressView, textView);
                     }
                 })
-                .negativeText(android.R.string.cancel)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         // Cancel button
                         EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(null, url), true));
                     }
                 });
 
         if (address != null) {
-            builder.neutralText(R.string.rte_remove_action)
-            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+            builder.setNeutralButton(R.string.rte_remove_action, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                public void onClick(DialogInterface dialog, int which) {
                     // Remove button
                     EventBus.getDefault().post(new LinkEvent(LinkFragment.this, null, false));
                 }
             });
         }
 
-        return builder.build();
+        return builder.create();
     }
 
-    private void validate(Dialog dialog, TextView addressView, TextView textView) {
+    private void validate(DialogInterface dialog, TextView addressView, TextView textView) {
         // retrieve link address and do some cleanup
         final String address = addressView.getText().toString().trim();
 

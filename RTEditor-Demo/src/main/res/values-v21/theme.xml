@@ -26,6 +26,8 @@
         <item name="android:statusBarColor">#90A4AE</item>
         
         <item name="rte_icMenuLoad">@drawable/ic_menu_load_light</item>
+
+        <item name="alertDialogTheme">@style/Theme_Dialog_Light</item>
     </style>
 
     <style name="ThemeDark" parent="@style/RTE_ThemeDark">
@@ -37,6 +39,8 @@
         <item name="android:statusBarColor">#1A237E</item>
 
         <item name="rte_icMenuLoad">@drawable/ic_menu_load_dark</item>
+
+        <item name="alertDialogTheme">@style/Theme_Dialog_Dark</item>
     </style>
 
 </resources>

@@ -19,10 +19,11 @@ package com.onegravity.rteditor.api;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.support.annotation.AttrRes;
 import android.util.AndroidRuntimeException;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.util.DialogUtils;
 import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
@@ -108,10 +109,19 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         synchronized (sTheLock) {
             sAppContext = context.getApplicationContext();
         }
-        sDarkTheme = DialogUtils.resolveBoolean(context, R.attr.md_dark_theme, false);
+        sDarkTheme = resolveBoolean(context, R.attr.rte_darkTheme, false);
 
         mRTProxy = rtProxy;
         mMediaFactory = mediaFactory;
+    }
+
+    private boolean resolveBoolean(Context context, @AttrRes int attr, boolean fallback) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
+        try {
+            return a.getBoolean(0, fallback);
+        } finally {
+            a.recycle();
+        }
     }
 
 	/*

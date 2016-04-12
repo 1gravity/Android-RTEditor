@@ -19,8 +19,6 @@
 
     <!-- LIGHT THEME -->
     <style name="RTE_ToolbarBaseThemeLight" parent="RTE_BaseThemeLight">
-        <item name="md_dark_theme">false</item>
-
         <item name="rte_ToolbarButton">@style/RTE_ToolbarButton</item>
         <item name="rte_ToolbarSpinner">@style/RTE_ToolbarSpinnerLight</item>
         <item name="rte_ToolbarSpinnerItem">@style/RTE_ToolbarSpinnerItem</item>
@@ -56,8 +54,6 @@
 
     <!-- DARK THEME -->
     <style name="RTE_ToolbarBaseThemeDark" parent="RTE_BaseThemeDark">
-        <item name="md_dark_theme">true</item>
-
         <item name="rte_ToolbarButton">@style/RTE_ToolbarButton</item>
         <item name="rte_ToolbarSpinner">@style/RTE_ToolbarSpinnerDark</item>
         <item name="rte_ToolbarSpinnerItem">@style/RTE_ToolbarSpinnerItem</item>

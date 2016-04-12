@@ -20,8 +20,10 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:layout_marginTop="@dimen/md_dialog_frame_margin"
-    android:layout_marginBottom="@dimen/md_dialog_frame_margin">
+	android:paddingTop="@dimen/dialog_margin_top_bottom"
+	android:paddingBottom="@dimen/dialog_margin_top_bottom"
+    android:paddingLeft="@dimen/dialog_margin_left_right"
+	android:paddingRight="@dimen/dialog_margin_left_right">
 
     <EditText
         android:id="@+id/linkURL"

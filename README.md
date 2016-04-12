@@ -50,13 +50,6 @@ dependencies {
 }
 ```
 
-Because the library uses [a Material design library](https://github.com/afollestad/material-dialogs), you need to add the following code to your app's build.gradle file (allprojects block):  
-```
-repositories {
-    maven { url "https://jitpack.io" }
-}
-```
-
 ####**Manifest**
 
 Add these two Activity definitions to your manifest:

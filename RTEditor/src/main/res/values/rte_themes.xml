@@ -19,7 +19,7 @@
 
     <!-- LIGHT THEME -->
     <style name="RTE_BaseThemeLight" parent="@style/Theme.AppCompat.Light">
-        <item name="md_dark_theme">false</item>
+        <item name="rte_darkTheme">false</item>
 
 		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_light</item>
 		<item name="rte_icMenuSave">@drawable/ic_menu_save_light</item>
@@ -29,7 +29,7 @@
 
     <!-- DARK THEME -->
     <style name="RTE_BaseThemeDark" parent="@style/Theme.AppCompat">
-        <item name="md_dark_theme">true</item>
+        <item name="rte_darkTheme">true</item>
 
 		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_dark</item>
 		<item name="rte_icMenuSave">@drawable/ic_menu_save_dark</item>

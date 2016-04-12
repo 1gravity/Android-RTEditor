@@ -19,16 +19,14 @@ package com.onegravity.rteditor.demo;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -108,23 +106,20 @@ public class RTEditorBaseActivity extends AppCompatActivity {
         if (shouldShowRequestPermissionRationale(permission) && !userDeniedPermissionAfterRationale(permission)) {
 
             //  Notify the user of the reduction in functionality and possibly exit (app dependent)
-            MaterialDialog dialog = new MaterialDialog.Builder(this)
-                    .title(getString(R.string.permission_denied))
-                    .content(promptResId)
-                    .positiveText(R.string.permission_deny)
-                    .negativeText(R.string.permission_retry)
-                    .autoDismiss(false)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.permission_denied)
+                    .setMessage(promptResId)
+                    .setPositiveButton(R.string.permission_deny, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             try { dialog.dismiss(); } catch (Exception ignore) { }
                             setUserDeniedPermissionAfterRationale(permission);
                             mRequestPermissionsInProcess.set(false);
                         }
                     })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    .setNegativeButton(R.string.permission_retry, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             try { dialog.dismiss(); } catch (Exception ignore) { }
                             mRequestPermissionsInProcess.set(false);
                             checkPermissions(new String[]{permission});

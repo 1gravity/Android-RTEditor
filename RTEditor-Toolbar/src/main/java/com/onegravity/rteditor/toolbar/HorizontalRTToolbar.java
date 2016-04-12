@@ -29,14 +29,14 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.onegravity.colorpicker.ColorPickerDialog;
+import com.onegravity.colorpicker.OnColorChangedListener;
+import com.onegravity.colorpicker.SetColorChangedListenerEvent;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.RTToolbarListener;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
-import com.onegravity.rteditor.toolbar.colorpicker.ColorPickerDialog;
-import com.onegravity.rteditor.toolbar.colorpicker.OnColorChangedListener;
-import com.onegravity.rteditor.toolbar.colorpicker.SetColorChangedListenerEvent;
 import com.onegravity.rteditor.toolbar.spinner.BGColorSpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.ColorSpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.FontColorSpinnerItem;
