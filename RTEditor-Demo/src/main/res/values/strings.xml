@@ -44,4 +44,6 @@
     <string name="permission_deny">Deny</string>
     <string name="permission_retry">Re-try</string>
 
+    <string name="no_file_picker">There\'s no app installed to handle picking a directory: %s</string>
+
 </resources>
