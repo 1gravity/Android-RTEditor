@@ -61,6 +61,21 @@ Add these two Activity definitions to your manifest:
     android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
 ```
 
+#### **Proguard**
+
+If you use Proguard in your app, please add the following line to your configuration file:
+```
+-keepattributes Signature
+```
+
+The "Signature" attribute is required to be able to access generic type, which the rich text editor code does:
+```
+protected BooleanEffect() {
+    Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+    mSpanClazz = (Class<? extends RTSpan<Boolean>>) types[0];
+}
+```
+
 ####**Theming**
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
