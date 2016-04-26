@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.onegravity.rteditor.utils.Helper;
@@ -66,7 +65,7 @@ public class FileHelper {
                     return true;
                 }
             } catch (ActivityNotFoundException e) {
-                Log.w(FileHelper.class.getSimpleName(), e.getMessage(), e);
+                showNoFilePickerError(activity, e);
             }
         }
 
@@ -74,10 +73,21 @@ public class FileHelper {
     }
 
     public static boolean pickFile(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
-        activity.startActivityForResult(intent, requestCode);
-        return true;
+        try {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("file/*");
+            activity.startActivityForResult(intent, requestCode);
+            return true;
+        }
+        catch (ActivityNotFoundException e) {
+            showNoFilePickerError(activity, e);
+        }
+        return false;
+    }
+
+    private static void showNoFilePickerError(Context context, Exception e) {
+        String msg = context.getString(R.string.no_file_picker, e.getMessage());
+        Toast.makeText(context, msg , Toast.LENGTH_LONG).show();
     }
 
     public static String save(Context context, File outFile, String html) {
