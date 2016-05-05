@@ -66,6 +66,9 @@ Add these two Activity definitions to your manifest:
 If you use Proguard in your app, please add the following line to your configuration file:
 ```
 -keepattributes Signature
+-keepclassmembers class * extends com.onegravity.rteditor.spans.RTSpan {
+    public <init>(int);
+}
 ```
 
 The "Signature" attribute is required to be able to access generic type, which the rich text editor code does:
