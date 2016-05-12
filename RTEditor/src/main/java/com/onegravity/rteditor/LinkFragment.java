@@ -17,10 +17,10 @@
 package com.onegravity.rteditor;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,7 +35,6 @@ import com.onegravity.rteditor.utils.validator.UrlValidator;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.lang.ref.SoftReference;
 import java.util.Locale;
 
 /**
@@ -102,8 +101,6 @@ public class LinkFragment extends DialogFragment {
     private static final UrlValidator sUrlValidator = new UrlValidator(UrlValidator.ALLOW_2_SLASHES + UrlValidator.ALLOW_ALL_SCHEMES);
     private static final EmailValidator sEmailValidator = EmailValidator.getInstance(false);
 
-    private SoftReference<Activity> mActivity;
-
     public static LinkFragment newInstance(String linkText, String url) {
         LinkFragment fragment = new LinkFragment();
         Bundle args = new Bundle();
@@ -116,22 +113,11 @@ public class LinkFragment extends DialogFragment {
     public LinkFragment() {
     }
 
-    @Override
-    public final void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = new SoftReference<Activity>(activity);
-    }
-
-    @Override
-    public final void onDetach() {
-        super.onDetach();
-        mActivity = null;
-    }
-
     @SuppressLint("InflateParams")
     @Override
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater li = LayoutInflater.from(mActivity.get());
+        Context context = getActivity();
+        LayoutInflater li = LayoutInflater.from(context);
         View view = li.inflate(R.layout.rte_link, null);
 
         Bundle args = getArguments();
@@ -159,7 +145,7 @@ public class LinkFragment extends DialogFragment {
             textView.setText(linkText);
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity.get())
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(R.string.rte_create_a_link)
                 .setView(view)
                 .setCancelable(false)
