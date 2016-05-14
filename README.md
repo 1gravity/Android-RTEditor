@@ -63,7 +63,7 @@ Add these two Activity definitions to your manifest:
 
 #### **Proguard**
 
-If you use Proguard in your app, please add the following line to your configuration file:
+If you use Proguard in your app, please add the following lines to your configuration file:
 ```
 -keepattributes Signature
 -keepclassmembers class * extends com.onegravity.rteditor.spans.RTSpan {
@@ -265,7 +265,7 @@ If you have an issues with this library, please open a issue here: https://githu
 License
 -------
 
-Copyright 2015 Emanuel Moecklin
+Copyright 2015-2016 Emanuel Moecklin
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

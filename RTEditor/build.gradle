@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    compile 'com.1gravity:android-colorpicker:1.5.0'
+    compile 'com.1gravity:android-colorpicker:2.0.0'
 }
 
 apply from: '../android-artifacts.gradle'

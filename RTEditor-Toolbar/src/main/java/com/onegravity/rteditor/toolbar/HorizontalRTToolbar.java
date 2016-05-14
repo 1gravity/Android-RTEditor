@@ -30,8 +30,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.onegravity.colorpicker.ColorPickerDialog;
-import com.onegravity.colorpicker.OnColorChangedListener;
-import com.onegravity.colorpicker.SetColorChangedListenerEvent;
+import com.onegravity.colorpicker.ColorPickerListener;
+import com.onegravity.colorpicker.SetColorPickerListenerEvent;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.RTToolbarListener;
 import com.onegravity.rteditor.effects.Effects;
@@ -46,8 +46,6 @@ import com.onegravity.rteditor.toolbar.spinner.SpinnerItem;
 import com.onegravity.rteditor.toolbar.spinner.SpinnerItemAdapter;
 import com.onegravity.rteditor.toolbar.spinner.SpinnerItems;
 import com.onegravity.rteditor.utils.Helper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -109,8 +107,8 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     private int mCustomColorFont = Color.BLACK;
     private int mCustomColorBG = Color.BLACK;
 
-    private int mPickerId;
-    private OnColorChangedListener mColorChangedlistener;
+    private int mPickerId = -1;
+    private ColorPickerListener mColorPickerListener;
 
     // ****************************************** Initialize Methods *******************************************
 
@@ -133,6 +131,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         synchronized (sIdCounter) {
             mId = sIdCounter.getAndIncrement();
         }
+        SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
     }
 
     @Override
@@ -330,8 +329,8 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if (mColorChangedlistener != null) {
-            EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
+        if (mColorPickerListener != null && mPickerId != -1) {
+            SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
         }
     }
 
@@ -524,7 +523,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         @Override
         public void onItemSelected(final FontColorSpinnerItem spinnerItem, int position) {
             if (spinnerItem.isCustom()) {
-                mColorChangedlistener = new OnColorChangedListener() {
+                mColorPickerListener = new ColorPickerListener() {
                     @Override
                     public void onColorChanged(int color) {
                         mCustomColorFont = color;
@@ -534,10 +533,13 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                             mListener.onEffectSelected(Effects.FONTCOLOR, color);
                         }
                     }
+                    @Override
+                    public void onDialogClosing() {
+                        mPickerId = -1;
+                    }
                 };
-                ColorPickerDialog dialog = new ColorPickerDialog(getContext(), mCustomColorFont, false).show();
-                mPickerId = dialog.getId();
-                EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
+                mPickerId = new ColorPickerDialog(getContext(), mCustomColorFont, false).show();
+                SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
             } else if (mListener != null) {
                 Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
                 mListener.onEffectSelected(Effects.FONTCOLOR, color);
@@ -549,8 +551,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         @Override
         public void onItemSelected(final BGColorSpinnerItem spinnerItem, int position) {
             if (spinnerItem.isCustom()) {
-                ColorPickerDialog dialog = new ColorPickerDialog(getContext(), mCustomColorBG, false).show();
-                mColorChangedlistener = new OnColorChangedListener() {
+                mColorPickerListener = new ColorPickerListener() {
                     @Override
                     public void onColorChanged(int color) {
                         mCustomColorBG = color;
@@ -560,9 +561,12 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                             mListener.onEffectSelected(Effects.BGCOLOR, color);
                         }
                     }
+                    public void onDialogClosing() {
+                        mPickerId = -1;
+                    }
                 };
-                mPickerId = dialog.getId();
-                EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
+                mPickerId = new ColorPickerDialog(getContext(), mCustomColorBG, false).show();
+                SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
             } else if (mListener != null) {
                 Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
                 mListener.onEffectSelected(Effects.BGCOLOR, color);
