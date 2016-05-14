@@ -80,5 +80,5 @@ dependencies {
     compile project(':RTEditor-Toolbar')
 
     // or this to use the latest published library
-    //compile 'com.1gravity:android-rteditor:1.5.0'
+    //compile 'com.1gravity:android-rteditor:1.5.1'
 }
