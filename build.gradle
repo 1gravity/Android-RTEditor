@@ -19,10 +19,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        // we need to keep the 2.1.0 at the moment because 2.2.0-alpha crashes with a
-        // ResourceNotFound exception when the app is started
-        // classpath 'com.android.tools.build:gradle:2.2.0-alpha1'
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha1'
     }
 }
 
