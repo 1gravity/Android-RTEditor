@@ -18,8 +18,8 @@ package com.onegravity.rteditor;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -187,7 +187,7 @@ public class LinkFragment extends DialogFragment {
             // valid url or email address
 
             // encode address
-            String newAddress = Helper.encodeQuery(address);
+            String newAddress = Helper.encodeUrl(address);
 
             // add mailto: for email addresses
             if (isEmail && !startsWithMailto(newAddress)) {

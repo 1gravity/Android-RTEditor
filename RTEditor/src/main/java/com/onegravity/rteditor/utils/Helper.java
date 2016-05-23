@@ -33,7 +33,11 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.Bidi;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Miscellaneous helper methods
@@ -111,14 +115,24 @@ public abstract class Helper {
      * @param url an url (e.g. http://www.1gravity.com?query=üö)
      * @return The url with an encoded query, e.g. http://www.1gravity.com?query%3D%C3%BC%C3%B6
      */
-    public static String encodeQuery(String url) {
+    public static String encodeUrl(String url) {
         Uri uri = Uri.parse(url);
 
         try {
-            String query = uri.getQuery();
-            String encodedQuery = query != null ? URLEncoder.encode(query, "UTF-8") : null;
-            URI tmp = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, uri.getFragment());
-            return tmp + (encodedQuery != null && encodedQuery.length() > 0 ? "?" + encodedQuery : "");
+            Map<String, List<String>> splitQuery = splitQuery(uri);
+            StringBuilder encodedQuery = new StringBuilder();
+            for (String key : splitQuery.keySet()) {
+                for (String value : splitQuery.get(key)) {
+                    if (encodedQuery.length() > 0) {
+                        encodedQuery.append("&");
+                    }
+                    encodedQuery.append(key + "=" + URLEncoder.encode(value, "UTF-8"));
+                }
+            }
+            String queryString = encodedQuery != null && encodedQuery.length() > 0 ? "?" + encodedQuery : "";
+
+            URI baseUri = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, uri.getFragment());
+            return baseUri + queryString;
         }
         catch (UnsupportedEncodingException ignore) {}
         catch (URISyntaxException ignore) {}
@@ -128,7 +142,7 @@ public abstract class Helper {
 
     /**
      * This method decodes an url with encoded query string
-     * @param url an url with encoded query string (e.g. http://www.1gravity.com?query%3D%C3%BC%C3%B6)
+     * @param url an url with encoded query string (e.g. http://www.1gravity.com?query%C3%BC%C3%B6)
      * @return The decoded url, e.g. http://www.1gravity.com?query=üö
      */
     public static String decodeQuery(String url) {
@@ -138,6 +152,25 @@ public abstract class Helper {
         catch (UnsupportedEncodingException ignore) {}
 
         return url;
+    }
+
+    /**
+     * Splits the query parameters into key value pairs.
+     * See: http://stackoverflow.com/a/13592567/534471.
+     */
+    private static Map<String, List<String>> splitQuery(Uri uri) throws UnsupportedEncodingException {
+        final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
+        final String[] pairs = uri.getQuery().split("&");
+        for (String pair : pairs) {
+            final int idx = pair.indexOf("=");
+            final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+            if (!query_pairs.containsKey(key)) {
+                query_pairs.put(key, new LinkedList<String>());
+            }
+            final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : "";
+            query_pairs.get(key).add(value);
+        }
+        return query_pairs;
     }
 
     /**
