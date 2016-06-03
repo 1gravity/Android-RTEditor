@@ -46,7 +46,7 @@ Setup
 Add this to your Gradle build file:
 ```
 dependencies {
-    compile 'com.1gravity:android-rteditor:1.5.3'
+    compile 'com.1gravity:android-rteditor:1.6.0'
 }
 ```
 
