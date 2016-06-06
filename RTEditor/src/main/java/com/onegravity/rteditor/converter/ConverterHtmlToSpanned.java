@@ -21,14 +21,8 @@ import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StrikethroughSpan;
-import android.text.style.SubscriptSpan;
-import android.text.style.SuperscriptSpan;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -41,14 +35,20 @@ import com.onegravity.rteditor.converter.tagsoup.HTMLSchema;
 import com.onegravity.rteditor.converter.tagsoup.Parser;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
+import com.onegravity.rteditor.spans.AbsoluteSizeSpan;
 import com.onegravity.rteditor.spans.AlignmentSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
+import com.onegravity.rteditor.spans.ForegroundColorSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
+import com.onegravity.rteditor.spans.StrikethroughSpan;
+import com.onegravity.rteditor.spans.SubscriptSpan;
+import com.onegravity.rteditor.spans.SuperscriptSpan;
 import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 import com.onegravity.rteditor.utils.Helper;
@@ -341,9 +341,11 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         } else if (tag.equalsIgnoreCase("del")) {
             end(Strikethrough.class, new StrikethroughSpan());
         } else if (tag.equalsIgnoreCase("big")) {
-            end(Big.class, new RelativeSizeSpan(1.25f));
+            int size = Helper.convertPxToSp(32);
+            end(Big.class, new AbsoluteSizeSpan(size));
         } else if (tag.equalsIgnoreCase("small")) {
-            end(Small.class, new RelativeSizeSpan(0.8f));
+            int size = Helper.convertPxToSp(14);
+            end(Small.class, new AbsoluteSizeSpan(size));
         } else if (tag.equalsIgnoreCase("font")) {
             endFont();
         } else if (tag.equalsIgnoreCase("blockquote")) {
@@ -790,35 +792,16 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
-    private static class Bold {
-    }
-
-    private static class Italic {
-    }
-
-    private static class Underline {
-    }
-
-    private static class Strikethrough {
-    }
-
-    private static class Super {
-    }
-
-    private static class Sub {
-    }
-
-    private static class Big {
-    }
-
-    private static class Small {
-    }
-
-    private static class Monospace {
-    }
-
-    private static class Blockquote {
-    }
+    private static class Bold {}
+    private static class Italic {}
+    private static class Underline {}
+    private static class Strikethrough {}
+    private static class Super {}
+    private static class Sub {}
+    private static class Big {}
+    private static class Small {}
+    private static class Monospace {}
+    private static class Blockquote {}
 
     private abstract static class List {
         int mNrOfIndents;
