@@ -223,7 +223,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         return spinnerItems;
     }
 
-        private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
+    private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
         SpinnerItems<FontSizeSpinnerItem> spinnerItems = new SpinnerItems<FontSizeSpinnerItem>();
         Resources res = getResources();
 

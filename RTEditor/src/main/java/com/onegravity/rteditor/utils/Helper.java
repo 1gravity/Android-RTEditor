@@ -160,7 +160,10 @@ public abstract class Helper {
      */
     private static Map<String, List<String>> splitQuery(Uri uri) throws UnsupportedEncodingException {
         final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
-        final String[] pairs = uri.getQuery().split("&");
+        String query = uri.getQuery();
+        if (query == null) return query_pairs;
+
+        final String[] pairs = query.split("&");
         for (String pair : pairs) {
             final int idx = pair.indexOf("=");
             final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
