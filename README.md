@@ -230,8 +230,46 @@ The rich text editor supports fonts that are part of the Android device it's run
 
 A lot of frequently used fonts have a copyright and can therefore not be included in this library but you can use any true type font you want by adding them to the assets folder of the demo app (just make sure you don't infringe on someone else's copyright).
 The fonts can be put anywhere in the assets folder (root or subdirectories). Since reading the directory structure of the assets folder during run-time is pretty slow (see [here](http://stackoverflow.com/a/12639530/534471)) a Gradle script generates an index of all ttf files during build time.
+In order to create that file during build time, please copy the following code to your build.gradle:
 
-Note that loading the fonts can take a moment. That's why you should pre-load them in your Application class:
+```
+task indexAssets {
+    description 'Index Build Variant assets for faster lookup by AssetManager'
+
+    ext.assetsSrcDir = file( "${projectDir}/src/main/assets" )
+
+    inputs.dir assetsSrcDir
+
+    doLast {
+        android.applicationVariants.each { target ->
+            // create index
+            def contents = ""
+            def tree = fileTree(dir: "${ext.assetsSrcDir}", include: ['**/*.ttf'], exclude: ['**/.svn/**', '*.index'])
+            // use this instead if you have assets folders in each flavor:
+            // def tree = fileTree(dir: "${ext.variantPath}", exclude: ['**/.svn/**', '*.index'])
+            tree.visit { fileDetails ->
+                contents += "${fileDetails.relativePath}" + "\n"
+            }
+
+            // create index file
+            def assetIndexFile = new File("${ext.assetsSrcDir}/assets.index")
+            assetIndexFile.write contents
+        }
+    }
+}
+
+indexAssets.dependsOn {
+    tasks.matching { task -> task.name.startsWith( 'merge' ) && task.name.endsWith( 'Assets' ) }
+}
+
+tasks.withType( JavaCompile ) {
+   compileTask -> compileTask.dependsOn indexAssets
+}
+
+indexAssets
+```
+
+Note that loading the fonts can take a moment. That's why you should pre-load them in your Application class (it's an asynchronous call):
 ```
 FontManager.preLoadFonts(Context);
 ```
