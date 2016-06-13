@@ -49,7 +49,7 @@ abstract class AssetIndex {
                     mAssetIndex.add(line);
                 }
             } catch (final IOException e) {
-                Log.e(AssetIndex.class.getSimpleName(), e.getMessage(), e);
+                Log.w(AssetIndex.class.getSimpleName(), "The assets.index file could not be read. If you want to use your own fonts, please copy the fonts to the assets folder and the build code to generate the assets.index file into your build.gradle (for more details consult the readme, chapter fonts)", e);
             } finally {
                 IOUtils.closeQuietly(in);
                 IOUtils.closeQuietly(reader);
