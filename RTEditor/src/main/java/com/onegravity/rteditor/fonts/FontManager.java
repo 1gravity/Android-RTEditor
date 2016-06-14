@@ -182,7 +182,7 @@ public class FontManager {
     private static void listFontFiles(AssetManager assets, Collection<String> fonts, String path) {
         try {
             String[] list = assets.list(path);
-            if (list.length > 0) {
+            if (list != null && list.length > 0) {
                 // it's a folder
                 for (String file : list) {
                     String prefix = "".equals(path) ? "" : path + File.separator;
