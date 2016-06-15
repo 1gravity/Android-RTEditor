@@ -18,9 +18,9 @@
 <selector
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:onegravity="http://schemas.android.com/apk/res-auto">
-    
-    <item android:state_pressed="true"									android:drawable="@drawable/ic_toolbar_number_dark_pressed"/>
-    <item android:state_pressed="false"	onegravity:state_checked="true"	android:drawable="@drawable/ic_toolbar_number_dark_checked"/>
-    <item																android:drawable="@drawable/ic_toolbar_number_dark"/>
-        
+
+    <item android:drawable="@drawable/ic_toolbar_number_dark_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/ic_toolbar_number_dark_checked" android:state_pressed="false" onegravity:state_checked="true"/>
+    <item android:drawable="@drawable/ic_toolbar_number_dark"/>
+
 </selector>

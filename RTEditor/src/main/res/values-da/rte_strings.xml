@@ -19,6 +19,6 @@
 
     <string name="rte_link_enter_url_text">Linktekst (Valgfri)</string>
     <string name="rte_create_a_link">Opret et Link</string>
-	<string name="rte_remove_action">Fjern</string>
+    <string name="rte_remove_action">Fjern</string>
 
 </resources>

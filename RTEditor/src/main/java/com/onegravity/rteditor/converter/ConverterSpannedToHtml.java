@@ -108,9 +108,9 @@ public class ConverterSpannedToHtml {
                 }
             }
 
-			/*
-			 * start tag: bullet points, numbering and indentation
-			 */
+            /*
+             * start tag: bullet points, numbering and indentation
+             */
             int newIndent = 0;
             ParagraphType newType = ParagraphType.NONE;
             for (SingleParagraphStyle style : styles) {
@@ -125,21 +125,21 @@ public class ConverterSpannedToHtml {
             // add start list tag
             mOut.append(newType.getListStartTag());
 
-			/*
-			 * start tag: alignment (left, center, right)
-			 */
+            /*
+             * start tag: alignment (left, center, right)
+             */
             if (alignmentType != null) {
                 mOut.append(alignmentType.getStartTag());
             }
-			
-			/*
-			 * Convert the plain text
-			 */
+
+            /*
+             * Convert the plain text
+             */
             withinParagraph(mText, paragraph.start(), paragraph.end());
 
-			/*
-			 * end tag: alignment (left, center, right)
-			 */
+            /*
+             * end tag: alignment (left, center, right)
+             */
             if (alignmentType != null) {
                 removeTrailingLineBreak(alignmentType);
                 mOut.append(alignmentType.getEndTag());
@@ -151,9 +151,9 @@ public class ConverterSpannedToHtml {
             mOut.append(newType.getListEndTag());
         }
 
-		/*
-		 * end tag: bullet points and indentation
-		 */
+        /*
+         * end tag: bullet points and indentation
+         */
         while (!mParagraphStyles.isEmpty()) {
             removeParagraph();
         }
@@ -304,13 +304,13 @@ public class ConverterSpannedToHtml {
         } else if (style instanceof StrikethroughSpan) {
             mOut.append("<strike>");
         }
-	    /* Examples for fonts styles:
-	       <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-		   <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
-		*/
+        /* Examples for fonts styles:
+           <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
+           <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+        */
         else if (style instanceof TypefaceSpan) {
             mOut.append("<font face=\"");
-            String fontName = ((TypefaceSpan)style).getValue().getName();
+            String fontName = ((TypefaceSpan) style).getValue().getName();
             mOut.append(StringEscapeUtils.escapeHtml4(fontName));
             mOut.append("\">");
         } else if (style instanceof AbsoluteSizeSpan) {

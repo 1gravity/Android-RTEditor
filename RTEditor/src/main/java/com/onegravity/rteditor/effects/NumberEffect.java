@@ -51,10 +51,10 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
         SparseIntArray numbers = new SparseIntArray();
         for (Paragraph paragraph : editor.getParagraphs()) {
 
-			/*
+            /*
              * We need to know the indentation for each paragraph to be able
-			 * to determine which paragraphs belong together (same indentation)
-			 */
+             * to determine which paragraphs belong together (same indentation)
+             */
             int currentIndentation = 0;
             List<RTSpan<Integer>> indentationSpans = Effects.INDENTATION.getSpans(str, paragraph, SpanCollectMode.EXACT);
             if (! indentationSpans.isEmpty()) {
@@ -68,15 +68,15 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
             List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
             mSpans2Process.removeSpans(existingSpans, paragraph);
 
-			/*
-			 * If the paragraph is selected then we sure have a number
-			 */
+            /*
+             * If the paragraph is selected then we sure have a number
+             */
             boolean hasExistingSpans = ! existingSpans.isEmpty();
             boolean hasNumber = paragraph.isSelected(selectedParagraphs) ? enable : hasExistingSpans;
 
-			/*
-			 * If we have a number then apply a new span
-			 */
+            /*
+             * If we have a number then apply a new span
+             */
             if (hasNumber) {
                 // let's determine the number for this paragraph
                 int nr = 1;

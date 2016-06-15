@@ -616,7 +616,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     /*
      * Examples:
      * <font style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-	 * <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+     * <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
      */
     private static final Pattern FONT_SIZE = Pattern.compile("\\d+");
     private static final Pattern FONT_COLOR = Pattern.compile("#[a-f0-9]+");

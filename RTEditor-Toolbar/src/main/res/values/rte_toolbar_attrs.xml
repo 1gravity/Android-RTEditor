@@ -18,41 +18,41 @@
 <resources>
 
     <declare-styleable name="Theme">
-		<attr name="rte_ToolbarButton" format="reference" />
-		<attr name="rte_ToolbarSpinner" format="reference" />
-		<attr name="rte_ToolbarSpinnerItem" format="reference" />
-        <attr name="rte_ToolbarSpinnerSelectedColor" format="color" />
-						
-		<attr name="rte_icToolbarBold" format="reference" />
-        <attr name="rte_icToolbarItalic" format="reference" />
-        <attr name="rte_icToolbarUnderline" format="reference" />
-        <attr name="rte_icToolbarStrikethrough" format="reference" />
-        <attr name="rte_icToolbarSuperscript" format="reference" />
-        <attr name="rte_icToolbarSubscript" format="reference" />
-        <attr name="rte_icToolbarAlignLeft" format="reference" />
-        <attr name="rte_icToolbarAlignCenter" format="reference" />
-        <attr name="rte_icToolbarAlignRight" format="reference" />
-        <attr name="rte_icToolbarIncIndent" format="reference" />
-        <attr name="rte_icToolbarDecIntent" format="reference" />
-        <attr name="rte_icToolbarBullet" format="reference" />
-        <attr name="rte_icToolbarNumber" format="reference" />
-        <attr name="rte_icToolbarFont" format="reference" />
-        <attr name="rte_icToolbarFontSize" format="reference" />
-        <attr name="rte_icToolbarFontColor" format="reference" />
-        <attr name="rte_icToolbarBGColor" format="reference" />
-        <attr name="rte_icToolbarLink" format="reference" />
-        <attr name="rte_icToolbarImage" format="reference" />
-        <attr name="rte_icToolbarCapture" format="reference" />
-        <attr name="rte_icToolbarUndo" format="reference" />
-        <attr name="rte_icToolbarRedo" format="reference" />
-        <attr name="rte_icToolbarClear" format="reference" />
-        
-        <attr name="rte_ToolbarVerticalDivider" format="reference" />
-	</declare-styleable>
-	
+        <attr name="rte_ToolbarButton" format="reference"/>
+        <attr name="rte_ToolbarSpinner" format="reference"/>
+        <attr name="rte_ToolbarSpinnerItem" format="reference"/>
+        <attr name="rte_ToolbarSpinnerSelectedColor" format="color"/>
+
+        <attr name="rte_icToolbarBold" format="reference"/>
+        <attr name="rte_icToolbarItalic" format="reference"/>
+        <attr name="rte_icToolbarUnderline" format="reference"/>
+        <attr name="rte_icToolbarStrikethrough" format="reference"/>
+        <attr name="rte_icToolbarSuperscript" format="reference"/>
+        <attr name="rte_icToolbarSubscript" format="reference"/>
+        <attr name="rte_icToolbarAlignLeft" format="reference"/>
+        <attr name="rte_icToolbarAlignCenter" format="reference"/>
+        <attr name="rte_icToolbarAlignRight" format="reference"/>
+        <attr name="rte_icToolbarIncIndent" format="reference"/>
+        <attr name="rte_icToolbarDecIntent" format="reference"/>
+        <attr name="rte_icToolbarBullet" format="reference"/>
+        <attr name="rte_icToolbarNumber" format="reference"/>
+        <attr name="rte_icToolbarFont" format="reference"/>
+        <attr name="rte_icToolbarFontSize" format="reference"/>
+        <attr name="rte_icToolbarFontColor" format="reference"/>
+        <attr name="rte_icToolbarBGColor" format="reference"/>
+        <attr name="rte_icToolbarLink" format="reference"/>
+        <attr name="rte_icToolbarImage" format="reference"/>
+        <attr name="rte_icToolbarCapture" format="reference"/>
+        <attr name="rte_icToolbarUndo" format="reference"/>
+        <attr name="rte_icToolbarRedo" format="reference"/>
+        <attr name="rte_icToolbarClear" format="reference"/>
+
+        <attr name="rte_ToolbarVerticalDivider" format="reference"/>
+    </declare-styleable>
+
     <declare-styleable name="ToolbarButton">
-		<attr name="checked" format="boolean"/>
-		<attr name="state_checked" format="boolean"/>
-	</declare-styleable>
+        <attr name="checked" format="boolean"/>
+        <attr name="state_checked" format="boolean"/>
+    </declare-styleable>
 
 </resources>

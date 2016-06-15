@@ -19,6 +19,6 @@
 
     <string name="rte_link_enter_url_text">Länktext (frivilligt)</string>
     <string name="rte_create_a_link">Skapa en länk</string>
-	<string name="rte_remove_action">Ta bort</string>
+    <string name="rte_remove_action">Ta bort</string>
 
 </resources>

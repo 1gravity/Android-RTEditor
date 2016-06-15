@@ -20,6 +20,6 @@
     <string name="rte_link_enter_url">Adres</string>
     <string name="rte_link_enter_url_text">Bağlantı metni (tercihe bağlı)</string>
     <string name="rte_create_a_link">Bir bağlantı oluşturun</string>
-	<string name="rte_remove_action">Kaldır</string>
+    <string name="rte_remove_action">Kaldır</string>
 
 </resources>

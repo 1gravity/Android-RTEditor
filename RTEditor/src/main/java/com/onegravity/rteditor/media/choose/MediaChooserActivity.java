@@ -187,21 +187,21 @@ public class MediaChooserActivity extends MonitoredActivity implements
     }
 
     @Override
-	/* AudioChooserListener */
+    /* AudioChooserListener */
     public void onAudioChosen(RTAudio audio) {
         mSelectedMedia = audio;
         setWorkInProgress(false);
     }
 
     @Override
-	/* VideoChooserListener */
+    /* VideoChooserListener */
     public void onVideoChosen(RTVideo video) {
         mSelectedMedia = video;
         setWorkInProgress(false);
     }
 
     @Override
-	/* MediaChooserListener */
+    /* MediaChooserListener */
     public void onError(String reason) {
         Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
         setWorkInProgress(false);

@@ -16,10 +16,9 @@
   -->
 
 <selector
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:onegravity="http://schemas.android.com/apk/res-auto">
-    
-    <item android:state_pressed="true"									android:drawable="@drawable/ic_toolbar_clear_dark_pressed"/>
-    <item																android:drawable="@drawable/ic_toolbar_clear_dark"/>
-        
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/ic_toolbar_clear_dark_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/ic_toolbar_clear_dark"/>
+
 </selector>

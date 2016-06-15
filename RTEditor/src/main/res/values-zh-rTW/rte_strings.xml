@@ -19,6 +19,6 @@
 
     <string name="rte_link_enter_url_text">連結文字 (非必要)</string>
     <string name="rte_create_a_link">建立連結</string>
-	<string name="rte_remove_action">刪除</string>
+    <string name="rte_remove_action">刪除</string>
 
 </resources>

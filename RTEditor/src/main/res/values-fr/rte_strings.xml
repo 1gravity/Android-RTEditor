@@ -20,7 +20,7 @@
     <string name="rte_link_enter_url_text">Texte du lien (optionnel)</string>
     <string name="rte_create_a_link">Créer un lien</string>
     <string name="rte_invalid_link"><xliff:g id="link">%s</xliff:g> n\'est pas une adresse e-mail valide</string>
-	<string name="rte_remove_action">Supprimer</string>
+    <string name="rte_remove_action">Supprimer</string>
 
     <string name="rte_pick_image">Sélectionner une image</string>
     <string name="rte_pick_audio">Sélectionner un fichier audio</string>

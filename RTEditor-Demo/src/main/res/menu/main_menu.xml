@@ -18,49 +18,49 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+
     <item
-		android:id="@+id/load"
-		android:icon="?attr/rte_icMenuLoad"
-		android:title="@string/menu_load"
-        app:showAsAction="ifRoom|withText"
+        android:id="@+id/load"
+        android:alphabeticShortcut="l"
+        android:icon="?attr/rte_icMenuLoad"
         android:orderInCategory="1"
-        android:alphabeticShortcut="l"/>
-    
+        android:title="@string/menu_load"
+        app:showAsAction="ifRoom|withText"/>
+
     <item
-		android:id="@+id/save"
-		android:icon="?attr/rte_icMenuSave"
-		android:title="@string/menu_save"
-        app:showAsAction="ifRoom|withText"
+        android:id="@+id/save"
+        android:alphabeticShortcut="s"
+        android:icon="?attr/rte_icMenuSave"
         android:orderInCategory="2"
-        android:alphabeticShortcut="s"/>
-    
+        android:title="@string/menu_save"
+        app:showAsAction="ifRoom|withText"/>
+
     <item
-		android:id="@+id/theme"
-		android:title="@string/menu_dark_theme"
-        app:showAsAction="never"
+        android:id="@+id/theme"
+        android:alphabeticShortcut="t"
         android:orderInCategory="3"
-        android:alphabeticShortcut="t"/>
+        android:title="@string/menu_dark_theme"
+        app:showAsAction="never"/>
 
-	<item
-		android:id="@+id/split_toolbar"
-		android:title="@string/menu_split_toolbar"
-		app:showAsAction="never"
-		android:orderInCategory="4"
-		android:alphabeticShortcut="c"/>
+    <item
+        android:id="@+id/split_toolbar"
+        android:alphabeticShortcut="c"
+        android:orderInCategory="4"
+        android:title="@string/menu_split_toolbar"
+        app:showAsAction="never"/>
 
-	<item
-		android:id="@+id/editor_fragment"
-		android:title="@string/menu_fragment"
-		app:showAsAction="never"
-		android:orderInCategory="5"
-		android:alphabeticShortcut="f"/>
+    <item
+        android:id="@+id/editor_fragment"
+        android:alphabeticShortcut="f"
+        android:orderInCategory="5"
+        android:title="@string/menu_fragment"
+        app:showAsAction="never"/>
 
-	<item
-		android:id="@+id/editor_activity"
-		android:title="@string/menu_activity"
-		app:showAsAction="never"
-		android:orderInCategory="6"
-		android:alphabeticShortcut="f"/>
+    <item
+        android:id="@+id/editor_activity"
+        android:alphabeticShortcut="f"
+        android:orderInCategory="6"
+        android:title="@string/menu_activity"
+        app:showAsAction="never"/>
 
 </menu>

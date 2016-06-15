@@ -21,7 +21,7 @@
     <string name="rte_link_enter_url_text">Link-Text (optional)</string>
     <string name="rte_create_a_link">Link erstellen</string>
     <string name="rte_invalid_link"><xliff:g id="link">%s</xliff:g> ist keine gültige Adresse</string>
-	<string name="rte_remove_action">Entfernen</string>
+    <string name="rte_remove_action">Entfernen</string>
 
     <string name="rte_pick_image">Bild auswählen</string>
     <string name="rte_pick_audio">Audiodatei auswählen</string>

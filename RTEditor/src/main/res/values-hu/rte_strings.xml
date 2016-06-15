@@ -19,6 +19,6 @@
 
     <string name="rte_link_enter_url_text">Hivatkozás szövege(nem kötelező)</string>
     <string name="rte_create_a_link">Hivatkozás létrehozása</string>
-	<string name="rte_remove_action">Töröl</string>
+    <string name="rte_remove_action">Töröl</string>
 
 </resources>

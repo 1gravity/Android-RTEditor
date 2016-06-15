@@ -415,7 +415,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onRedo() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
@@ -424,7 +424,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onCreateLink() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
@@ -454,13 +454,13 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onPickImage() {
         onPickCaptureImage(MediaAction.PICK_PICTURE);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onCaptureImage() {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
     }
@@ -533,7 +533,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onFocusChanged(RTEditText editor, boolean focused) {
         if (editor.usesRTFormatting()) {
             synchronized (this) {
@@ -567,7 +567,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onSelectionChanged(RTEditText editor, int start, int end) {
         if (editor == null) return;
 
@@ -672,7 +672,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onTextChanged(RTEditText editor, Spannable before, Spannable after,
                               int selStartBefore, int selEndBefore, int selStartAfter, int selEndAfter) {
         TextChangeOperation op = new TextChangeOperation(before, after,
@@ -682,7 +682,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onClick(RTEditText editor, LinkSpan span) {
         if (editor != null) {
             String linkText = getLinkText(editor, span);

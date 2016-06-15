@@ -47,9 +47,9 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
 
     private static final long serialVersionUID = -3877685955074371741L;
 
-	/*
+    /*
      * Application Context Part
-	 */
+     */
 
     private static final class IncorrectInitializationException extends AndroidRuntimeException {
         private static final long serialVersionUID = 327389536289485672L;
@@ -93,9 +93,9 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         return sDarkTheme;
     }
 
-	/*
-	 * Constructor
-	 */
+    /*
+     * Constructor
+     */
 
     transient final private RTProxy mRTProxy;    // not Serializable
     final private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
@@ -124,9 +124,9 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         }
     }
 
-	/*
-	 * RTProxy Methods
-	 */
+    /*
+     * RTProxy Methods
+     */
 
     /**
      * The RTProxy is the link to the "outside world".
@@ -138,44 +138,44 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void startActivityForResult(Intent intent, int requestCode) {
         mRTProxy.startActivityForResult(intent, requestCode);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void runOnUiThread(Runnable action) {
         mRTProxy.runOnUiThread(action);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public Toast makeText(int resId, int duration) {
         return mRTProxy.makeText(resId, duration);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public Toast makeText(CharSequence text, int duration) {
         return mRTProxy.makeText(text, duration);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
         mRTProxy.openDialogFragment(fragmentTag, fragment);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void removeFragment(String fragmentTag) {
         mRTProxy.removeFragment(fragmentTag);
     }
 
-	/*
-	 * RTMediaFactory Methods
-	 */
+    /*
+     * RTMediaFactory Methods
+     */
 
     /**
      * The media factory allows custom storage implementations for media files.
@@ -187,37 +187,37 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTImage createImage(RTMediaSource mediaSource) {
         return mMediaFactory.createImage(mediaSource);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTAudio createAudio(RTMediaSource mediaSource) {
         return mMediaFactory.createAudio(mediaSource);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTVideo createVideo(RTMediaSource mediaSource) {
         return mMediaFactory.createVideo(mediaSource);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTImage createImage(String path) {
         return mMediaFactory.createImage(path);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTAudio createAudio(String path) {
         return mMediaFactory.createAudio(path);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTVideo createVideo(String path) {
         return mMediaFactory.createVideo(path);
     }

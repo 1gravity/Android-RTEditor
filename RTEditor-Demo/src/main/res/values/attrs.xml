@@ -19,6 +19,6 @@
 
     <declare-styleable name="Theme">
         <attr name="rte_icMenuLoad" format="reference" />
-	</declare-styleable>
-	
+    </declare-styleable>
+
 </resources>

@@ -19,6 +19,6 @@
 
     <string name="rte_link_enter_url_text">Link tekst (optioneel)</string>
     <string name="rte_create_a_link">Maak een link</string>
-	<string name="rte_remove_action">Verwijderen</string>
+    <string name="rte_remove_action">Verwijderen</string>
 
 </resources>

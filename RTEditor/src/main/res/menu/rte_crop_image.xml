@@ -16,34 +16,34 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/rotate_left"
+        android:alphabeticShortcut="l"
         android:icon="?attr/rte_icMenuRotateLeft"
-        app:showAsAction="always"
         android:orderInCategory="1"
-        android:alphabeticShortcut="l"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/rotate_right"
+        android:alphabeticShortcut="r"
         android:icon="?attr/rte_icMenuRotateRight"
-        app:showAsAction="always"
         android:orderInCategory="2"
-        android:alphabeticShortcut="r"/>
+        app:showAsAction="always"/>
 
     <item
-		android:id="@+id/save"
-		android:icon="?attr/rte_icMenuSave"
-        app:showAsAction="always"
+        android:id="@+id/save"
+        android:alphabeticShortcut="s"
+        android:icon="?attr/rte_icMenuSave"
         android:orderInCategory="3"
-        android:alphabeticShortcut="s"/>
-    
+        app:showAsAction="always"/>
+
     <item
-		android:id="@+id/cancel"
-		android:icon="?attr/rte_icMenuCloseClearCancel"
-        app:showAsAction="always"
+        android:id="@+id/cancel"
+        android:alphabeticShortcut="q"
+        android:icon="?attr/rte_icMenuCloseClearCancel"
         android:orderInCategory="4"
-        android:alphabeticShortcut="q"/>
+        app:showAsAction="always"/>
 
 </menu>

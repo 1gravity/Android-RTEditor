@@ -94,11 +94,11 @@ public class RTEditorActivityWithFragment extends RTEditorBaseActivity {
 
             if (requestCode == REQUEST_SAVE_FILE) {
                 /*
-            	 * Save file.
-            	 *
-            	 * Of course this is a hack but since this is just a demo
-            	 * to show how to integrate the rich text editor this is ok ;-)
-            	 */
+                 * Save file.
+                 *
+                 * Of course this is a hack but since this is just a demo
+                 * to show how to integrate the rich text editor this is ok ;-)
+                 */
 
                 // write subject
                 File targetFile = MediaUtils.createUniqueFile(new File(filePath), "subject.html", true);
@@ -117,11 +117,11 @@ public class RTEditorActivityWithFragment extends RTEditorBaseActivity {
                     Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
                 }
             } else if (requestCode == REQUEST_LOAD_FILE) {
-        		/*
-        		 * Load File
-        		 *
-            	 * A hack, I know ...
-        		 */
+                /*
+                 * Load File
+                 *
+                 * A hack, I know ...
+                 */
 
                 if (filePath.contains("message_")) {
                     filePath = filePath.replace("message_", "subject_");
@@ -181,11 +181,11 @@ public class RTEditorActivityWithFragment extends RTEditorBaseActivity {
             FileHelper.pickFile(this, REQUEST_LOAD_FILE);
             return true;
         } else if (itemId == R.id.save) {
-			/*
-			 * Note that you need a third party file explorer that
-			 * supports a pick directory Intent (like ES File Explorer or any
-			 * Open Intent file explorer).
-			 */
+            /*
+             * Note that you need a third party file explorer that
+             * supports a pick directory Intent (like ES File Explorer or any
+             * Open Intent file explorer).
+             */
             File targetDir = getExternalFilesDir(null);
             FileHelper.pickDirectory(this, targetDir, REQUEST_SAVE_FILE);
             return true;

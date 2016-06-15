@@ -52,7 +52,7 @@ public class RTProxyImpl implements RTProxy {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void runOnUiThread(Runnable action) {
         Activity activity = getActivity();
         if (activity != null) {
@@ -61,19 +61,19 @@ public class RTProxyImpl implements RTProxy {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public Toast makeText(int resId, int duration) {
         return Toast.makeText(RTApi.getApplicationContext(), resId, duration);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public Toast makeText(CharSequence text, int duration) {
         return Toast.makeText(RTApi.getApplicationContext(), text, duration);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
         Activity activity = getActivity();
         if (activity != null) {
@@ -88,7 +88,7 @@ public class RTProxyImpl implements RTProxy {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void removeFragment(String fragmentTag) {
         Activity activity = getActivity();
         if (activity != null) {

@@ -20,6 +20,6 @@
     <string name="rte_link_enter_url">Adres URL</string>
     <string name="rte_link_enter_url_text">Tekst łącza (opcjonalnie)</string>
     <string name="rte_create_a_link">Utwórz łącze</string>
-	<string name="rte_remove_action">Skasuj</string>
+    <string name="rte_remove_action">Skasuj</string>
 
 </resources>

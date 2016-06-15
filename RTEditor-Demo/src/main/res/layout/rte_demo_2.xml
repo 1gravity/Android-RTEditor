@@ -17,35 +17,34 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:onegravity="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/rte_toolbar_container"
-    	android:orientation="vertical"
-	    android:layout_alignParentBottom="true"
-    	android:layout_width="match_parent"
-    	android:layout_height="wrap_content">
-    	
-    	<include layout="@layout/rte_toolbar_character" />
-        
-    	<include layout="@layout/rte_toolbar_paragraph" />
-    	
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/rte_toolbar_character"/>
+
+        <include layout="@layout/rte_toolbar_paragraph"/>
+
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/rte_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/rte_toolbar_container"
-		android:layout_margin="4dp"
+        android:layout_alignParentTop="true"
+        android:layout_margin="4dp"
         android:fillViewport="true"
-        android:scrollbarStyle="insideOverlay" >
+        android:scrollbarStyle="insideOverlay">
 
-    	<include layout="@layout/rte_content" />
-        
+        <include layout="@layout/rte_content"/>
+
     </ScrollView>
 
 </RelativeLayout>

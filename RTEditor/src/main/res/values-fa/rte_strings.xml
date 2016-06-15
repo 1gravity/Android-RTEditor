@@ -21,7 +21,7 @@
     <string name="rte_link_enter_url_text">لینک متنی (اختیاری)</string>
     <string name="rte_create_a_link">ایجاد پیوند</string>
     <string name="rte_invalid_link"><xliff:g id="link">%s</xliff:g> یک آدرس معتبر نیست</string>
-	<string name="rte_remove_action">پاک کردن</string>
+    <string name="rte_remove_action">پاک کردن</string>
 
     <string name="rte_pick_image">تصویر را انتخاب کنید</string>
     <string name="rte_pick_audio">فایل صوتی را انتخاب کنید</string>

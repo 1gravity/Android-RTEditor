@@ -64,12 +64,12 @@ public final class RTEditable extends RTSpanned {
         Editable text = mEditor.getText();
         BaseInputConnection.removeComposingSpans(text);
 
-		/* 
-		  Cleanup ParagraphStyles to:
-		  - make sure spans are applied to whole paragraphs
-		  - remove obsolete spans
-		  - Note: the sequence is important
-		*/
+        /*
+         Cleanup ParagraphStyles to:
+          - make sure spans are applied to whole paragraphs
+          - remove obsolete spans
+          - Note: the sequence is important
+        */
         Effects.cleanupParagraphs(mEditor);
     }
 }

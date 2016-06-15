@@ -19,34 +19,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/rte_spinnerPreferredItemHeight"
-    android:descendantFocusability="blocksDescendants" >
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
         android:id="@+id/chip_pacemaker"
-	    android:layout_height="@dimen/rte_spinnerPreferredItemHeight"
-	    android:layout_width="match_parent"
-        android:orientation="horizontal" >
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rte_spinnerPreferredItemHeight"
+        android:orientation="horizontal">
 
         <View
             android:id="@+id/spinner_color"
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:layout_gravity="left|center_vertical"
-            android:gravity="left|center_vertical"
-            android:layout_marginLeft="15dip" 
-            android:layout_marginRight="15dip"/>
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:gravity="left|center_vertical"/>
 
-	    <TextView
-		    android:id="@+id/spinner_name"
-	    	android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/spinner_name"
+            style="?attr/rte_ToolbarSpinnerItem"
+            android:layout_width="match_parent"
             android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="15dip"
+            android:ellipsize="end"
             android:gravity="left|center_vertical"
-		    android:layout_marginLeft="0dip"
-		    android:layout_marginRight="15dip"
-		    android:singleLine="true"
-		    android:ellipsize="end"
-		    style="?attr/rte_ToolbarSpinnerItem"/>
-        
+            android:singleLine="true"/>
+
     </LinearLayout>
 
 </FrameLayout>

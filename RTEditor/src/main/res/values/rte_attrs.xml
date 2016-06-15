@@ -24,6 +24,6 @@
         <attr name="rte_icMenuCloseClearCancel" format="reference" />
         <attr name="rte_icMenuRotateLeft" format="reference" />
         <attr name="rte_icMenuRotateRight" format="reference" />
-	</declare-styleable>
+    </declare-styleable>
 
 </resources>
