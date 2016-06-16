@@ -17,12 +17,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 24
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 24
     }
 
     buildTypes {
@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-    compile 'com.1gravity:android-colorpicker:2.0.0'
+    compile 'com.1gravity:android-colorpicker:2.0.1'
 }
 
 apply from: '../android-artifacts.gradle'
