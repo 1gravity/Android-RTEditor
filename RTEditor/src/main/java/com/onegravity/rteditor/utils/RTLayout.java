@@ -40,16 +40,15 @@ public class RTLayout implements Serializable {
     private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\\r\\n|\\r|\\n");
 
     private int mNrOfLines = 0;
-    private final ArrayList<Paragraph> mParagraphs = new ArrayList<Paragraph>();
+    private final ArrayList<Paragraph> mParagraphs = new ArrayList<>();
 
-    public RTLayout(Spanned spanned) {
+    public RTLayout(final Spanned spanned) {
         if (spanned != null) {
-            String s = spanned.toString();
-            int len = s.length();
+            final String s = spanned.toString();
 
             // find the line breaks and the according lines / paragraphs
             mNrOfLines = 1;
-            Matcher m = LINEBREAK_PATTERN.matcher(s.substring(0, len));
+            final Matcher m = LINEBREAK_PATTERN.matcher(s);
             int groupStart = 0;
             while (m.find()) {
                 // the line feeds are part of the paragraph              isFirst          isLast
@@ -61,7 +60,8 @@ public class RTLayout implements Serializable {
 
             // even an empty line after the last cr/lf is considered a paragraph
             if (mParagraphs.size() < mNrOfLines) {
-                mParagraphs.add(new Paragraph(groupStart, len, mNrOfLines == 1, true));
+                Paragraph paragraph = new Paragraph(groupStart, s.length(), mNrOfLines == 1, true);
+                mParagraphs.add(paragraph);
             }
         }
     }
@@ -76,7 +76,7 @@ public class RTLayout implements Serializable {
     /**
      * @return the line for a certain position in the spanned text
      */
-    public int getLineForOffset(int offset) {
+    public int getLineForOffset(final int offset) {
         int lineNr = 0;
         while (lineNr < mNrOfLines && offset >= mParagraphs.get(lineNr).end()) {
             lineNr++;
@@ -87,7 +87,7 @@ public class RTLayout implements Serializable {
     /**
      * @return the start position of a certain line in the spanned text
      */
-    public int getLineStart(int line) {
+    public int getLineStart(final int line) {
         return mNrOfLines == 0 || line < 0 ? 0 :
                line < mNrOfLines ? mParagraphs.get(line).start() :
                mParagraphs.get(mNrOfLines - 1).end() - 1;
@@ -96,7 +96,7 @@ public class RTLayout implements Serializable {
     /**
      * @return the end position of a certain line in the spanned text
      */
-    public int getLineEnd(int line) {
+    public int getLineEnd(final int line) {
         return mNrOfLines == 0 || line < 0 ? 0 :
                line < mNrOfLines ? mParagraphs.get(line).end() :
                mParagraphs.get(mNrOfLines - 1).end() - 1;
@@ -107,7 +107,8 @@ public class RTLayout implements Serializable {
         StringBuilder s = new StringBuilder();
         int line = 1;
         for (Paragraph p : mParagraphs) {
-            s.append(line++ + ": " + p.start() + "-" + p.end() + (p.isLast() ? "" : ", "));
+            s.append(line++).append(": ").append(p.start()).append("-").append(p.end())
+                    .append(p.isLast() ? "" : ", ");
         }
         return s.toString();
     }
