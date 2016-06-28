@@ -20,7 +20,6 @@ import android.text.Spanned;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,7 +68,7 @@ public class RTLayout implements Serializable {
     /**
      * @return all Paragraphs for this layout / spanned text.
      */
-    public List<Paragraph> getParagraphs() {
+    public ArrayList<Paragraph> getParagraphs() {
         return mParagraphs;
     }
 

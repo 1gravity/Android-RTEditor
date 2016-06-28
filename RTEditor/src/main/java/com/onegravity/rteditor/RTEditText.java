@@ -50,8 +50,8 @@ import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.RTLayout;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -186,9 +186,8 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     /**
      * Return all paragraphs as as array of selection objects
      */
-    public List<Paragraph> getParagraphs() {
-        RTLayout layout = getRTLayout();
-        return layout.getParagraphs();
+    public ArrayList<Paragraph> getParagraphs() {
+        return getRTLayout().getParagraphs();
     }
 
     /**

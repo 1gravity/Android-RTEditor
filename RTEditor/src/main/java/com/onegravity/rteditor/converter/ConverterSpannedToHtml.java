@@ -95,7 +95,12 @@ public class ConverterSpannedToHtml {
     private void convertParagraphs() {
         RTLayout rtLayout = new RTLayout(mText);
 
-        for (Paragraph paragraph : rtLayout.getParagraphs()) {
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = rtLayout.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
+
             // retrieve all spans for this paragraph
             Set<SingleParagraphStyle> styles = getParagraphStyles(mText, paragraph);
 

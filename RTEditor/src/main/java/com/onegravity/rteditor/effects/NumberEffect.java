@@ -26,6 +26,7 @@ import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,12 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
         int lineNr = 1;
         SparseIntArray indentations = new SparseIntArray();
         SparseIntArray numbers = new SparseIntArray();
-        for (Paragraph paragraph : editor.getParagraphs()) {
+
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = editor.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
 
             /*
              * We need to know the indentation for each paragraph to be able

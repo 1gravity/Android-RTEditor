@@ -25,6 +25,7 @@ import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +46,12 @@ public class BulletEffect extends ParagraphEffect<Boolean, BulletSpan> {
 
         mSpans2Process.clear();
 
-        for (Paragraph paragraph : editor.getParagraphs()) {
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = editor.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
+
             // find existing BulletSpan and add them to mSpans2Process to be removed
             List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
             mSpans2Process.removeSpans(existingSpans, paragraph);

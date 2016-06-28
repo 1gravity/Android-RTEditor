@@ -24,6 +24,7 @@ import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,11 @@ public class IndentationEffect extends ParagraphEffect<Integer, IndentationSpan>
 
         mSpans2Process.clear();
 
-        for (Paragraph paragraph : editor.getParagraphs()) {
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = editor.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
 
             // find existing IndentationSpan and add them to mSpans2Process to be removed
             List<RTSpan<Integer>> existingSpans = getSpans(str, paragraph, SpanCollectMode.EXACT);
