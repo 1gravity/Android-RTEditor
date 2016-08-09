@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.onegravity.rteditor.api.format.RTFormat;
 
-import org.apache.commons.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
 
 import java.io.File;
 

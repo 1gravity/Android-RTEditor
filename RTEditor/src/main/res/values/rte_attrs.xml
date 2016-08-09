@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@
 <resources>
 
     <declare-styleable name="Theme">
-        <!-- crop image --> 
+        <!-- crop image -->
+        <attr name="rte_darkTheme" format="boolean" />
         <attr name="rte_icMenuSave" format="reference" />
         <attr name="rte_icMenuCloseClearCancel" format="reference" />
         <attr name="rte_icMenuRotateLeft" format="reference" />
         <attr name="rte_icMenuRotateRight" format="reference" />
-	</declare-styleable>
+    </declare-styleable>
 
 </resources>

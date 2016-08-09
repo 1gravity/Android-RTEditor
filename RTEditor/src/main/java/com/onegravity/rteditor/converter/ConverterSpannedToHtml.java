@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
-import android.text.style.UnderlineSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
@@ -36,7 +36,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
-import com.onegravity.rteditor.spans.FontSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
@@ -95,7 +95,12 @@ public class ConverterSpannedToHtml {
     private void convertParagraphs() {
         RTLayout rtLayout = new RTLayout(mText);
 
-        for (Paragraph paragraph : rtLayout.getParagraphs()) {
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = rtLayout.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
+
             // retrieve all spans for this paragraph
             Set<SingleParagraphStyle> styles = getParagraphStyles(mText, paragraph);
 
@@ -108,9 +113,9 @@ public class ConverterSpannedToHtml {
                 }
             }
 
-			/*
-			 * start tag: bullet points, numbering and indentation
-			 */
+            /*
+             * start tag: bullet points, numbering and indentation
+             */
             int newIndent = 0;
             ParagraphType newType = ParagraphType.NONE;
             for (SingleParagraphStyle style : styles) {
@@ -125,21 +130,21 @@ public class ConverterSpannedToHtml {
             // add start list tag
             mOut.append(newType.getListStartTag());
 
-			/*
-			 * start tag: alignment (left, center, right)
-			 */
+            /*
+             * start tag: alignment (left, center, right)
+             */
             if (alignmentType != null) {
                 mOut.append(alignmentType.getStartTag());
             }
-			
-			/*
-			 * Convert the plain text
-			 */
+
+            /*
+             * Convert the plain text
+             */
             withinParagraph(mText, paragraph.start(), paragraph.end());
 
-			/*
-			 * end tag: alignment (left, center, right)
-			 */
+            /*
+             * end tag: alignment (left, center, right)
+             */
             if (alignmentType != null) {
                 removeTrailingLineBreak(alignmentType);
                 mOut.append(alignmentType.getEndTag());
@@ -151,9 +156,9 @@ public class ConverterSpannedToHtml {
             mOut.append(newType.getListEndTag());
         }
 
-		/*
-		 * end tag: bullet points and indentation
-		 */
+        /*
+         * end tag: bullet points and indentation
+         */
         while (!mParagraphStyles.isEmpty()) {
             removeParagraph();
         }
@@ -304,13 +309,13 @@ public class ConverterSpannedToHtml {
         } else if (style instanceof StrikethroughSpan) {
             mOut.append("<strike>");
         }
-	    /* Examples for fonts styles:
-	       <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-		   <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
-		*/
-        else if (style instanceof FontSpan) {
+        /* Examples for fonts styles:
+           <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
+           <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+        */
+        else if (style instanceof TypefaceSpan) {
             mOut.append("<font face=\"");
-            String fontName = ((FontSpan)style).getTypeface().getName();
+            String fontName = ((TypefaceSpan) style).getValue().getName();
             mOut.append(StringEscapeUtils.escapeHtml4(fontName));
             mOut.append("\">");
         } else if (style instanceof AbsoluteSizeSpan) {
@@ -365,7 +370,7 @@ public class ConverterSpannedToHtml {
     private void handleEndTag(CharacterStyle style) {
         if (style instanceof URLSpan) {
             mOut.append("</a>");
-        } else if (style instanceof FontSpan) {
+        } else if (style instanceof TypefaceSpan) {
             mOut.append("</font>");
         } else if (style instanceof ForegroundColorSpan) {
             mOut.append("</font>");

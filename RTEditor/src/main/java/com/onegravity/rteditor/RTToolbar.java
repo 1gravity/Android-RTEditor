@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,7 @@ package com.onegravity.rteditor;
 import android.text.Layout;
 import android.view.ViewGroup;
 
-import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.fonts.RTTypeface;
-
-import java.util.List;
 
 /**
  * An interface describing a rich text toolbar.
@@ -32,27 +29,6 @@ import java.util.List;
  * selected some effect on the toolbar.
  */
 public interface RTToolbar {
-
-    /*
-     * Listener interface to listen to toolbar events like bold
-	 * selected/unselected.
-	 * The methods should be fairly self-explaining.
-	 */
-    public interface RTToolbarListener {
-        public <T> void onEffectSelected(Effect<T> effect, T value);
-
-        public void onUndo();
-
-        public void onRedo();
-
-        public void onClearFormatting();
-
-        public void onCreateLink();
-
-        public void onPickImage();
-
-        public void onCaptureImage();
-    }
 
     /**
      * Set this toolbar's listener.
@@ -104,8 +80,6 @@ public interface RTToolbar {
     public void setNumber(boolean enabled);
 
     public void setAlignment(Layout.Alignment alignment);
-
-    public void setAlignments(List<Layout.Alignment> alignments);
 
     public void setFont(RTTypeface typeface);
 

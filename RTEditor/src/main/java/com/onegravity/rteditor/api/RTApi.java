@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@ package com.onegravity.rteditor.api;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.support.annotation.AttrRes;
 import android.util.AndroidRuntimeException;
 import android.widget.Toast;
 
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMediaSource;
@@ -44,9 +47,9 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
 
     private static final long serialVersionUID = -3877685955074371741L;
 
-	/*
+    /*
      * Application Context Part
-	 */
+     */
 
     private static final class IncorrectInitializationException extends AndroidRuntimeException {
         private static final long serialVersionUID = 327389536289485672L;
@@ -63,6 +66,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
      */
     private static Object sTheLock = new Object();    // synchronize access to sAppContext
     private static Context sAppContext;
+    private static boolean sDarkTheme;
 
     /**
      * Return the context of the single, global Application object for the
@@ -81,9 +85,17 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         }
     }
 
-	/*
-	 * Constructor
-	 */
+    /**
+     * Since we can't use the application context to retrieve the current theme,
+     * we retrieve the theme from the Activity context when the object is initialized.
+     */
+    public static boolean useDarkTheme() {
+        return sDarkTheme;
+    }
+
+    /*
+     * Constructor
+     */
 
     transient final private RTProxy mRTProxy;    // not Serializable
     final private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
@@ -97,14 +109,24 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
         synchronized (sTheLock) {
             sAppContext = context.getApplicationContext();
         }
+        sDarkTheme = resolveBoolean(context, R.attr.rte_darkTheme, false);
 
         mRTProxy = rtProxy;
         mMediaFactory = mediaFactory;
     }
 
-	/*
-	 * RTProxy Methods
-	 */
+    private boolean resolveBoolean(Context context, @AttrRes int attr, boolean fallback) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
+        try {
+            return a.getBoolean(0, fallback);
+        } finally {
+            a.recycle();
+        }
+    }
+
+    /*
+     * RTProxy Methods
+     */
 
     /**
      * The RTProxy is the link to the "outside world".
@@ -116,44 +138,44 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void startActivityForResult(Intent intent, int requestCode) {
         mRTProxy.startActivityForResult(intent, requestCode);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void runOnUiThread(Runnable action) {
         mRTProxy.runOnUiThread(action);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public Toast makeText(int resId, int duration) {
         return mRTProxy.makeText(resId, duration);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public Toast makeText(CharSequence text, int duration) {
         return mRTProxy.makeText(text, duration);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void openDialogFragment(String fragmentTag, DialogFragment fragment) {
         mRTProxy.openDialogFragment(fragmentTag, fragment);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void removeFragment(String fragmentTag) {
         mRTProxy.removeFragment(fragmentTag);
     }
 
-	/*
-	 * RTMediaFactory Methods
-	 */
+    /*
+     * RTMediaFactory Methods
+     */
 
     /**
      * The media factory allows custom storage implementations for media files.
@@ -165,37 +187,37 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTImage createImage(RTMediaSource mediaSource) {
         return mMediaFactory.createImage(mediaSource);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTAudio createAudio(RTMediaSource mediaSource) {
         return mMediaFactory.createAudio(mediaSource);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTVideo createVideo(RTMediaSource mediaSource) {
         return mMediaFactory.createVideo(mediaSource);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTImage createImage(String path) {
         return mMediaFactory.createImage(path);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTAudio createAudio(String path) {
         return mMediaFactory.createAudio(path);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTVideo createVideo(String path) {
         return mMediaFactory.createVideo(path);
     }

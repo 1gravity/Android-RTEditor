@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -15,27 +15,28 @@
   limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:layout_marginTop="@dimen/md_dialog_frame_margin"
-    android:layout_marginBottom="@dimen/md_dialog_frame_margin">
+    android:paddingBottom="@dimen/dialog_margin_top_bottom"
+    android:paddingLeft="@dimen/dialog_margin_left_right"
+    android:paddingRight="@dimen/dialog_margin_left_right"
+    android:paddingTop="@dimen/dialog_margin_top_bottom">
 
     <EditText
         android:id="@+id/linkURL"
-		style="@android:style/Widget.EditText"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/rte_link_enter_url"
-        android:inputType="textUri"/>
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/linkText"
-		style="@android:style/Widget.EditText"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/rte_link_enter_url_text"
         android:inputType="text"/>
 

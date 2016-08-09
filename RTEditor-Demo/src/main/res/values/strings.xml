@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 <resources>
 
     <string name="app_name">RT Editor Demo</string>
-    
+    <string name="title_activity">RT Editor Activity</string>
+    <string name="title_fragment">RT Editor Fragment</string>
+
     <string name="label_subject">Subject</string>
     <string name="label_message">Message</string>
     <string name="label_signature">Signature</string>
@@ -28,11 +30,20 @@
     <string name="menu_light_theme">Light theme</string>
     <string name="menu_single_toolbar">Single toolbar</string>
     <string name="menu_split_toolbar">Split toolbar</string>
-    
+    <string name="menu_fragment">Use Fragment</string>
+    <string name="menu_activity">Use Activity</string>
+
     <string name="save_as">Save as…</string>
     <string name="save_as_success">Text saved as %s</string>
     <string name="save_as_failure">Text could not be saved: %s</string>
     <string name="load_failure_1">This isn\'t a valid rich text editor file</string>
     <string name="load_failure_2">This isn\'t a valid rich text editor file: %s</string>
-    
+
+    <string name="permission_denied">Permission denied</string>
+    <string name="permission_denied_storage">Without this permission you can\'t insert camera pictures. Are you sure you want to deny this permission?</string>
+    <string name="permission_deny">Deny</string>
+    <string name="permission_retry">Re-try</string>
+
+    <string name="no_file_picker">There\'s no app installed to handle picking a directory: %s</string>
+
 </resources>

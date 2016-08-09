@@ -16,11 +16,6 @@
 
 package com.onegravity.rteditor.media.crop;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,6 +41,11 @@ import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.media.MediaUtils;
 import com.onegravity.rteditor.media.MonitoredActivity;
 import com.onegravity.rteditor.utils.Helper;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * The activity can crop specific region of interest from an image.
@@ -88,7 +88,7 @@ public class CropImageActivity extends MonitoredActivity {
     boolean mSaving; // Whether the "save" button is already clicked.
     HighlightView mCrop;
 
-    // These options specifiy the output image size and whether we should
+    // These options specify the output image size and whether we should
     // scale the output to fit it (or just crop it).
     private boolean mScaleUp = true;
 
@@ -312,12 +312,12 @@ public class CropImageActivity extends MonitoredActivity {
             c.drawColor(0x00000000, PorterDuff.Mode.CLEAR);
         }
 
-		/* If the output is required to a specific size then scale or fill */
+        /* If the output is required to a specific size then scale or fill */
         if (mOutputX != 0 && mOutputY != 0) {
 
             if (mScale) {
 
-				/* Scale the image to the required dimensions */
+                /* Scale the image to the required dimensions */
                 Bitmap old = croppedImage;
                 croppedImage = transform(new Matrix(), croppedImage, mOutputX,
                         mOutputY, mScaleUp);
@@ -327,11 +327,11 @@ public class CropImageActivity extends MonitoredActivity {
                 }
             } else {
 
-				/*
+                /*
                  * Don't scale the image crop it to the size requested. Create
-				 * an new image with the cropped image in the center and the
-				 * extra space filled.
-				 */
+                 * an new image with the cropped image in the center and the
+                 * extra space filled.
+                 */
 
                 // Don't scale the image but instead fill it so it's the
                 // required dimension
@@ -345,16 +345,16 @@ public class CropImageActivity extends MonitoredActivity {
                 int dx = (srcRect.width() - dstRect.width()) / 2;
                 int dy = (srcRect.height() - dstRect.height()) / 2;
 
-				/* If the srcRect is too big, use the center part of it. */
+                /* If the srcRect is too big, use the center part of it. */
                 srcRect.inset(Math.max(0, dx), Math.max(0, dy));
 
-				/* If the dstRect is too big, use the center part of it. */
+                /* If the dstRect is too big, use the center part of it. */
                 dstRect.inset(Math.max(0, -dx), Math.max(0, -dy));
 
-				/* Draw the cropped bitmap in the center */
+                /* Draw the cropped bitmap in the center */
                 canvas.drawBitmap(mBitmap, srcRect, dstRect, null);
 
-				/* Set the cropped bitmap as the new bitmap */
+                /* Set the cropped bitmap as the new bitmap */
                 croppedImage.recycle();
                 croppedImage = b;
             }
@@ -487,10 +487,10 @@ public class CropImageActivity extends MonitoredActivity {
             Rect imageRect = new Rect(0, 0, width, height);
 
             // make the default size about 4/5 of the width or height
-			/*
-			 * int cropWidth = Math.min(width, height) * 4 / 5; int cropHeight =
-			 * cropWidth;
-			 */
+            /*
+             * int cropWidth = Math.min(width, height) * 4 / 5; int cropHeight =
+             * cropWidth;
+             */
             int cropWidth = width;
             int cropHeight = height;
 
@@ -590,12 +590,12 @@ public class CropImageActivity extends MonitoredActivity {
         int deltaX = source.getWidth() - targetWidth;
         int deltaY = source.getHeight() - targetHeight;
         if (!scaleUp && (deltaX < 0 || deltaY < 0)) {
-			/*
-			 * In this case the bitmap is smaller, at least in one dimension,
-			 * than the target. Transform it by placing as much of the image as
-			 * possible into the target and leaving the top/bottom or left/right
-			 * (or both) black.
-			 */
+            /*
+             * In this case the bitmap is smaller, at least in one dimension,
+             * than the target. Transform it by placing as much of the image as
+             * possible into the target and leaving the top/bottom or left/right
+             * (or both) black.
+             */
             Bitmap b2 = Bitmap.createBitmap(targetWidth, targetHeight,
                     Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(b2);

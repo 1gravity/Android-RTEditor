@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package com.onegravity.rteditor.toolbar.spinner;
 
-import android.widget.TextView;
-
 import com.onegravity.rteditor.fonts.RTTypeface;
 
 /**
@@ -33,10 +31,5 @@ public class FontSpinnerItem extends SpinnerItem {
 
     public RTTypeface getTypeface() {
         return mTypeface;
-    }
-
-    @Override
-    void formatNameView(TextView view) {
-        super.formatNameView(view);
     }
 }

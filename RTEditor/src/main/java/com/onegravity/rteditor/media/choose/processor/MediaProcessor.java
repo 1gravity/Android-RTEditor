@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,16 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public abstract class MediaProcessor implements Runnable {
 
@@ -114,15 +114,19 @@ public abstract class MediaProcessor implements Runnable {
     }
 
     private InputStream downloadFile(String sourceFile) {
-        HttpClient client = new DefaultHttpClient();
-        HttpGet getRequest = new HttpGet(sourceFile);
-
         InputStream in = null;
         try {
-            HttpResponse response = client.execute(getRequest);
-            in = response.getEntity().getContent();
+            URL url = new URL(sourceFile);
+            final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            in = new BufferedInputStream(urlConnection.getInputStream()) {
+                public void close() throws IOException {
+                    super.close();
+                    urlConnection.disconnect();
+                }
+            };
         } catch (Exception e) {
             Log.e(getClass().getSimpleName(), e.getMessage(), e);
+            IOUtils.closeQuietly(in);
         }
 
         return in;

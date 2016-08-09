@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
     <string name="rte_link_enter_url_text">Link do Texto (opcional)</string>
     <string name="rte_create_a_link">Criar um Link</string>
     <string name="rte_invalid_link"><xliff:g id="link">%s</xliff:g> não é um endereço válido</string>
-	<string name="rte_remove_action">Remover</string>
+    <string name="rte_remove_action">Remover</string>
 
     <string name="rte_pick_image">Selecionar uma imagem</string>
     <string name="rte_pick_audio">Selecionar um arquivo de áudio</string>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,18 @@ import android.text.Spanned;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * This class finds the Paragraphs in a Spanned text.
- * <p>
- * We need this for all paragraph formatting. While it's optimized for
- * performance, it should still be used with caution.
+ *
+ * A paragraph spans from one \n (exclusive) to the next one (inclusive):
+ * first paragraph\nsecond paragraph\nthird paragraph
+ * |_______________||________________||_____________|
+ *
+ * We need this for all the paragraph formatting (bullet points, indentation etc.).
+ * While it's optimized for performance, it should still be used with caution.
  */
 public class RTLayout implements Serializable {
     private static final long serialVersionUID = 2210969820444215580L;
@@ -36,41 +39,43 @@ public class RTLayout implements Serializable {
     private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\\r\\n|\\r|\\n");
 
     private int mNrOfLines = 0;
-    private ArrayList<Paragraph> mParagraphs = new ArrayList<Paragraph>();
-    ;
+    private final ArrayList<Paragraph> mParagraphs = new ArrayList<>();
 
-    public RTLayout(Spanned spanned) {
+    public RTLayout(final Spanned spanned) {
         if (spanned != null) {
-            String s = spanned.toString();
+            final String s = spanned.toString();
 
-            // remove the trailing line feeds
-            int len = s.length();
-            char c = len > 0 ? s.charAt(len - 1) : '-';
-            while (len > 0 && (c == '\n' || c == '\r')) {
-                len--;
-                if (len > 0) c = s.charAt(len - 1);
-            }
-
-            // now find the line breaks and the according lines / paragraphs
+            // find the line breaks and the according lines / paragraphs
             mNrOfLines = 1;
-            Matcher m = LINEBREAK_PATTERN.matcher(s.substring(0, len));
+            final Matcher m = LINEBREAK_PATTERN.matcher(s);
             int groupStart = 0;
             while (m.find()) {
-                mParagraphs.add(new Paragraph(groupStart, m.end(), mNrOfLines == 1, false));    // the line feeds are part of the paragraph
+                // the line feeds are part of the paragraph              isFirst          isLast
+                Paragraph paragraph = new Paragraph(groupStart, m.end(), mNrOfLines == 1, false);
+                mParagraphs.add(paragraph);
                 groupStart = m.end();
                 mNrOfLines++;
             }
-            if (groupStart < len) {
-                mParagraphs.add(new Paragraph(groupStart, len, mNrOfLines == 1, true));
+
+            // even an empty line after the last cr/lf is considered a paragraph
+            if (mParagraphs.size() < mNrOfLines) {
+                Paragraph paragraph = new Paragraph(groupStart, s.length(), mNrOfLines == 1, true);
+                mParagraphs.add(paragraph);
             }
         }
     }
 
-    public List<Paragraph> getParagraphs() {
+    /**
+     * @return all Paragraphs for this layout / spanned text.
+     */
+    public ArrayList<Paragraph> getParagraphs() {
         return mParagraphs;
     }
 
-    public int getLineForOffset(int offset) {
+    /**
+     * @return the line for a certain position in the spanned text
+     */
+    public int getLineForOffset(final int offset) {
         int lineNr = 0;
         while (lineNr < mNrOfLines && offset >= mParagraphs.get(lineNr).end()) {
             lineNr++;
@@ -78,15 +83,32 @@ public class RTLayout implements Serializable {
         return Math.min(Math.max(0, lineNr), mParagraphs.size() - 1);
     }
 
-    public int getLineStart(int line) {
+    /**
+     * @return the start position of a certain line in the spanned text
+     */
+    public int getLineStart(final int line) {
         return mNrOfLines == 0 || line < 0 ? 0 :
-                line < mNrOfLines ? mParagraphs.get(line).start() :
-                        mParagraphs.get(mNrOfLines - 1).end() - 1;
+               line < mNrOfLines ? mParagraphs.get(line).start() :
+               mParagraphs.get(mNrOfLines - 1).end() - 1;
     }
 
-    public int getLineEnd(int line) {
+    /**
+     * @return the end position of a certain line in the spanned text
+     */
+    public int getLineEnd(final int line) {
         return mNrOfLines == 0 || line < 0 ? 0 :
-                line < mNrOfLines ? mParagraphs.get(line).end() :
-                        mParagraphs.get(mNrOfLines - 1).end() - 1;
+               line < mNrOfLines ? mParagraphs.get(line).end() :
+               mParagraphs.get(mNrOfLines - 1).end() - 1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        int line = 1;
+        for (Paragraph p : mParagraphs) {
+            s.append(line++).append(": ").append(p.start()).append("-").append(p.end())
+                    .append(p.isLast() ? "" : ", ");
+        }
+        return s.toString();
     }
 }

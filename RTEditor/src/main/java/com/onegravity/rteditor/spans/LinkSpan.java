@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import android.view.View;
  * View it's embedded in.
  * That View is the RTEditText which implements the LinkSpanListener interface.
  */
-public class LinkSpan extends URLSpan {
+public class LinkSpan extends URLSpan implements RTSpan<String> {
 
     public interface LinkSpanListener {
         public void onClick(LinkSpan linkSpan);
@@ -39,6 +39,11 @@ public class LinkSpan extends URLSpan {
         if (view instanceof LinkSpanListener) {
             ((LinkSpanListener) view).onClick(this);
         }
+    }
+
+    @Override
+    public String getValue() {
+        return getURL();
     }
 
 }

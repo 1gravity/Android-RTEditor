@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,11 +42,5 @@ public abstract class Constants {
     }
 
     public final static int CROP_IMAGE = 107;
-
-    /*
-     * Extra in the Intent sent back to the rich text editor
-     * when picking a media file. It's a serialized Media object.
-     */
-    public static final String RESULT_MEDIA = "RTE_RESULT_MEDIA";
 
 }

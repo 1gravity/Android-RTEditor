@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,13 +54,16 @@ public class Paragraph extends Selection {
      * e.g. [10, 10] will intersect the paragraph [0, 10] only if it's the last paragraph
      */
     public boolean isSelected(Selection sel) {
-        if (sel == null) return false;
-        if (sel.isEmpty()) {                                                            // selection is a point
-            boolean isCompletelyWithin = sel.start() >= start() && sel.end() < end();    // selection is completely within paragraph (not at the end)
-            boolean isWithin = sel.start() >= start() && sel.end() <= end();            // selection is within or at the end of the paragraph
+        if (sel == null) {
+            return false;
+        }
+        if (sel.isEmpty()) {
+            // selection is a point
+            boolean isCompletelyWithin = sel.start() >= start() && sel.end() < end();  // selection is completely within paragraph (not at the end)
+            boolean isWithin = sel.start() >= start() && sel.end() <= end();           // selection is within or at the end of the paragraph
             return isCompletelyWithin || (isWithin && mIsLast);
         } else {
-            // at least one character in common
+            // selection is a range --> at least one character in common
             int start = Math.max(start(), sel.start());
             int end = Math.min(end(), sel.end());
             return start < end;

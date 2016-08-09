@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,6 +83,7 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
         return true;
     }
 
+    // TODO: on Android M we need to ask the WRITE_EXTERNAL_STORAGE permission explicitly
     private boolean takePicture() {
         try {
             // Create an image file name (must be in "public area" or the camera app might not be able to access the file)

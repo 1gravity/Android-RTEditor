@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
         mOriginalFile = null;
         if (data != null && data.getDataString() != null) {
             try {
-                mOriginalFile = MediaUtils.determineOriginalFile(RTApi.getApplicationContext(), data.getData());
+                mOriginalFile = MediaUtils.determineOriginalFile(mActivity.getApplicationContext(), data.getData());
             } catch (IllegalArgumentException e) {
                 onError(e.getMessage());
             }

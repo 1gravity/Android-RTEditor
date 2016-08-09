@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ import com.onegravity.rteditor.media.choose.VideoChooserManager.VideoChooserList
 import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class MediaChooserActivity extends MonitoredActivity implements
         ImageChooserListener,
@@ -138,8 +140,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
             } else if (requestCode == Constants.CROP_IMAGE) {
                 String path = data.getStringExtra(CropImageActivity.IMAGE_DESTINATION_FILE);
                 if (path != null && mSelectedMedia instanceof RTImage) {
-                    Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-                    setResult(RESULT_OK, resultIntent);
+                    EventBus.getDefault().postSticky( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
             }
@@ -178,8 +179,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
                     // start activity CropImageActivity
                     startActivityForResult(intent, Constants.CROP_IMAGE);
                 } else {
-                    Intent resultIntent = new Intent().putExtra(Constants.RESULT_MEDIA, mSelectedMedia);
-                    setResult(RESULT_OK, resultIntent);
+                    EventBus.getDefault().postSticky( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
             }
@@ -187,21 +187,21 @@ public class MediaChooserActivity extends MonitoredActivity implements
     }
 
     @Override
-	/* AudioChooserListener */
+    /* AudioChooserListener */
     public void onAudioChosen(RTAudio audio) {
         mSelectedMedia = audio;
         setWorkInProgress(false);
     }
 
     @Override
-	/* VideoChooserListener */
+    /* VideoChooserListener */
     public void onVideoChosen(RTVideo video) {
         mSelectedMedia = video;
         setWorkInProgress(false);
     }
 
     @Override
-	/* MediaChooserListener */
+    /* MediaChooserListener */
     public void onError(String reason) {
         Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
         setWorkInProgress(false);

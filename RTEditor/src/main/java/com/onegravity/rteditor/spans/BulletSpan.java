@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ import android.text.style.LeadingMarginSpan;
  * we ignore the leading margin for the last, empty paragraph unless it's the
  * only one
  */
-public class BulletSpan implements LeadingMarginSpan {
+public class BulletSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagraphSpan<Boolean> {
+
     private static Path sBulletPath = null;
 
     private final int mGapWidth;
@@ -45,6 +46,11 @@ public class BulletSpan implements LeadingMarginSpan {
         if (sBulletPath == null) {
             sBulletPath = new Path();
         }
+    }
+
+    private BulletSpan(int gapWidth, boolean ignoreSpan) {
+        mGapWidth = gapWidth;
+        mIgnoreSpan = ignoreSpan;
     }
 
     @Override
@@ -79,4 +85,15 @@ public class BulletSpan implements LeadingMarginSpan {
         c.drawPath(sBulletPath, p);
         c.restore();
     }
+
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public BulletSpan createClone() {
+        return new BulletSpan(mGapWidth, mIgnoreSpan);
+    }
+
 }

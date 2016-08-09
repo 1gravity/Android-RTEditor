@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.onegravity.rteditor;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,11 +33,10 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.LinkFragment.Link;
 import com.onegravity.rteditor.LinkFragment.LinkEvent;
-import com.onegravity.rteditor.RTEditText.RTEditTextListener;
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
-import com.onegravity.rteditor.RTToolbar.RTToolbarListener;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.media.RTImage;
+import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.effects.AbsoluteSizeEffect;
 import com.onegravity.rteditor.effects.AlignmentEffect;
 import com.onegravity.rteditor.effects.BackgroundColorEffect;
@@ -49,6 +47,7 @@ import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.effects.ForegroundColorEffect;
 import com.onegravity.rteditor.effects.ItalicEffect;
 import com.onegravity.rteditor.effects.NumberEffect;
+import com.onegravity.rteditor.effects.SpanCollectMode;
 import com.onegravity.rteditor.effects.StrikethroughEffect;
 import com.onegravity.rteditor.effects.SubscriptEffect;
 import com.onegravity.rteditor.effects.SuperscriptEffect;
@@ -56,19 +55,23 @@ import com.onegravity.rteditor.effects.TypefaceEffect;
 import com.onegravity.rteditor.effects.UnderlineEffect;
 import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
+import com.onegravity.rteditor.media.choose.MediaEvent;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
-import com.onegravity.rteditor.utils.Constants;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Selection;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * The RTManager manages the different components:
@@ -230,45 +233,14 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         mRTApi = null;
     }
 
-    /**
-     * Must be called from the Activity's onActivityResult method to be able to
-     * process the rich text editor specific calls (e.g. when picking an image
-     * to insert).
-     *
-     * @param requestCode The integer request code originally supplied to
-     *                    startActivityForResult(), allowing you to identify who this
-     *                    result came from.
-     * @param resultCode  The integer result code returned by the child activity through
-     *                    its setResult().
-     * @param data        An Intent, which can return result data to the caller (various
-     *                    data can be attached to Intent "extras").
-     * @return True if the call was consumed in this component, False otherwise
-     */
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && data != null) {
-
-            if (requestCode == MediaAction.PICK_PICTURE.requestCode() ||
-                    requestCode == MediaAction.CAPTURE_PICTURE.requestCode()) {
-
-                RTImage image = (RTImage) data.getSerializableExtra(Constants.RESULT_MEDIA);
-                insertImage(image);
-                return true;
-
-            }
-
-        }
-
-        return false;
-    }
-
     // ****************************************** Public Methods *******************************************
 
     /**
      * Register a rich text editor.
      * <p>
-     * Before using the editor it needs to be registered to an RTManager. Using
-     * means any calls to the editor (setText will fail if the editor isn't
-     * registered)! Must be called from the ui thread.
+     * Before using the editor it needs to be registered to an RTManager.
+     * Using means any calls to the editor (setText will fail if the editor isn't registered)!
+     * MUST be called from the ui thread.
      *
      * @param editor The rich text editor to register.
      */
@@ -402,11 +374,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    // ****************************************** RTToolbar.RTToolbarListener *******************************************
+    // ****************************************** RTToolbarListener *******************************************
 
     @Override
     /* @inheritDoc */
-    public <T> void onEffectSelected(Effect<T> effect, T value) {
+    public <V, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value) {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
             editor.applyEffect(effect, value);
@@ -421,7 +393,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             int selStartBefore = editor.getSelectionStart();
             int selEndBefore = editor.getSelectionEnd();
             Spannable oldSpannable = editor.cloneSpannable();
-            for (Effect<?> effect : Effects.FORMATTING_EFFECTS) {
+            for (Effect effect : Effects.FORMATTING_EFFECTS) {
                 effect.clearFormattingInSelection(editor);
             }
             int selStartAfter = editor.getSelectionStart();
@@ -443,7 +415,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onRedo() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
@@ -452,15 +424,15 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onCreateLink() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
             String url = null;
             String linkText = null;
 
-            LinkSpan[] links = Effects.LINK.getSpans(editor.getText(), new Selection(editor));
-            if (links.length == 0) {
+            List<RTSpan<String>> links = Effects.LINK.getSpans(editor.getText(), new Selection(editor), SpanCollectMode.EXACT);
+            if (links.isEmpty()) {
                 // default values if no link is found at selection
                 linkText = editor.getSelectedText();
                 try {
@@ -472,8 +444,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 mLinkSelection = editor.getSelection();
             } else {
                 // values if a link already exists
-                url = links[0].getURL();
-                linkText = getLinkText(editor, links[0]);
+                RTSpan<String> linkSpan = links.get(0);
+                url = linkSpan.getValue();
+                linkText = getLinkText(editor, linkSpan);
             }
 
             mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, url));
@@ -481,13 +454,13 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onPickImage() {
         onPickCaptureImage(MediaAction.PICK_PICTURE);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onCaptureImage() {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
     }
@@ -505,43 +478,35 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    /* called from onActivityResult() */
-    private void insertImage(final RTImage image) {
-        mRTApi.runOnUiThread(new Runnable() {
+    /* called from onEventMainThread(MediaEvent) */
+    private void insertImage(final RTEditText editor, final RTImage image) {
+        if (image != null && editor != null) {
+            Selection selection = new Selection(editor);
+            Editable str = editor.getText();
 
-            @Override
-            public void run() {
-                RTEditText editor = mEditors.get(mActiveEditor);
-                if (image != null && editor != null) {
-                    Selection selection = new Selection(editor);
-                    Editable str = editor.getText();
+            // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
+            // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
+            str.insert(selection.start(), "\uFFFC");
 
-                    // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
-                    // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
-                    str.insert(selection.start(), "\uFFFC");
+            try {
+                // now add the actual image and inform the RTOperationManager about the operation
+                Spannable oldSpannable = editor.cloneSpannable();
 
-                    try {
-                        // now add the actual image and inform the RTOperationManager about the operation
-                        Spannable oldSpannable = editor.cloneSpannable();
+                ImageSpan imageSpan = new ImageSpan(image, false);
+                str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                int selStartAfter = editor.getSelectionStart();
+                int selEndAfter = editor.getSelectionEnd();
+                editor.onAddMedia(image);
 
-                        ImageSpan imageSpan = new ImageSpan(image, false);
-                        str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        int selStartAfter = editor.getSelectionStart();
-                        int selEndAfter = editor.getSelectionEnd();
-                        editor.onAddMedia(image);
+                Spannable newSpannable = editor.cloneSpannable();
 
-                        Spannable newSpannable = editor.cloneSpannable();
-
-                        mOPManager.executed(editor, new RTOperationManager.TextChangeOperation(oldSpannable, newSpannable,
-                                selection.start(), selection.end(), selStartAfter, selEndAfter));
-                    } catch (OutOfMemoryError e) {
-                        str.delete(selection.start(), selection.end() + 1);
-                        mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
-                    }
-                }
+                mOPManager.executed(editor, new RTOperationManager.TextChangeOperation(oldSpannable, newSpannable,
+                        selection.start(), selection.end(), selStartAfter, selEndAfter));
+            } catch (OutOfMemoryError e) {
+                str.delete(selection.start(), selection.end() + 1);
+                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
             }
-
-        });
+        }
     }
 
     private RTEditText getActiveEditor() {
@@ -553,10 +518,22 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         return null;
     }
 
-    // ****************************************** RTEditText.RTEditTextListener *******************************************
+    // ****************************************** RTEditTextListener *******************************************
 
     @Override
-	/* @inheritDoc */
+    public void onRestoredInstanceState(RTEditText editor) {
+        /*
+         * We need to process pending sticky MediaEvents once the editors are registered with the
+         * RTManager and are fully restored.
+         */
+        MediaEvent event = EventBus.getDefault().getStickyEvent(MediaEvent.class);
+        if (event != null) {
+            onEventMainThread(event);
+        }
+    }
+
+    @Override
+    /* @inheritDoc */
     public void onFocusChanged(RTEditText editor, boolean focused) {
         if (editor.usesRTFormatting()) {
             synchronized (this) {
@@ -590,7 +567,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onSelectionChanged(RTEditText editor, int start, int end) {
         if (editor == null) return;
 
@@ -610,9 +587,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         List<Integer> bgColors = null;
 
         // check if effect exists in selection
-        boolean isEmpty = (start == end);
-        for (Effect<?> effect : Effects.ALL_EFFECTS) {
-            if (effect.existsInSelection(editor, isEmpty ? Spanned.SPAN_INCLUSIVE_EXCLUSIVE : Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)) {
+        for (Effect effect : Effects.ALL_EFFECTS) {
+            if (effect.existsInSelection(editor)) {
                 if (effect instanceof BoldEffect) {
                     isBold = true;
                 } else if (effect instanceof ItalicEffect) {
@@ -630,15 +606,15 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 } else if (effect instanceof NumberEffect) {
                     isNumber = true;
                 } else if (effect instanceof AlignmentEffect) {
-                    alignments = Effects.ALIGNMENT.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    alignments = Effects.ALIGNMENT.valuesInSelection(editor);
                 } else if (effect instanceof TypefaceEffect) {
-                    typefaces = Effects.TYPEFACE.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    typefaces = Effects.TYPEFACE.valuesInSelection(editor);
                 } else if (effect instanceof AbsoluteSizeEffect) {
-                    sizes = Effects.FONTSIZE.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sizes = Effects.FONTSIZE.valuesInSelection(editor);
                 } else if (effect instanceof ForegroundColorEffect) {
-                    fontColors = Effects.FONTCOLOR.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    fontColors = Effects.FONTCOLOR.valuesInSelection(editor);
                 } else if (effect instanceof BackgroundColorEffect) {
-                    bgColors = Effects.BGCOLOR.valuesInSelection(editor, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    bgColors = Effects.BGCOLOR.valuesInSelection(editor);
                 }
             }
         }
@@ -655,10 +631,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             toolbar.setNumber(isNumber);
 
             // alignment (left, center, right)
-            if (alignments == null) {
-                toolbar.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+            if (alignments != null && alignments.size() == 1) {
+                toolbar.setAlignment(alignments.get(0));
             } else {
-                toolbar.setAlignments(alignments);
+                boolean isRTL = Helper.isRTL(editor.getText(), start, end);
+                toolbar.setAlignment(isRTL ? Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL);
             }
 
             // fonts
@@ -695,19 +672,17 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onTextChanged(RTEditText editor, Spannable before, Spannable after,
                               int selStartBefore, int selEndBefore, int selStartAfter, int selEndAfter) {
-
         TextChangeOperation op = new TextChangeOperation(before, after,
                 selStartBefore, selEndBefore,
                 selStartAfter, selEndAfter);
         mOPManager.executed(editor, op);
-
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public void onClick(RTEditText editor, LinkSpan span) {
         if (editor != null) {
             String linkText = getLinkText(editor, span);
@@ -715,7 +690,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    private String getLinkText(RTEditText editor, LinkSpan span) {
+    private String getLinkText(RTEditText editor, RTSpan<String> span) {
         Spannable text = editor.getText();
         final int spanStart = text.getSpanStart(span);
         final int spanEnd = text.getSpanEnd(span);
@@ -730,8 +705,23 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     /**
+     * Media file was picked -> process the result.
+     */
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(MediaEvent event) {
+        RTEditText editor = mEditors.get(mActiveEditor);
+        RTMedia media = event.getMedia();
+        if (editor != null && media instanceof RTImage) {
+            insertImage(editor, (RTImage) media);
+            EventBus.getDefault().removeStickyEvent(event);
+            mActiveEditor = Integer.MAX_VALUE;
+        }
+    }
+
+    /**
      * LinkFragment has closed -> process the result.
      */
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LinkEvent event) {
         final String fragmentTag = event.getFragmentTag();
         mRTApi.removeFragment(fragmentTag);

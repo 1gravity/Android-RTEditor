@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,33 +18,44 @@ package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.fonts.RTTypeface;
+import com.onegravity.rteditor.spans.AbsoluteSizeSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.onegravity.rteditor.spans.BoldSpan;
+import com.onegravity.rteditor.spans.ForegroundColorSpan;
+import com.onegravity.rteditor.spans.ItalicSpan;
+import com.onegravity.rteditor.spans.LinkSpan;
+import com.onegravity.rteditor.spans.StrikethroughSpan;
+import com.onegravity.rteditor.spans.SubscriptSpan;
+import com.onegravity.rteditor.spans.SuperscriptSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import java.util.ArrayList;
 
 public class Effects {
     // character effects
-    public static final Effect<Boolean> BOLD = new BoldEffect();                        // boolean effect
-    public static final Effect<Boolean> ITALIC = new ItalicEffect();                    // boolean effect
-    public static final Effect<Boolean> UNDERLINE = new UnderlineEffect();              // boolean effect
-    public static final Effect<Boolean> STRIKETHROUGH = new StrikethroughEffect();      // boolean effect
-    public static final Effect<Boolean> SUPERSCRIPT = new SuperscriptEffect();          // boolean effect
-    public static final Effect<Boolean> SUBSCRIPT = new SubscriptEffect();              // boolean effect
-    public static final Effect<Integer> FONTSIZE = new AbsoluteSizeEffect();            // non-boolean effect
-    public static final Effect<Integer> FONTCOLOR = new ForegroundColorEffect();        // non-boolean effect
-    public static final Effect<Integer> BGCOLOR = new BackgroundColorEffect();          // non-boolean effect
-    public static final Effect<RTTypeface> TYPEFACE = new TypefaceEffect();             // non-boolean effect
-    public static final LinkEffect LINK = new LinkEffect();                             // non-boolean effect
+    public static final Effect<Boolean, BoldSpan> BOLD = new BoldEffect();                             // boolean effect
+    public static final Effect<Boolean, ItalicSpan> ITALIC = new ItalicEffect();                       // boolean effect
+    public static final Effect<Boolean, UnderlineSpan> UNDERLINE = new UnderlineEffect();              // boolean effect
+    public static final Effect<Boolean, StrikethroughSpan> STRIKETHROUGH = new StrikethroughEffect();  // boolean effect
+    public static final Effect<Boolean, SuperscriptSpan> SUPERSCRIPT = new SuperscriptEffect();        // boolean effect
+    public static final Effect<Boolean, SubscriptSpan> SUBSCRIPT = new SubscriptEffect();              // boolean effect
+    public static final Effect<Integer, AbsoluteSizeSpan> FONTSIZE = new AbsoluteSizeEffect();         // non-boolean effect
+    public static final Effect<Integer, ForegroundColorSpan> FONTCOLOR = new ForegroundColorEffect();  // non-boolean effect
+    public static final Effect<Integer, BackgroundColorSpan> BGCOLOR = new BackgroundColorEffect();    // non-boolean effect
+    public static final Effect<RTTypeface, TypefaceSpan> TYPEFACE = new TypefaceEffect();              // non-boolean effect
+    public static final Effect<String, LinkSpan> LINK = new LinkEffect();                              // non-boolean effect
 
     // paragraph effects
-    public static final BulletEffect BULLET = new BulletEffect();                       // boolean effect
-    public static final NumberEffect NUMBER = new NumberEffect();                       // boolean effect
-    public static final IndentationEffect INDENTATION = new IndentationEffect();        // boolean effect
-    public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();              // non-boolean effect
+    public static final BulletEffect BULLET = new BulletEffect();                                      // boolean effect
+    public static final NumberEffect NUMBER = new NumberEffect();                                      // boolean effect
+    public static final IndentationEffect INDENTATION = new IndentationEffect();                       // non-boolean effect
+    public static final AlignmentEffect ALIGNMENT = new AlignmentEffect();                             // non-boolean effect
 
     /*
      * ALL_EFFECTS is a list of all defined effects, for simpler iteration over all effects.
      */
-    public static final ArrayList<Effect<?>> ALL_EFFECTS = new ArrayList<Effect<?>>();
+    public static final ArrayList<Effect> ALL_EFFECTS = new ArrayList<Effect>();
 
     static {
         // character effects
@@ -70,7 +81,7 @@ public class Effects {
     /*
      * FORMATTING_EFFECTS is a list of all effects which will be removed when the formatting is removed from the text.
      */
-    public static final ArrayList<Effect<?>> FORMATTING_EFFECTS = new ArrayList<Effect<?>>();
+    public static final ArrayList<Effect> FORMATTING_EFFECTS = new ArrayList<Effect>();
 
     static {
         // character effects
@@ -94,17 +105,27 @@ public class Effects {
     }
 
     /**
-     * This important method makes sure that all paragraph effects are applied
-     * to whole paragraphs. While it's optimized for performance it's still an
-     * expensive operation so it shouldn't be called too often.
+     * This important method makes sure that all paragraph effects are applied to whole paragraphs.
+     * While it's optimized for performance it's still an expensive operation so it shouldn't be
+     * called too often.
      *
-     * @param editor The rich text editor to cleanup the paragraphs for
+     * @param exclude if an Effect has just been applied, there's no need to cleanup that Effect.
      */
-    public static void cleanupParagraphs(RTEditText editor) {
-        Effects.ALIGNMENT.applyToSelection(editor, null, null);
-        Effects.INDENTATION.applyToSelection(editor, null, null);
-        Effects.BULLET.applyToSelection(editor, null, null);
-        Effects.NUMBER.applyToSelection(editor, null, null);
+    public static void cleanupParagraphs(RTEditText editor, Effect...exclude) {
+        cleanupParagraphs(editor, Effects.ALIGNMENT, exclude);
+        cleanupParagraphs(editor, Effects.INDENTATION, exclude);
+        cleanupParagraphs(editor, Effects.BULLET, exclude);
+        cleanupParagraphs(editor, Effects.NUMBER, exclude);
+    }
+
+    private static void cleanupParagraphs(RTEditText editor, ParagraphEffect effect, Effect...exclude) {
+        for (Effect e : exclude) {
+            if (effect == e) {
+                return;
+            }
+        }
+
+        effect.applyToSelection(editor, null, null);
     }
 
 }

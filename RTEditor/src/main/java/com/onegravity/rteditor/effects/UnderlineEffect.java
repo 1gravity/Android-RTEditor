@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,9 @@
 
 package com.onegravity.rteditor.effects;
 
-import android.text.style.UnderlineSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 
 /**
  * Underlined text
  */
-public class UnderlineEffect extends SimpleBooleanEffect<UnderlineSpan> {
-    public UnderlineEffect() {
-        super(UnderlineSpan.class);
-    }
-}
+public class UnderlineEffect extends BooleanEffect<UnderlineSpan> {}

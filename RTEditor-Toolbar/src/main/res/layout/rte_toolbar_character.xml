@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -21,66 +21,66 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:background="?android:attr/actionBarItemBackground"
-    android:scrollbarStyle="outsideOverlay" >
+    android:scrollbarStyle="outsideOverlay">
 
     <com.onegravity.rteditor.toolbar.HorizontalRTToolbar
         android:id="@+id/rte_toolbar_character"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-    	android:background="?android:attr/actionBarItemBackground"
-        android:orientation="horizontal" >
+        android:background="?android:attr/actionBarItemBackground"
+        android:orientation="horizontal">
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_bold"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarBold" />
+            android:background="?attr/rte_icToolbarBold"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_italic"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarItalic" />
+            android:background="?attr/rte_icToolbarItalic"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_underline"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarUnderline" />
+            android:background="?attr/rte_icToolbarUnderline"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_strikethrough"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarStrikethrough" />
+            android:background="?attr/rte_icToolbarStrikethrough"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_superscript"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarSuperscript" />
+            android:background="?attr/rte_icToolbarSuperscript"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_subscript"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarSubscript" />
+            android:background="?attr/rte_icToolbarSubscript"/>
 
-		<include layout="@layout/rte_toolbar_divider"/>
+        <include layout="@layout/rte_toolbar_divider"/>
 
         <Spinner
             android:id="@+id/toolbar_font"
             style="?attr/rte_ToolbarSpinner"
-            android:background="?attr/rte_icToolbarFont" />
+            android:background="?attr/rte_icToolbarFont"/>
 
         <Spinner
             android:id="@+id/toolbar_fontsize"
             style="?attr/rte_ToolbarSpinner"
-            android:background="?attr/rte_icToolbarFontSize" />
+            android:background="?attr/rte_icToolbarFontSize"/>
 
         <Spinner
             android:id="@+id/toolbar_fontcolor"
             style="?attr/rte_ToolbarSpinner"
-            android:background="?attr/rte_icToolbarFontColor" />
-		
+            android:background="?attr/rte_icToolbarFontColor"/>
+
         <Spinner
             android:id="@+id/toolbar_bgcolor"
             style="?attr/rte_ToolbarSpinner"
-            android:background="?attr/rte_icToolbarBGColor" />
+            android:background="?attr/rte_icToolbarBGColor"/>
 
     </com.onegravity.rteditor.toolbar.HorizontalRTToolbar>
 

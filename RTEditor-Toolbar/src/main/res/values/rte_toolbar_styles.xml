@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<style name="RTE_ToolbarButton" parent="@android:style/Widget.ImageButton">
+    <style name="RTE_ToolbarButton" parent="@android:style/Widget.ImageButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -27,8 +27,8 @@
         <item name="android:gravity">center</item>
         <item name="android:adjustViewBounds">true</item>
     </style>
-	
-	<style name="RTE_ToolbarSpinnerLight" parent="@android:style/Widget.Holo.Light.Spinner">
+
+    <style name="RTE_ToolbarSpinnerLight" parent="@android:style/Widget.Holo.Light.Spinner">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -40,8 +40,8 @@
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">?android:attr/actionBarItemBackground</item>
     </style>
-	
-	<style name="RTE_ToolbarSpinnerDark" parent="@android:style/Widget.Holo.Spinner">
+
+    <style name="RTE_ToolbarSpinnerDark" parent="@android:style/Widget.Holo.Spinner">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -66,8 +66,8 @@
         <item name="android:textSize">@dimen/rte_spinnerTextSize</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
-    
-    <style name="RTE_VerticalDivider">
+
+    <style name="RTE_ToolbarVerticalDivider">
         <item name="android:layout_width">1dip</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginTop">5dp</item>

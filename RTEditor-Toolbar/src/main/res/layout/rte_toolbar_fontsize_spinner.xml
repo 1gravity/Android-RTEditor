@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,27 +17,27 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_gravity="center"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:background="?attr/rte_icToolbarFontSize">
-	
-	<ImageView
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:gravity="center"
-	    android:layout_gravity="center"
-	    android:scaleType="center"
-	    android:visibility="invisible"
-	    android:drawable="?attr/rte_icToolbarFontSize" />
 
-   	<TextView 
-	    android:id="@+id/title"
-	    android:textIsSelectable="false"
-	    android:paddingLeft="4dip"
-	    android:paddingRight="0dip"
-	    android:gravity="left|center_vertical"
-	    android:layout_gravity="left|center_vertical"
-	    style="?attr/rte_ToolbarSpinnerItem"/>
-	
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawable="?attr/rte_icToolbarFontSize"
+        android:gravity="center"
+        android:scaleType="center"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/title"
+        style="?attr/rte_ToolbarSpinnerItem"
+        android:layout_gravity="left|center_vertical"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="4dip"
+        android:paddingRight="0dip"
+        android:textIsSelectable="false"/>
+
 </FrameLayout>

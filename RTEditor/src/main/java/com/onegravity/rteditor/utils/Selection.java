@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,19 +60,15 @@ public class Selection implements Serializable {
         return mStart == mEnd;
     }
 
-    public Selection expandSelection(int offsetLeft, int offsetRight) {
-        int newStart = Math.max(0, mStart - offsetLeft);
-        int newEnd = mEnd + offsetRight;
-        return new Selection(newStart, newEnd);
-    }
-
-    public void union(Selection other) {
-        mStart = Math.min(mStart, other.mStart);
-        mEnd = Math.max(mEnd, other.mEnd);
+    public Selection offset(int offsetLeft, int offsetRight) {
+        mStart = Math.max(0, mStart - offsetLeft);
+        mEnd = mEnd + offsetRight;
+        return this;
     }
 
     @Override
     public String toString() {
         return "[" + mStart + ", " + mEnd + "]";
     }
+
 }

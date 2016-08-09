@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class RTEditorMovementMethod extends ArrowKeyMovementMethod {
 
     private static Rect sLineBounds = new Rect();
 
-    public static MovementMethod getInstance() {
+    public static synchronized  MovementMethod getInstance() {
         if (sInstance == null) {
             sInstance = new RTEditorMovementMethod();
         }
@@ -78,6 +78,7 @@ public class RTEditorMovementMethod extends ArrowKeyMovementMethod {
         return super.onTouchEvent(widget, buffer, event);
     }
 
+    // TODO finding links doesn't work with right alignment and potentially other formatting options
     private int getCharIndexAt(TextView textView, MotionEvent event) {
         // get coordinates
         int x = (int) event.getX();

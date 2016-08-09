@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package com.onegravity.rteditor.converter;
 
 import android.text.Layout;
-import android.text.style.AlignmentSpan;
 import android.text.style.ParagraphStyle;
 
+import com.onegravity.rteditor.spans.AlignmentSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
 
 /*
@@ -38,18 +38,16 @@ public enum ParagraphType {
     INDENTATION_OL("<ol style='list-style-type:none;'>", "</ol>", "<li style='list-style-type:none;'>", "</li>", false, true);
 
     public static ParagraphType getInstance(ParagraphStyle style) {
-        ParagraphType type;
-        if (style instanceof AlignmentSpan.Standard) {
-            Layout.Alignment align = ((AlignmentSpan.Standard) style).getAlignment();
-            type = align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
-                    align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
-                            ParagraphType.ALIGNMENT_RIGHT;
+        if (style instanceof AlignmentSpan) {
+            Layout.Alignment align = ((AlignmentSpan) style).getValue();
+            return align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
+                   align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
+                   ParagraphType.ALIGNMENT_RIGHT;
         } else {
-            type = style instanceof BulletSpan ? ParagraphType.BULLET :
-                    style instanceof NumberSpan ? ParagraphType.NUMBERING :
-                            style instanceof IntendationSpan ? ParagraphType.INDENTATION_UL : null;
+            return style instanceof BulletSpan ? ParagraphType.BULLET :
+                   style instanceof NumberSpan ? ParagraphType.NUMBERING :
+                   style instanceof IndentationSpan ? ParagraphType.INDENTATION_UL : null;
         }
-        return type;
     }
 
     final private String mStartTag;

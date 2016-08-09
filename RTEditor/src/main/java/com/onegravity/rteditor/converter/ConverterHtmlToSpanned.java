@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,8 @@ import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.AlignmentSpan;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StrikethroughSpan;
-import android.text.style.SubscriptSpan;
-import android.text.style.SuperscriptSpan;
-import android.text.style.UnderlineSpan;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -41,17 +33,24 @@ import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.HTMLSchema;
 import com.onegravity.rteditor.converter.tagsoup.Parser;
-import com.onegravity.rteditor.effects.LeadingMarginEffect;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
+import com.onegravity.rteditor.spans.AbsoluteSizeSpan;
+import com.onegravity.rteditor.spans.AlignmentSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.FontSpan;
+import com.onegravity.rteditor.spans.ForegroundColorSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
-import com.onegravity.rteditor.spans.IntendationSpan;
+import com.onegravity.rteditor.spans.IndentationSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
+import com.onegravity.rteditor.spans.StrikethroughSpan;
+import com.onegravity.rteditor.spans.SubscriptSpan;
+import com.onegravity.rteditor.spans.SuperscriptSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 import com.onegravity.rteditor.utils.Helper;
 
 import org.xml.sax.Attributes;
@@ -342,9 +341,11 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         } else if (tag.equalsIgnoreCase("del")) {
             end(Strikethrough.class, new StrikethroughSpan());
         } else if (tag.equalsIgnoreCase("big")) {
-            end(Big.class, new RelativeSizeSpan(1.25f));
+            int size = Helper.convertPxToSp(32);
+            end(Big.class, new AbsoluteSizeSpan(size));
         } else if (tag.equalsIgnoreCase("small")) {
-            end(Small.class, new RelativeSizeSpan(0.8f));
+            int size = Helper.convertPxToSp(14);
+            end(Small.class, new AbsoluteSizeSpan(size));
         } else if (tag.equalsIgnoreCase("font")) {
             endFont();
         } else if (tag.equalsIgnoreCase("blockquote")) {
@@ -381,17 +382,18 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
         mResult.removeSpan(obj);
         if (start != end) {
-            if (!checkDuplicateSpan(mResult, start, AlignmentSpan.Standard.class)) {
+            if (!checkDuplicateSpan(mResult, start, AlignmentSpan.class)) {
                 Div divObj = (Div) obj;
                 Layout.Alignment align = divObj.mAlign.equalsIgnoreCase("center") ? Layout.Alignment.ALIGN_CENTER :
-                        divObj.mAlign.equalsIgnoreCase("right") ? Layout.Alignment.ALIGN_OPPOSITE : null;
+                        divObj.mAlign.equalsIgnoreCase("right") ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL;
                 if (align != null) {
                     if (mResult.charAt(end - 1) != '\n') {
                         // yes we need that linefeed, or we will get crashes
                         mResult.append('\n');
                     }
                     // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
-                    mResult.setSpan(new AlignmentSpan.Standard(align), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    boolean isRTL = Helper.isRTL(mResult, start, end);
+                    mResult.setSpan(new AlignmentSpan(align, isRTL), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
         }
@@ -496,18 +498,18 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             int nrOfIndents = list.mNrOfIndents;
             if (!list.mIsIndentation) {
                 nrOfIndents--;
-                int gap = LeadingMarginEffect.getLeadingMargingIncrement();
+                int margin = Helper.getLeadingMarging();
                 // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
                 Object span = list instanceof UL ?
-                        new BulletSpan(gap, start == end, false, false) :
-                        new NumberSpan(1, gap, start == end, false, false);
+                        new BulletSpan(margin, start == end, false, false) :
+                        new NumberSpan(1, margin, start == end, false, false);
                 mResult.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             if (nrOfIndents > 0) {
-                int margin = nrOfIndents * LeadingMarginEffect.getLeadingMargingIncrement();
+                int margin = nrOfIndents * Helper.getLeadingMarging();
                 // use SPAN_EXCLUSIVE_EXCLUSIVE here, will be replaced later anyway when the cleanup function is called
-                IntendationSpan span = new IntendationSpan(margin, start == end, false, false);
+                IndentationSpan span = new IndentationSpan(margin, start == end, false, false);
                 mResult.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
@@ -614,7 +616,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     /*
      * Examples:
      * <font style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-	 * <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+     * <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
      */
     private static final Pattern FONT_SIZE = Pattern.compile("\\d+");
     private static final Pattern FONT_COLOR = Pattern.compile("#[a-f0-9]+");
@@ -681,8 +683,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             if (font.hasFontFace()) {
                 // Note: use SPAN_EXCLUSIVE_EXCLUSIVE, the TemporarySpan will be replaced by a SPAN_EXCLUSIVE_INCLUSIVE span
                 RTTypeface typeface = FontManager.getTypeface(font.mFontFace);
-                TemporarySpan span = new TemporarySpan(new FontSpan(typeface));
-                mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (typeface != null) {
+                    TemporarySpan span = new TemporarySpan(new TypefaceSpan(typeface));
+                    mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
             }
 
             // text size
@@ -788,35 +792,16 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
-    private static class Bold {
-    }
-
-    private static class Italic {
-    }
-
-    private static class Underline {
-    }
-
-    private static class Strikethrough {
-    }
-
-    private static class Super {
-    }
-
-    private static class Sub {
-    }
-
-    private static class Big {
-    }
-
-    private static class Small {
-    }
-
-    private static class Monospace {
-    }
-
-    private static class Blockquote {
-    }
+    private static class Bold {}
+    private static class Italic {}
+    private static class Underline {}
+    private static class Strikethrough {}
+    private static class Super {}
+    private static class Sub {}
+    private static class Big {}
+    private static class Small {}
+    private static class Monospace {}
+    private static class Blockquote {}
 
     private abstract static class List {
         int mNrOfIndents;

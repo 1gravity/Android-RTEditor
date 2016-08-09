@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,38 +21,38 @@ package com.onegravity.rteditor.converter;
  * It's the accumulated paragraph styles (all SingleParagraphStyle of a paragraph together)
  */
 public class AccumulatedParagraphStyle {
-	final private ParagraphType mType;
-	private int mAbsoluteIndent;
-	private int mRelativeIndent;
+    final private ParagraphType mType;
+    private int mAbsoluteIndent;
+    private int mRelativeIndent;
 
-	public AccumulatedParagraphStyle(ParagraphType type, int absoluteIndent, int relativeIndent) {
-		mType = type;
-		mAbsoluteIndent = absoluteIndent;
-		mRelativeIndent = relativeIndent;
-	}
+    public AccumulatedParagraphStyle(ParagraphType type, int absoluteIndent, int relativeIndent) {
+        mType = type;
+        mAbsoluteIndent = absoluteIndent;
+        mRelativeIndent = relativeIndent;
+    }
 
-	public ParagraphType getType() {
-		return mType;
-	}
+    public ParagraphType getType() {
+        return mType;
+    }
 
-	public int getAbsoluteIndent() {
-		return mAbsoluteIndent;
-	}
+    public int getAbsoluteIndent() {
+        return mAbsoluteIndent;
+    }
 
-	public int getRelativeIndent() {
-		return mRelativeIndent;
-	}
+    public int getRelativeIndent() {
+        return mRelativeIndent;
+    }
 
-	public void setAbsoluteIndent(int absoluteIndent) {
-		mAbsoluteIndent = absoluteIndent;
-	}
+    public void setAbsoluteIndent(int absoluteIndent) {
+        mAbsoluteIndent = absoluteIndent;
+    }
 
-	public void setRelativeIndent(int relativeIndent) {
-		mRelativeIndent = relativeIndent;
-	}
+    public void setRelativeIndent(int relativeIndent) {
+        mRelativeIndent = relativeIndent;
+    }
 
-	@Override
-	public String toString() {
-		return mType.name() + " - " + mAbsoluteIndent + "/" + mRelativeIndent;
-	}
+    @Override
+    public String toString() {
+        return mType.name() + " - " + mAbsoluteIndent + "/" + mRelativeIndent;
+    }
 }

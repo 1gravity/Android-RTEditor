@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import android.text.Spannable;
 import android.util.SparseIntArray;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.IntendationSpan;
 import com.onegravity.rteditor.spans.NumberSpan;
-import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -37,51 +37,52 @@ import java.util.List;
  * Each call to applyToSelection will make sure that each paragraph has again its own NumberSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class NumberEffect extends LeadingMarginEffect {
+public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
+
+    private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
+    public synchronized void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+        mSpans2Process.clear();
 
         int lineNr = 1;
         SparseIntArray indentations = new SparseIntArray();
         SparseIntArray numbers = new SparseIntArray();
-        for (Paragraph paragraph : editor.getParagraphs()) {
 
-			/*
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = editor.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
+
+            /*
              * We need to know the indentation for each paragraph to be able
-			 * to determine which paragraphs belong together (same indentation)
-			 */
+             * to determine which paragraphs belong together (same indentation)
+             */
             int currentIndentation = 0;
-            Object[] indentationSpans = Effects.INDENTATION.getCleanSpans(str, paragraph);
-            if (indentationSpans.length > 0) {
-                for (Object span : indentationSpans) {
-                    currentIndentation += ((IntendationSpan) span).getLeadingMargin();
+            List<RTSpan<Integer>> indentationSpans = Effects.INDENTATION.getSpans(str, paragraph, SpanCollectMode.EXACT);
+            if (! indentationSpans.isEmpty()) {
+                for (RTSpan<Integer> span : indentationSpans) {
+                    currentIndentation += span.getValue();
                 }
             }
             indentations.put(lineNr, currentIndentation);
 
-			/*
-			 * Find existing NumberSpans for this paragraph
-			 */
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
-            if (hasExistingSpans) {
-                for (Object span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
-                }
-            }
+            // find existing NumberSpans and add them to mSpans2Process to be removed
+            List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            mSpans2Process.removeSpans(existingSpans, paragraph);
 
-			/*
-			 * If the paragraph is selected then we sure have a number
-			 */
+            /*
+             * If the paragraph is selected then we sure have a number
+             */
+            boolean hasExistingSpans = ! existingSpans.isEmpty();
             boolean hasNumber = paragraph.isSelected(selectedParagraphs) ? enable : hasExistingSpans;
 
-			/*
-			 * If we have a number then apply a new span
-			 */
+            /*
+             * If we have a number then apply a new span
+             */
             if (hasNumber) {
                 // let's determine the number for this paragraph
                 int nr = 1;
@@ -99,25 +100,19 @@ public class NumberEffect extends LeadingMarginEffect {
                 }
                 numbers.put(lineNr, nr);
 
-                int gap = getLeadingMargingIncrement();
-                NumberSpan numberSpan = new NumberSpan(nr++, gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                spans2Process.add(new ParagraphSpan(numberSpan, paragraph, false));
+                int margin = Helper.getLeadingMarging();
+                NumberSpan numberSpan = new NumberSpan(nr++, margin, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                mSpans2Process.addSpan(numberSpan, paragraph);
 
-                // if the paragraph has bullet spans, then remove it
-                Effects.BULLET.findSpans2Remove(str, paragraph, spans2Process);
+                // if the paragraph has bullet spans, then remove them
+                Effects.BULLET.findSpans2Remove(str, paragraph, mSpans2Process);
             }
 
             lineNr++;
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
+        mSpans2Process.process(str);
     }
 
-    @Override
-    protected NumberSpan[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), NumberSpan.class);
-    }
 }

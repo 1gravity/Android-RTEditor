@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.onegravity.rteditor.fonts;
 
 import android.content.res.AssetManager;
 
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,10 +43,8 @@ abstract class TTFAnalyzer {
             RandomAccessFile file = new RandomAccessFile(filePath, "r");
             in = new TTFRandomAccessFile(file);
             return getTTFFontName(in, filePath);
-        } catch (FileNotFoundException e) {
-            return null;    // Missing permissions?
         } catch (IOException e) {
-            return null;    // Corrupted font file?
+            return null;    // Missing permissions or corrupted font file?
         }
         finally {
             IOUtils.closeQuietly(in);

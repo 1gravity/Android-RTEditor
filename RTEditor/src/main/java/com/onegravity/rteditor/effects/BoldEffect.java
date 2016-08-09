@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,4 @@ import com.onegravity.rteditor.spans.BoldSpan;
 /**
  * Bold text
  */
-public class BoldEffect extends SimpleBooleanEffect<BoldSpan> {
-    public BoldEffect() {
-        super(BoldSpan.class);
-    }
-}
+public class BoldEffect extends BooleanEffect<BoldSpan> {}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -34,12 +34,22 @@
         android:theme="@style/ThemeLight">
 
         <activity
-            android:name="com.onegravity.rteditor.demo.RichTextEditor">
+            android:name="com.onegravity.rteditor.demo.RTEditorActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />/>
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name="com.onegravity.rteditor.demo.RTEditorActivityWithFragment">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.EMBED" />
             </intent-filter>
 
         </activity>

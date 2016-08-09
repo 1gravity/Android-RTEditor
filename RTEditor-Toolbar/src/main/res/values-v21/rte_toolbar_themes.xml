@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="RTE_BaseThemeLight" parent="Theme.AppCompat.Light">
+    <style name="RTE_ThemeLight" parent="@style/RTE_ToolbarBaseThemeLight">
         <item name="rte_ToolbarSpinnerSelectedColor">#ffeeeeee</item>
-        <item name="android:statusBarColor">#E65100</item>
     </style>
 
-    <style name="RTE_BaseThemeDark" parent="Theme.AppCompat">
+    <style name="RTE_ThemeDark" parent="@style/RTE_ToolbarBaseThemeDark">
         <item name="rte_ToolbarSpinnerSelectedColor">#ff303030</item>
-        <item name="android:statusBarColor">#E65100</item>
     </style>
     
 </resources>

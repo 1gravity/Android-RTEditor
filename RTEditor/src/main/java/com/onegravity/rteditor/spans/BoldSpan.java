@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,20 @@
 package com.onegravity.rteditor.spans;
 
 import android.graphics.Typeface;
-import android.os.Parcel;
 import android.text.style.StyleSpan;
 
 /**
  * Implementation for a bold span (android.text.style.StyleSpan(TypeFace.BOLD))
  */
-public class BoldSpan extends StyleSpan {
+public class BoldSpan extends StyleSpan implements RTSpan<Boolean> {
 
     public BoldSpan() {
         super(Typeface.BOLD);
     }
 
-    public BoldSpan(int style) {
-        super(Typeface.BOLD);
-    }
-
-    public BoldSpan(Parcel src) {
-        super(src);
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
     }
 
 }

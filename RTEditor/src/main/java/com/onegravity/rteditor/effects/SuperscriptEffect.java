@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,9 @@
 
 package com.onegravity.rteditor.effects;
 
-import android.text.style.SuperscriptSpan;
+import com.onegravity.rteditor.spans.SuperscriptSpan;
 
 /**
  * Superscript text
  */
-public class SuperscriptEffect extends SimpleBooleanEffect<SuperscriptSpan> {
-    public SuperscriptEffect() {
-        super(SuperscriptSpan.class);
-    }
-}
+public class SuperscriptEffect extends BooleanEffect<SuperscriptSpan> {}

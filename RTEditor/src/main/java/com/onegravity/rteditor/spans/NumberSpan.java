@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ import android.text.style.LeadingMarginSpan;
  * (]0, 4][4, 4] --> the leading margin of the second span is added to the ]0, 4] paragraph regardless of the Spanned.flags)
  * --> therefore we ignore the leading margin for the last, empty paragraph unless it's the only one
  */
-public class NumberSpan implements LeadingMarginSpan {
+public class NumberSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagraphSpan<Boolean> {
+
     private final int mNr;
     private final int mGapWidth;
     private final boolean mIgnoreSpan;
@@ -41,6 +42,12 @@ public class NumberSpan implements LeadingMarginSpan {
         mNr = nr;
         mGapWidth = gapWidth;
         mIgnoreSpan = isEmpty && isLast && !isFirst;
+    }
+
+    private NumberSpan(int nr, int gapWidth, boolean ignoreSpan) {
+        mNr = nr;
+        mGapWidth = gapWidth;
+        mIgnoreSpan = ignoreSpan;
     }
 
     @Override
@@ -69,6 +76,16 @@ public class NumberSpan implements LeadingMarginSpan {
             p.setStyle(oldStyle);
             p.setTextSize(oldTextSize);
         }
+    }
+
+    @Override
+    public Boolean getValue() {
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public NumberSpan createClone() {
+        return new NumberSpan(mNr, mGapWidth, mIgnoreSpan);
     }
 
 }

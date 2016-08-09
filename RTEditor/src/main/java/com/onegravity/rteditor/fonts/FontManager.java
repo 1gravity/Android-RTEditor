@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 
-import org.apache.commons.io.FilenameUtils;
+import com.onegravity.rteditor.utils.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,8 +99,13 @@ public class FontManager {
         for (String fontName : assetFonts.keySet()) {
             String filePath = assetFonts.get(fontName);
             if (!ALL_FONTS.contains(fontName)) {
-                Typeface typeface = Typeface.createFromAsset(assets, filePath);
-                ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                try {
+                    Typeface typeface = Typeface.createFromAsset(assets, filePath);
+                    ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                }
+                catch (Exception e) {
+                    // this can happen if we don't have access to the font or it's not a font or...
+                }
             }
         }
 
@@ -111,8 +116,13 @@ public class FontManager {
         for (String fontName : systemFonts.keySet()) {
             String filePath = systemFonts.get(fontName);
             if (!ALL_FONTS.contains(fontName)) {
-                Typeface typeface = Typeface.createFromFile(filePath);
-                ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                try {
+                    Typeface typeface = Typeface.createFromFile(filePath);
+                    ALL_FONTS.add(new RTTypeface(fontName, typeface));
+                }
+                catch (Exception e) {
+                    // this can happen if we don't have access to the font or it's not a font or...
+                }
             }
         }
 
@@ -172,7 +182,7 @@ public class FontManager {
     private static void listFontFiles(AssetManager assets, Collection<String> fonts, String path) {
         try {
             String[] list = assets.list(path);
-            if (list.length > 0) {
+            if (list != null && list.length > 0) {
                 // it's a folder
                 for (String file : list) {
                     String prefix = "".equals(path) ? "" : path + File.separator;
@@ -194,8 +204,6 @@ public class FontManager {
      */
     private static Map<String, String> getSystemFonts() {
         synchronized (SYSTEM_FONTS_BY_NAME) {
-            Map<String, String> fonts = new TreeMap<String, String>();
-
             for (String fontDir : FONT_DIRS) {
                 File dir = new File(fontDir);
 

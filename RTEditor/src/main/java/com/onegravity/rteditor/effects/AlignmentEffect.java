@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package com.onegravity.rteditor.effects;
 import android.text.Layout;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
-import android.text.style.AlignmentSpan;
 
 import com.onegravity.rteditor.RTEditText;
-import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.AlignmentSpan;
+import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -37,60 +38,40 @@ import java.util.List;
  * Each call to applyToSelection will again make sure that each paragraph has again its own AlignmentSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class AlignmentEffect extends Effect<Layout.Alignment> implements ParagraphEffect {
+public class AlignmentEffect extends ParagraphEffect<Layout.Alignment, AlignmentSpan> {
+
+    private ParagraphSpanProcessor<Layout.Alignment> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public List<Alignment> valuesInSelection(RTEditText editor, int spanType) {
-        List<Alignment> result = new ArrayList<Alignment>();
-
-        Selection expandedSelection = editor.getParagraphsInSelection();
-        if (expandedSelection != null) {
-            for (AlignmentSpan.Standard span : getSpans(editor.getText(), expandedSelection)) {
-                result.add(span.getAlignment());
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public void applyToSelection(RTEditText editor, Layout.Alignment alignment) {
-        Selection selection = new Selection(editor);
-        applyToSelection(editor, selection, alignment);
-    }
-
     public void applyToSelection(RTEditText editor, Selection selectedParagraphs, Layout.Alignment alignment) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+        mSpans2Process.clear();
 
-        for (Paragraph paragraph : editor.getParagraphs()) {
-            // find existing alignment spans for this paragraph
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
-            if (hasExistingSpans)
-                for (Object span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
-                }
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = editor.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
+
+            // find existing AlignmentSpan and add them to mSpans2Process to be removed
+            List<RTSpan<Layout.Alignment>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            mSpans2Process.removeSpans(existingSpans, paragraph);
 
             // if the paragraph is selected then we sure have an alignment
+            boolean hasExistingSpans = !existingSpans.isEmpty();
             Alignment newAlignment = paragraph.isSelected(selectedParagraphs) ? alignment :
-                    hasExistingSpans ? ((AlignmentSpan.Standard) existingSpans[0]).getAlignment() : null;
+                                     hasExistingSpans ? existingSpans.get(0).getValue() : null;
 
             if (newAlignment != null) {
-                spans2Process.add(new ParagraphSpan(new AlignmentSpan.Standard(newAlignment), paragraph, false));
+                boolean isRTL = Helper.isRTL(str, paragraph.start(), paragraph.end());
+                AlignmentSpan alignmentSpan = new AlignmentSpan(newAlignment, isRTL);
+                mSpans2Process.addSpan(alignmentSpan, paragraph);
             }
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
-    }
-
-    @Override
-    protected AlignmentSpan.Standard[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), AlignmentSpan.Standard.class);
+        mSpans2Process.process(str);
     }
 
 }

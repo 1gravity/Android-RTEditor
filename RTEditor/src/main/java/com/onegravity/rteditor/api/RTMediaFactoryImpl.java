@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import com.onegravity.rteditor.api.media.RTVideoImpl;
 import com.onegravity.rteditor.media.MediaUtils;
 import com.onegravity.rteditor.utils.Helper;
 
-import org.apache.commons.io.IOUtils;
+import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,15 +72,15 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
         return mediaPath.getAbsolutePath();
     }
 
-	/*
+    /*
      * Use case 1: Inserting media objects into the rich text editor.
-	 * 
-	 * This default implementation copies all files into the dedicated media
-	 * storage area.
-	 */
+     *
+     * This default implementation copies all files into the dedicated media
+     * storage area.
+     */
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTImage createImage(RTMediaSource mediaSource) {
         File targetFile = loadMedia(mediaSource);
         return targetFile == null ? null :
@@ -88,7 +88,7 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTAudio createAudio(RTMediaSource mediaSource) {
         File targetFile = loadMedia(mediaSource);
         return targetFile == null ? null :
@@ -96,7 +96,7 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTVideo createVideo(RTMediaSource mediaSource) {
         File targetFile = loadMedia(mediaSource);
         return targetFile == null ? null :
@@ -128,29 +128,29 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
         }
     }
 
-	/*
-	 * Use case 2: Load a rich text with referenced media objects into the rich
-	 * text editor.
-	 * 
-	 * This default implementation doesn't apply any transformations to the path
-	 * because the files are stored in the file system where they can be
-	 * accessed directly by the rich text editor (via ImageSpan).  
-	 */
+    /*
+     * Use case 2: Load a rich text with referenced media objects into the rich
+     * text editor.
+     *
+     * This default implementation doesn't apply any transformations to the path
+     * because the files are stored in the file system where they can be
+     * accessed directly by the rich text editor (via ImageSpan).
+     */
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTImage createImage(String path) {
         return new RTImageImpl(path);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTAudio createAudio(String path) {
         return new RTAudioImpl(path);
     }
 
     @Override
-	/* @inheritDoc */
+    /* @inheritDoc */
     public RTVideo createVideo(String path) {
         return new RTVideoImpl(path);
     }

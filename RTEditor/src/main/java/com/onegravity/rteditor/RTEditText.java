@@ -25,6 +25,7 @@ import android.text.SpanWatcher;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ParagraphStyle;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,58 +42,22 @@ import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
-import com.onegravity.rteditor.effects.ParagraphEffect;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.LinkSpan.LinkSpanListener;
 import com.onegravity.rteditor.spans.MediaSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.RTLayout;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * The actual rich text editor (extending android.widget.EditText).
  */
 public class RTEditText extends EditText implements TextWatcher, SpanWatcher, LinkSpanListener {
-
-    /**
-     * The interface to be implemented by the RTManager to listen to RTEditText
-     * events.
-     */
-    public interface RTEditTextListener {
-
-        /*
-         * If this EditText changes focus the listener will be informed through
-         * this method.
-         */
-        void onFocusChanged(RTEditText editor, boolean focused);
-
-        /*
-         * Provides details of the new selection, including the start and ending
-         * character positions, and the id of this RTEditText component.
-         */
-        void onSelectionChanged(RTEditText editor, int start, int end);
-
-        /*
-         * Text and or text effects have changed (used for undo/redo function).
-         */
-        void onTextChanged(RTEditText editor, Spannable before, Spannable after,
-                           int selStartBefore, int selEndBefore, int selStartAfter, int selEndAfter);
-
-        /*
-         * A link in a LinkSpan has been clicked.
-         */
-        public void onClick(RTEditText editor, LinkSpan span);
-
-        /*
-         * Rich text editing was enabled/disabled for this editor.
-         */
-        public void onRichTextEditingChanged(RTEditText editor, boolean useRichText);
-
-    }
 
     // don't allow any formatting in text mode
     private boolean mUseRTFormatting = true;
@@ -120,14 +85,16 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     // used to check if selection has changed
     private int mOldSelStart = -1;
     private int mOldSelEnd = -1;
+    // we don't want to call Effects.cleanupParagraphs() if the paragraphs are already up to date
+    private boolean mParagraphsAreUp2Date;
+    // while Effects.cleanupParagraphs() is called, we ignore changes that would alter mParagraphsAreUp2Date
+    private boolean mIgnoreParagraphChanges;
 
-	/*
-     * Used for the undo / redo functions
-	 */
+    /* Used for the undo / redo functions */
 
     // if True then text changes are not registered for undo/redo
     // we need this during the actual undo/redo operation (or an undo would create a change event itself)
-    private boolean mIgnoreTextChange;
+    private boolean mIgnoreTextChanges;
 
     private int mSelStartBefore;        // selection start before text changed
     private int mSelEndBefore;          // selection end before text changed
@@ -188,7 +155,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         }
     }
 
-    /*
+    /**
      * Needs to be called if a media is added to the editor.
      * Important to be able to delete obsolete media once we're done editing.
      */
@@ -208,6 +175,9 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         mMediaFactory = mediaFactory;
     }
 
+    /**
+     * Usually called from the RTManager.onDestroy() method
+     */
     void unregister() {
         mListener = null;
         mMediaFactory = null;
@@ -216,9 +186,8 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     /**
      * Return all paragraphs as as array of selection objects
      */
-    public List<Paragraph> getParagraphs() {
-        RTLayout layout = getRTLayout();
-        return layout.getParagraphs();
+    public ArrayList<Paragraph> getParagraphs() {
+        return getRTLayout().getParagraphs();
     }
 
     /**
@@ -412,6 +381,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
 
     public void resetHasChanged() {
         mTextChanged = false;
+        setParagraphsAreUp2Date(false);
     }
 
     /**
@@ -420,7 +390,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      * undo would create a change event itself).
      */
     synchronized void ignoreTextChanges() {
-        mIgnoreTextChange = true;
+        mIgnoreTextChanges = true;
     }
 
     /**
@@ -428,15 +398,15 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
      * This is needed for the undo/redo functionality.
      */
     synchronized void registerTextChanges() {
-        mIgnoreTextChange = false;
+        mIgnoreTextChanges = false;
     }
 
     @Override
-	/* TextWatcher */
+    /* TextWatcher */
     public synchronized void beforeTextChanged(CharSequence s, int start, int count, int after) {
         // we use a String to get a static copy of the CharSequence (the CharSequence changes when the text changes...)
         String oldText = mOldText == null ? "" : mOldText;
-        if (!mIgnoreTextChange && !s.toString().equals(oldText)) {
+        if (!mIgnoreTextChanges && !s.toString().equals(oldText)) {
             mSelStartBefore = getSelectionStart();
             mSelEndBefore = getSelectionEnd();
             mOldText = s.toString();
@@ -447,42 +417,52 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     }
 
     @Override
-	/* TextWatcher */
+    /* TextWatcher */
     public synchronized void onTextChanged(CharSequence s, int start, int before, int count) {
         mLayoutChanged = true;
     }
 
     @Override
-	/* TextWatcher */
+    /* TextWatcher */
     public synchronized void afterTextChanged(Editable s) {
         String theText = s.toString();
         String newText = mNewText == null ? "" : mNewText;
-        if (mListener != null && !mIgnoreTextChange && !newText.equals(theText)) {
+        if (mListener != null && !mIgnoreTextChanges && !newText.equals(theText)) {
             Spannable newSpannable = cloneSpannable();
             mListener.onTextChanged(this, mOldSpannable, newSpannable, mSelStartBefore, mSelEndBefore, getSelectionStart(), getSelectionEnd());
             mNewText = theText;
         }
         mLayoutChanged = true;
         mTextChanged = true;
+        setParagraphsAreUp2Date(false);
         addSpanWatcher();
     }
 
     @Override
-	/* SpanWatcher */
+    /* SpanWatcher */
     public void onSpanAdded(Spannable text, Object what, int start, int end) {
         mTextChanged = true;
+        if (what instanceof RTSpan && what instanceof ParagraphStyle) {
+            setParagraphsAreUp2Date(false);
+        }
     }
 
     @Override
-	/* SpanWatcher */
+    /* SpanWatcher */
     public void onSpanChanged(Spannable text, Object what, int ostart, int oend, int nstart, int nend) {
         mTextChanged = true;
+        if (what instanceof RTSpan && what instanceof ParagraphStyle) {
+            setParagraphsAreUp2Date(false);
+        }
     }
 
     @Override
-	/* SpanWatcher */
+    /* SpanWatcher */
     public void onSpanRemoved(Spannable text, Object what, int start, int end) {
         mTextChanged = true;
+        if (what instanceof RTSpan && what instanceof ParagraphStyle) {
+            setParagraphsAreUp2Date(false);
+        }
     }
 
     /**
@@ -492,6 +472,12 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         Spannable spannable = getText();
         if (spannable.getSpans(0, spannable.length(), getClass()) != null) {
             spannable.setSpan(this, 0, spannable.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+    }
+
+    synchronized private void setParagraphsAreUp2Date(boolean value) {
+        if (! mIgnoreParagraphChanges) {
+            mParagraphsAreUp2Date = value;
         }
     }
 
@@ -536,6 +522,10 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         }
         else {
             super.onRestoreInstanceState(state);
+        }
+
+        if (mListener != null) {
+            mListener.onRestoredInstanceState(this);
         }
     }
 
@@ -588,7 +578,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     protected void onSelectionChanged(int start, int end) {
         if (mOldSelStart != start || mOldSelEnd != end) {
             mOldSelStart = start;
-            mOldSelStart = end;
+            mOldSelEnd = end;
 
             mTextSelected = (end > start);
 
@@ -596,8 +586,11 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
 
             if (mUseRTFormatting) {
 
-                if (!mIsSaving) {
+                if (!mIsSaving && !mParagraphsAreUp2Date) {
+                    mIgnoreParagraphChanges = true;
                     Effects.cleanupParagraphs(this);
+                    mIgnoreParagraphChanges = false;
+                    setParagraphsAreUp2Date(true);
                 }
 
                 if (mListener != null) {
@@ -610,25 +603,22 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         }
     }
 
-    /*
+    /**
      * Call this to have an effect applied to the current selection.
      * You get the Effect object via the static data members (e.g., RTEditText.BOLD).
      * The value for most effects is a Boolean, indicating whether to add or remove the effect.
      */
-    public <T> void applyEffect(Effect<T> effect, T value) {
+    public <V extends Object, C extends RTSpan<V>> void applyEffect(Effect<V, C> effect, V value) {
         if (mUseRTFormatting && !mIsSelectionChanging && !mIsSaving) {
-            Spannable oldSpannable = mIgnoreTextChange ? null : cloneSpannable();
+            Spannable oldSpannable = mIgnoreTextChanges ? null : cloneSpannable();
 
             effect.applyToSelection(this, value);
-            if (effect instanceof ParagraphEffect) {
-                Effects.cleanupParagraphs(this);
-            }
 
             synchronized (this) {
-                if (mListener != null && !mIgnoreTextChange) {
+                if (mListener != null && !mIgnoreTextChanges) {
                     Spannable newSpannable = cloneSpannable();
                     mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
-                            getSelectionStart(), getSelectionEnd());
+                                            getSelectionStart(), getSelectionEnd());
                 }
                 mLayoutChanged = true;
             }
@@ -636,7 +626,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     }
 
     @Override
-	/* LinkSpanListener */
+    /* LinkSpanListener */
     public void onClick(LinkSpan linkSpan) {
         if (mUseRTFormatting && mListener != null) {
             mListener.onClick(this, linkSpan);

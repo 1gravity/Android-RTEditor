@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@ import android.text.Spannable;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.spans.BulletSpan;
-import com.onegravity.rteditor.spans.ParagraphSpan;
+import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.Selection;
 
@@ -32,51 +33,46 @@ import java.util.List;
  * <p>
  * BulletSpans are always applied to whole paragraphs and each paragraphs gets its "own" BulletSpan (1:1).
  * Editing might violate this rule (deleting a line feed merges two paragraphs).
- * Each call to applyToSelection will again make sure that each paragraph has again its own BulletSpan
+ * Each call to applyToSelection will make sure that each paragraph has again its own BulletSpan
  * (call applyToSelection(RTEditText, null, null) and all will be good again).
  */
-public class BulletEffect extends LeadingMarginEffect {
+public class BulletEffect extends ParagraphEffect<Boolean, BulletSpan> {
+
+    private ParagraphSpanProcessor<Boolean> mSpans2Process = new ParagraphSpanProcessor();
 
     @Override
-    public void applyToSelection(final RTEditText editor, Selection selectedParagraphs, Boolean enable) {
+    public synchronized void applyToSelection(RTEditText editor, Selection selectedParagraphs, Boolean enable) {
         final Spannable str = editor.getText();
 
-        List<ParagraphSpan> spans2Process = new ArrayList<ParagraphSpan>();
+        mSpans2Process.clear();
 
-        for (Paragraph paragraph : editor.getParagraphs()) {
+        // a manual for loop is faster than the for-each loop for an ArrayList:
+        // see https://developer.android.com/training/articles/perf-tips.html#Loops
+        ArrayList<Paragraph> paragraphs = editor.getParagraphs();
+        for (int i = 0, size = paragraphs.size(); i < size; i++) {
+            Paragraph paragraph = paragraphs.get(i);
 
-            // find existing spans for this paragraph
-            Object[] existingSpans = getCleanSpans(str, paragraph);
-            boolean hasExistingSpans = existingSpans != null && existingSpans.length > 0;
-            if (hasExistingSpans) {
-                for (Object span : existingSpans) {
-                    spans2Process.add(new ParagraphSpan(span, paragraph, true));
-                }
-            }
+            // find existing BulletSpan and add them to mSpans2Process to be removed
+            List<RTSpan<Boolean>> existingSpans = getSpans(str, paragraph, SpanCollectMode.SPAN_FLAGS);
+            mSpans2Process.removeSpans(existingSpans, paragraph);
 
             // if the paragraph is selected then we sure have a bullet
+            boolean hasExistingSpans = !existingSpans.isEmpty();
             boolean hasBullet = paragraph.isSelected(selectedParagraphs) ? enable : hasExistingSpans;
 
             // if we have a bullet then apply a new span
             if (hasBullet) {
-                int gap = getLeadingMargingIncrement();
-                BulletSpan bulletSpan = new BulletSpan(gap, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
-                spans2Process.add(new ParagraphSpan(bulletSpan, paragraph, false));
+                int margin = Helper.getLeadingMarging();
+                BulletSpan bulletSpan = new BulletSpan(margin, paragraph.isEmpty(), paragraph.isFirst(), paragraph.isLast());
+                mSpans2Process.addSpan(bulletSpan, paragraph);
 
-                // if the parapgraph has number spans, then remove it
-                Effects.NUMBER.findSpans2Remove(str, paragraph, spans2Process);
+                // if the paragraph has number spans, then remove them
+                Effects.NUMBER.findSpans2Remove(str, paragraph, mSpans2Process);
             }
         }
 
         // add or remove spans
-        for (final ParagraphSpan spanDef : spans2Process) {
-            spanDef.process(str);
-        }
-    }
-
-    @Override
-    protected BulletSpan[] getSpans(Spannable str, Selection selection) {
-        return str.getSpans(selection.start(), selection.end(), BulletSpan.class);
+        mSpans2Process.process(str);
     }
 
 }

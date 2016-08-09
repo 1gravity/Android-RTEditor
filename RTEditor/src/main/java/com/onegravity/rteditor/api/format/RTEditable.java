@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,12 +64,12 @@ public final class RTEditable extends RTSpanned {
         Editable text = mEditor.getText();
         BaseInputConnection.removeComposingSpans(text);
 
-		/* 
-		  Cleanup ParagraphStyles to:
-		  - make sure spans are applied to whole paragraphs
-		  - remove obsolete spans
-		  - Note: the sequence is important
-		*/
+        /*
+         Cleanup ParagraphStyles to:
+          - make sure spans are applied to whole paragraphs
+          - remove obsolete spans
+          - Note: the sequence is important
+        */
         Effects.cleanupParagraphs(mEditor);
     }
 }

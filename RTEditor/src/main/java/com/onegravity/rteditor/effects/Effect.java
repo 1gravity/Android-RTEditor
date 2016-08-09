@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Emanuel Moecklin
+ * Copyright (C) 2015-2016 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,168 +17,119 @@
 package com.onegravity.rteditor.effects;
 
 import android.text.Spannable;
-import android.text.Spanned;
 
 import com.onegravity.rteditor.RTEditText;
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * Base class for all effects.
- * An "effect" is a particular type of styling to apply to the selected text in
- * a rich text editor. Most of them are wrappers around the corresponding
- * CharacterStyle classes (e.g. BulletSpan).
- * The generic type T is the sort of configuration information that the effect
- * needs -- many will be Effect<Boolean>, meaning the effect is a toggle (on or
- * off), such as boldface.
+ * An "effect" is a particular type of styling to apply to the selected text in a rich text editor.
+ * Most of them are wrappers around the corresponding CharacterStyle (Bold, Italic, font size etc.)
+ * or ParagraphStyle classes (e.g. BulletSpan).
+ *
+ * @param <V> is the sort of configuration information that the effect needs.
+ *           Many will be Effect<Boolean>, meaning the effect is a toggle (on or off), such as bold.
+ *
+ * @param <C> is the RTSpan<V> used by the Effect (e.g. BoldEffect uses BoldSpan)
  */
-abstract public class Effect<T> {
+abstract public class Effect<V, C extends RTSpan<V>> {
 
-    protected static class Range {
-        int start;
-        int end;
-
-        Range(int _start, int _end) {
-            start = _start;
-            end = _end;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + start + ", " + end + "]";
-        }
-    }
+    private SpanCollector<V> mSpanCollector;
 
     /**
-     * Returns the value of this styles in the current selection.
-     * Never null.
-     */
-    public abstract List<T> valuesInSelection(RTEditText editor, int spanType);
-
-    /**
-     * Apply this style to the selection
-     */
-    public abstract void applyToSelection(RTEditText editor, T value);
-
-    /**
-     * Return the Spans for this specific Effect within a a certain Spannable for a given Selection.
-     * The method must be implemented by all sub classes.
+     * Check whether the effect exists in the currently selected text of the active RTEditText.
      *
-     * @return The returned array of spans must NEVER be null.
+     * @param editor The RTEditText we want the check.
+     *
+     * @return True if the effect exists in the current selection, False otherwise.
      */
-    protected abstract Object[] getSpans(Spannable str, Selection selection);
+    final public boolean existsInSelection(RTEditText editor) {
+        Selection selection = getSelection(editor);
+        List<RTSpan<V>> spans = getSpans(editor.getText(), selection, SpanCollectMode.SPAN_FLAGS);
 
-    /**
-     * @param spanType correspondends to the four flags
-     *                 http://developer.android.com/reference/android/text/Spanned.html#SPAN_EXCLUSIVE_EXCLUSIVE
-     *                 http://developer.android.com/reference/android/text/Spanned.html#SPAN_EXCLUSIVE_INCLUSIVE
-     *                 http://developer.android.com/reference/android/text/Spanned.html#SPAN_INCLUSIVE_INCLUSIVE
-     *                 http://developer.android.com/reference/android/text/Spanned.html#SPAN_INCLUSIVE_EXCLUSIVE
-     */
-    public boolean existsInSelection(RTEditText editor, int spanType) {
-        Selection expandedSelection = getExpandedSelection(editor, spanType);
-        Object[] spans = getSpans(editor.getText(), expandedSelection);
-        return spans != null && spans.length > 0;
+        return ! spans.isEmpty();
     }
 
+    /**
+     * Returns the value(s) of this effect in the currently selected text of the active RTEditText.
+     *
+     * @return The returned list, must NEVER be null.
+     */
+    final public List<V> valuesInSelection(RTEditText editor) {
+        List<V> result = new ArrayList<V>();
+
+        Selection selection = getSelection(editor);
+        List<RTSpan<V>> spans = getSpans(editor.getText(), selection, SpanCollectMode.SPAN_FLAGS);
+        for (RTSpan<V> span : spans) {
+            result.add( span.getValue() );
+        }
+
+        return result;
+    }
+
+    /**
+     * Remove all effects of this type from the currently selected text of the active RTEditText.
+     * If the selection is empty (cursor), formatting for the whole text is removed.
+     */
     final public void clearFormattingInSelection(RTEditText editor) {
         Spannable text = editor.getText();
+
+        // if no selection --> select the whole text
+        // otherwise use the getSelection method (implented by sub classes)
         Selection selection = new Selection(editor);
-        if (selection.isEmpty()) {
-            selection = new Selection(0, text.length());
-        }
-        for (Object span : getSpans(text, selection)) {
+        selection = selection.isEmpty() ? new Selection(0, text.length()) : getSelection(editor);
+
+        List<RTSpan<V>> spans = getSpans(text, selection, SpanCollectMode.EXACT);
+        for (Object span : spans) {
             editor.getText().removeSpan(span);
         }
     }
 
-    final protected Selection getExpandedSelection(RTEditText editor, int spanType) {
-        Selection selection = new Selection(editor);
-        int offsetLeft = spanType == Spanned.SPAN_INCLUSIVE_EXCLUSIVE || spanType == Spanned.SPAN_INCLUSIVE_INCLUSIVE ? 1 : 0;
-        int offsetRight = spanType == Spanned.SPAN_EXCLUSIVE_INCLUSIVE || spanType == Spanned.SPAN_INCLUSIVE_INCLUSIVE ? 1 : 0;
-        return selection.expandSelection(offsetLeft, offsetRight);
-    }
-
     /**
-     * Given the current selection and an "extended" search area that is potentially a superset
-     * of the current selection, this method finds the range of characters for the style this Effect stands for.
-     * It does also remove all spans it finds. The caller is responsible to apply the ones still needed.
+     * Equivalent to the Spanned.getSpans(int, int, Class<T>) method.
+     * Return the markup objects (spans) attached to the specified slice of a Spannable.
+     * The type of the spans is defined in the SpanCollector.
      *
-     * @return Range The [start, end] interval of the styles within the "extended" search area
+     * @param str The Spannable to search for spans.
+     * @param selection The selection within the Spannable to search for spans.
+     * @param mode details see SpanCollectMode.
+     *
+     * @return the list of spans in this Spannable/Selection, never Null
      */
-    final protected Range getProAndEpilogue(Spannable str, Selection currentSelection, Selection selection2Search) {
-        int prologueStart = Integer.MAX_VALUE;
-        int epilogueEnd = -1;
-        for (Object span : getSpans(str, selection2Search)) {
-            int spanStart = str.getSpanStart(span);
-            if (spanStart < currentSelection.start()) {
-                prologueStart = Math.min(prologueStart, spanStart);
-            }
-
-            int spanEnd = str.getSpanEnd(span);
-            if (spanEnd > currentSelection.end()) {
-                epilogueEnd = Math.max(epilogueEnd, spanEnd);
-            }
-
-            str.removeSpan(span);
+    final public List<RTSpan<V>> getSpans(Spannable str, Selection selection, SpanCollectMode mode) {
+        if (mSpanCollector == null) {
+            // lazy initialize the SpanCollector
+            Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
+            Class<? extends RTSpan<V>> spanClazz = (Class<? extends RTSpan<V>>) types[types.length - 1];
+            mSpanCollector = newSpanCollector(spanClazz);
         }
-        return new Range(prologueStart, epilogueEnd);
+
+        return mSpanCollector.getSpans(str, selection, mode);
     }
 
     /**
-     * Spanned() unfortunately doesn't respects the mark/point flags (SPAN_EXCLUSIVE_EXCLUSIVE etc.).
-     * If a selection starts at the end or ends at the start of a span it will be returned by getSpans()
-     * regardless whether the span would really be applied to that selection if we were to enter text.
-     * E.g. [abc] with SPAN_EXCLUSIVE_EXCLUSIVE would not expand to a character entered at the end: [abc]d,
-     * nevertheless getSpans(3, 3, type) would still return the span.
-     * <p>
-     * This method returns just the spans that will affect the selection if text is entered.
+     * @return a new SpanCollector for this effect
      */
-    protected Object[] getCleanSpans(Spannable str, Selection sel) {
-        List<Object> spans = new ArrayList<Object>();
-        if (spans != null) {
-            for (Object span : getSpans(str, sel)) {
-                if (isCleanSpan(str, sel, span)) {
-                    spans.add(span);
-                }
-            }
-        }
-        return spans.toArray();
-    }
+    abstract protected SpanCollector<V> newSpanCollector(Class<? extends RTSpan<V>> spanClazz);
 
-    private boolean isCleanSpan(Spannable str, Selection sel, Object span) {
-        int spanStart = str.getSpanStart(span);
-        int spanEnd = str.getSpanEnd(span);
-        int start = Math.max(spanStart, sel.start());
-        int end = Math.min(spanEnd, sel.end());
+    /**
+     * @return the Selection for the specified RTEditText.
+     */
+    abstract protected Selection getSelection(RTEditText editor);
 
-        if (start < end) {
-            // 1) at least one character in common:
-            // span...
-            // [  [xx]    ]
-            //    selection
-            return true;
-        } else if (start > end) {
-            // 2) no character in common and not adjunctive
-            // [span]...[selection] or [selection]...[span]
-            return false;
-        } else {
-            // 3) adjunctive
-            int flags = str.getSpanFlags(span) & Spanned.SPAN_POINT_MARK_MASK;
-            if (spanEnd == sel.start()) {
-                // [span][selection] -> span must include at the end
-                return ((flags & Spanned.SPAN_EXCLUSIVE_INCLUSIVE) == Spanned.SPAN_EXCLUSIVE_INCLUSIVE) ||
-                        ((flags & Spanned.SPAN_INCLUSIVE_INCLUSIVE) == Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            } else {
-                // [selection][span] -> span must include at the start
-                return ((flags & Spanned.SPAN_INCLUSIVE_EXCLUSIVE) == Spanned.SPAN_INCLUSIVE_EXCLUSIVE) ||
-                        ((flags & Spanned.SPAN_INCLUSIVE_INCLUSIVE) == Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            }
-
-        }
-
-    }
+    /**
+     * Apply this effect to the selection.
+     * If value is Null then the effect will be removed from the current selection.
+     *
+     * @param editor The editor to apply the effect to (current selection)
+     * @param value The value to apply (depends on the Effect)
+     */
+    abstract public void applyToSelection(RTEditText editor, V value);
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015 Emanuel Moecklin
+  Copyright (C) 2015-2016 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@
 <selector
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:onegravity="http://schemas.android.com/apk/res-auto">
-    
-    <item android:state_pressed="true"									android:drawable="@drawable/ic_toolbar_align_center_dark_pressed"/>
-    <item android:state_pressed="false"	onegravity:state_checked="true"	android:drawable="@drawable/ic_toolbar_align_center_dark_checked"/>
-    <item																android:drawable="@drawable/ic_toolbar_align_center_dark"/>
-        
+
+    <item android:drawable="@drawable/ic_toolbar_align_center_dark_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/ic_toolbar_align_center_dark_checked" android:state_pressed="false" onegravity:state_checked="true"/>
+    <item android:drawable="@drawable/ic_toolbar_align_center_dark"/>
+
 </selector>
