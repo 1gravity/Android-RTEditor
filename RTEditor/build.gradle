@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-    compile 'com.1gravity:android-colorpicker:2.0.1'
+    compile 'com.1gravity:android-colorpicker:2.0.2'
 }
 
 apply from: '../android-artifacts.gradle'
