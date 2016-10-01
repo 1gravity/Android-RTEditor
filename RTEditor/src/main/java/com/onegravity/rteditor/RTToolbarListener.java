@@ -39,4 +39,5 @@ public interface RTToolbarListener {
 
     public void onCaptureImage();
 
+    public void onInsertBarcode();
 }
