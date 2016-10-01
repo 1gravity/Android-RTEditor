@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_margin_top_bottom"
+    android:paddingLeft="@dimen/dialog_margin_left_right"
+    android:paddingRight="@dimen/dialog_margin_left_right"
+    android:paddingTop="@dimen/dialog_margin_top_bottom">
+
+    <EditText
+        android:id="@+id/barcodeData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/rte_barcode_enter_text"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/barcodeWidth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/rte_barcode_enter_width"
+        android:inputType="number"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</LinearLayout>
