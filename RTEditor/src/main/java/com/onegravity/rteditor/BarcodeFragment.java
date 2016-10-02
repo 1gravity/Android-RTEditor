@@ -32,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.EnumMap;
-import java.util.IllegalFormatException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -205,7 +204,7 @@ public class BarcodeFragment extends DialogFragment {
         try {
             width = Integer.parseInt(widthString);
         }
-        catch (IllegalFormatException ignore) {}
+        catch (NumberFormatException ignore) {}
 
         String errorMessage = null;
 
