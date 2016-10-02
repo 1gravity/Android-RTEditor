@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.onegravity.rteditor;
+package com.onegravity.rteditor.link;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -29,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.validator.EmailValidator;
 import com.onegravity.rteditor.utils.validator.UrlValidator;
@@ -44,59 +44,6 @@ public class LinkFragment extends DialogFragment {
 
     private static final String LINK_ADDRESS = "link_address";
     private static final String LINK_TEXT = "link_text";
-
-    /**
-     * The Link class describes a link (link text and an URL).
-     */
-    static class Link {
-        final private String mLinkText;
-        final private String mUrl;
-
-        private Link(String linkText, String url) {
-            mLinkText = linkText;
-            mUrl = url;
-        }
-
-        public String getLinkText() {
-            return mLinkText;
-        }
-
-        public String getUrl() {
-            return mUrl;
-        }
-
-        public boolean isValid() {
-            return mUrl != null && mUrl.length() > 0 && mLinkText != null && mLinkText.length() > 0;
-        }
-    }
-
-    /**
-     * This event is broadcast via EventBus when the dialog closes.
-     * It's received by the RTManager to update the active editor.
-     */
-    static class LinkEvent {
-        private final String mFragmentTag;
-        private final Link mLink;
-        private final boolean mWasCancelled;
-
-        public LinkEvent(Fragment fragment, Link link, boolean wasCancelled) {
-            mFragmentTag = fragment.getTag();
-            mLink = link;
-            mWasCancelled = wasCancelled;
-        }
-
-        public String getFragmentTag() {
-            return mFragmentTag;
-        }
-
-        public Link getLink() {
-            return mLink;
-        }
-
-        public boolean wasCancelled() {
-            return mWasCancelled;
-        }
-    }
 
     private static final UrlValidator sUrlValidator = new UrlValidator(UrlValidator.ALLOW_2_SLASHES + UrlValidator.ALLOW_ALL_SCHEMES);
     private static final EmailValidator sEmailValidator = EmailValidator.getInstance(false);
