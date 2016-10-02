@@ -1,10 +1,25 @@
-package com.onegravity.rteditor;
+/*
+ * Copyright (C) 2016 Emanuel Moecklin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.onegravity.rteditor.barcode;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -22,7 +37,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.onegravity.rteditor.api.format.RTFormat;
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.media.RTImage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,85 +61,6 @@ public class BarcodeFragment extends DialogFragment {
 
     private static final String BARCODE_DATA = "barcode_data";
     private static final String BARCODE_WIDTH = "barcode_width";
-
-
-    static class Barcode {
-        final private RTImage mBarcode;
-        final private Bitmap mBitmap;
-        final private String mEncodeText;
-        final private int mWidth;
-
-        private Barcode(RTImage barcode, String encodeText, int width) {
-            mBarcode = barcode;
-            mBitmap = null;
-            mEncodeText = encodeText;
-            mWidth = width;
-        }
-
-        private Barcode(Bitmap bitmap, String encodeText, int width) {
-            mBarcode = null;
-            mBitmap = bitmap;
-            mEncodeText = encodeText;
-            mWidth = width;
-        }
-
-        public Barcode(RTImage mBarcode, Bitmap mBitmap, String mEncodeText, int mWidth) {
-            this.mBarcode = mBarcode;
-            this.mBitmap = mBitmap;
-            this.mEncodeText = mEncodeText;
-            this.mWidth = mWidth;
-        }
-
-
-        public RTImage getImage() {
-            return mBarcode;
-        }
-
-        public Bitmap getBitmap() {
-            return mBitmap;
-        }
-
-        public String getEncodeText() {
-            return mEncodeText;
-        }
-
-        public int getWidth() {
-            return mWidth;
-        }
-
-        public boolean isValid() {
-            return !mEncodeText.isEmpty() && mWidth != 0;
-        }
-    }
-
-    /**
-     * This event is broadcast via EventBus when the dialog closes.
-     * It's received by the RTManager to update the active editor.
-     */
-    static class BarcodeEvent {
-        private final String mFragmentTag;
-        private final Barcode mBarcode;
-        private final boolean mWasCancelled;
-
-        BarcodeEvent(Fragment fragment, Barcode barcode, boolean wasCancelled) {
-            mFragmentTag = fragment.getTag();
-            mBarcode = barcode;
-            mWasCancelled = wasCancelled;
-        }
-
-
-        public String getFragmentTag() {
-            return mFragmentTag;
-        }
-
-        public Barcode getBarcode() {
-            return mBarcode;
-        }
-
-        public boolean wasCancelled() {
-            return mWasCancelled;
-        }
-    }
 
     public static BarcodeFragment newInstance(String encodeText, int width) {
         BarcodeFragment fragment = new BarcodeFragment();
@@ -268,7 +204,6 @@ public class BarcodeFragment extends DialogFragment {
     }
 
     private class FileSaveAsyncTask extends AsyncTask<Barcode, Void, RTImage> {
-
         Activity activity;
         Bitmap bitmap;
         String data;
@@ -310,47 +245,7 @@ public class BarcodeFragment extends DialogFragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                barcode = new RTImage() {
-                    @Override
-                    public String getFilePath(RTFormat format) {
-                        return pathImage;
-                    }
-
-                    @Override
-                    public String getFileName() {
-                        return pathImage.substring(pathImage.lastIndexOf("/"));
-                    }
-
-                    @Override
-                    public String getFileExtension() {
-                        return pathImage.substring(pathImage.lastIndexOf("."));
-                    }
-
-                    @Override
-                    public boolean exists() {
-                        return new File(pathImage).exists();
-                    }
-
-                    @Override
-                    public void remove() {
-                        new File(pathImage).delete();
-                    }
-
-                    @Override
-                    public int getWidth() {
-                        return width;
-                    }
-
-                    @Override
-                    public int getHeight() {
-                        return width;
-                    }
-
-                    @Override
-                    public long getSize() {
-                        return bitmap.getByteCount();
-                    }
-                };
+                barcode = new BarcodeImage(pathImage);
             }
 
             return barcode;
