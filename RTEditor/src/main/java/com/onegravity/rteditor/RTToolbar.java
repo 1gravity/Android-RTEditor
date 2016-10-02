@@ -35,19 +35,19 @@ public interface RTToolbar {
      * There can be only one since this should be the RTManager and there's only
      * one of those (per layout).
      */
-    public void setToolbarListener(RTToolbarListener listener);
+    void setToolbarListener(RTToolbarListener listener);
 
     /**
      * Remove this toolbar's listener.
      */
-    public void removeToolbarListener();
+    void removeToolbarListener();
 
     /**
      * We can have more than one toolbar identified by this unique Id
      * (unique per layout).
      * It can be implemented e.g. by using a static counter.
      */
-    public int getId();
+    int getId();
 
     /**
      * This is merely a way to store the container in which the toolbar is shown
@@ -56,46 +56,46 @@ public interface RTToolbar {
      *
      * @param toolbarContainer The ViewGroup that contains this RTToolbar.
      */
-    public void setToolbarContainer(ViewGroup toolbarContainer);
+    void setToolbarContainer(ViewGroup toolbarContainer);
 
     /**
      * @return The ViewGroup that contains this RTToolbar.
      */
-    public ViewGroup getToolbarContainer();
+    ViewGroup getToolbarContainer();
 
-    public void setBold(boolean enabled);
+    void setBold(boolean enabled);
 
-    public void setItalic(boolean enabled);
+    void setItalic(boolean enabled);
 
-    public void setUnderline(boolean enabled);
+    void setUnderline(boolean enabled);
 
-    public void setStrikethrough(boolean enabled);
+    void setStrikethrough(boolean enabled);
 
-    public void setSuperscript(boolean enabled);
+    void setSuperscript(boolean enabled);
 
-    public void setSubscript(boolean enabled);
+    void setSubscript(boolean enabled);
 
-    public void setBullet(boolean enabled);
+    void setBullet(boolean enabled);
 
-    public void setNumber(boolean enabled);
+    void setNumber(boolean enabled);
 
-    public void setAlignment(Layout.Alignment alignment);
+    void setAlignment(Layout.Alignment alignment);
 
-    public void setFont(RTTypeface typeface);
+    void setFont(RTTypeface typeface);
 
     /**
      * Set the text size.
      *
      * @param size the text size, if -1 then no text size is set (e.g. when selection spans more than one text size)
      */
-    public void setFontSize(int size);
+    void setFontSize(int size);
 
-    public void setFontColor(int color);
+    void setFontColor(int color);
 
-    public void setBGColor(int color);
+    void setBGColor(int color);
 
-    public void removeFontColor();
+    void removeFontColor();
 
-    public void removeBGColor();
+    void removeBGColor();
 
 }
