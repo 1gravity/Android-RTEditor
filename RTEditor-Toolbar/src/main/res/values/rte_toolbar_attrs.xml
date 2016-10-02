@@ -41,6 +41,7 @@
         <attr name="rte_icToolbarFontColor" format="reference"/>
         <attr name="rte_icToolbarBGColor" format="reference"/>
         <attr name="rte_icToolbarLink" format="reference"/>
+        <attr name="rte_icToolbarBarcode" format="reference"/>
         <attr name="rte_icToolbarImage" format="reference"/>
         <attr name="rte_icToolbarCapture" format="reference"/>
         <attr name="rte_icToolbarUndo" format="reference"/>

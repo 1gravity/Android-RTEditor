@@ -43,6 +43,7 @@
         <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_light</item>
         <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_light</item>
         <item name="rte_icToolbarLink">@drawable/selector_ic_toolbar_link_light</item>
+        <item name="rte_icToolbarBarcode">@drawable/ic_toolbar_barcode_selected</item>
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
         <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_light</item>
@@ -78,6 +79,7 @@
         <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_dark</item>
         <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_dark</item>
         <item name="rte_icToolbarLink">@drawable/selector_ic_toolbar_link_dark</item>
+        <item name="rte_icToolbarBarcode">@drawable/ic_toolbar_barcode_selected</item>
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_dark</item>
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_dark</item>
         <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_dark</item>
