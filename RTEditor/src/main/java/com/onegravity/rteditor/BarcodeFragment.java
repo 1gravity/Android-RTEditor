@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -33,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.IllegalFormatException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -136,8 +136,7 @@ public class BarcodeFragment extends DialogFragment {
         return fragment;
     }
 
-    public BarcodeFragment() {
-    }
+    public BarcodeFragment() {}
 
     @NonNull
     @SuppressLint("InflateParams")
@@ -200,7 +199,14 @@ public class BarcodeFragment extends DialogFragment {
 
     private void validate(EditText dataView, EditText widthView) throws WriterException, IOException {
         final String data = dataView.getText().toString().trim();
-        final int width = Integer.parseInt(widthView.getText().toString());
+
+        int width = 200;    // default size of the QR code
+        String widthString = widthView.getText().toString();
+        try {
+            width = Integer.parseInt(widthString);
+        }
+        catch (IllegalFormatException ignore) {}
+
         String errorMessage = null;
 
         if (!data.isEmpty()) {
