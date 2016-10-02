@@ -42,6 +42,7 @@ import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
+import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.LinkSpan.LinkSpanListener;
 import com.onegravity.rteditor.spans.MediaSpan;
@@ -57,7 +58,9 @@ import java.util.Set;
 /**
  * The actual rich text editor (extending android.widget.EditText).
  */
-public class RTEditText extends EditText implements TextWatcher, SpanWatcher, LinkSpanListener {
+public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
+        LinkSpanListener,
+        BarcodeSpan.BarcodeSpanListener {
 
     // don't allow any formatting in text mode
     private boolean mUseRTFormatting = true;
@@ -627,9 +630,17 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
 
     @Override
     /* LinkSpanListener */
-    public void onClick(LinkSpan linkSpan) {
+    public void onLinkClicked(LinkSpan linkSpan) {
         if (mUseRTFormatting && mListener != null) {
             mListener.onClick(this, linkSpan);
+        }
+    }
+
+    /* BarcodeSpanListener */
+    @Override
+    public void onBarcodeClicked(BarcodeSpan barcodeSpan) {
+        if (mUseRTFormatting && mListener != null) {
+            mListener.onClick(this, barcodeSpan);
         }
     }
 

@@ -30,6 +30,8 @@ import android.text.style.LeadingMarginSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
+import com.onegravity.rteditor.spans.BarcodeSpan;
+
 /**
  * ArrowKeyMovementMethod does support selection of text but not the clicking of links.
  * LinkMovementMethod does support clicking of links but not the selection of text.
@@ -69,9 +71,12 @@ public class RTEditorMovementMethod extends ArrowKeyMovementMethod {
                     return true;
                 }
             }
-            /*else {
-                Selection.removeSelection(buffer);
-            }*/
+            else {
+                ClickableSpan[] link = buffer.getSpans(0, buffer.length(), BarcodeSpan.class);
+                if (link.length != 0) {
+                    link[0].onClick(widget);
+                }
+            }
 
         }
 

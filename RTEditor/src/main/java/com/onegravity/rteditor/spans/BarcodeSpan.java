@@ -16,34 +16,37 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.text.style.URLSpan;
+import android.text.style.ClickableSpan;
 import android.view.View;
 
-/**
- * A wrapper around an android.text.style.URLSpan that forwards clicks to the
- * View it's embedded in.
- * That View is the RTEditText which implements the LinkSpanListener interface.
- */
-public class LinkSpan extends URLSpan implements RTSpan<String> {
+import com.onegravity.rteditor.barcode.Barcode;
 
-    public interface LinkSpanListener {
-        void onLinkClicked(LinkSpan linkSpan);
+/**
+ * A wrapper around an android.text.style.ClickableSpan that forwards clicks to the
+ * View it's embedded in.
+ * That View is the RTEditText which implements the BarcodeSpanListener interface.
+ */
+public class BarcodeSpan extends ClickableSpan {
+
+    public interface BarcodeSpanListener {
+        void onBarcodeClicked(BarcodeSpan linkSpan);
     }
 
-    public LinkSpan(String url) {
-        super(url);
+    private final Barcode mBarcode;
+
+    public BarcodeSpan(Barcode barcode) {
+        mBarcode = barcode;
     }
 
     @Override
     public void onClick(View view) {
-        if (view instanceof LinkSpanListener) {
-            ((LinkSpanListener) view).onLinkClicked(this);
+        if (view instanceof BarcodeSpanListener) {
+            ((BarcodeSpanListener) view).onBarcodeClicked(this);
         }
     }
 
-    @Override
-    public String getValue() {
-        return getURL();
+    public Barcode getValue() {
+        return mBarcode;
     }
 
 }

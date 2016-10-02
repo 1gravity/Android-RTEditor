@@ -18,6 +18,7 @@ package com.onegravity.rteditor;
 
 import android.text.Spannable;
 
+import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 
 /**
@@ -53,11 +54,16 @@ public interface RTEditTextListener {
     /**
      * A link in a LinkSpan has been clicked.
      */
-    public void onClick(RTEditText editor, LinkSpan span);
+    void onClick(RTEditText editor, LinkSpan span);
+
+    /**
+     * A barcode in a BarcodeSpan has been clicked.
+     */
+    void onClick(RTEditText editor, BarcodeSpan span);
 
     /**
      * Rich text editing was enabled/disabled for this editor.
      */
-    public void onRichTextEditingChanged(RTEditText editor, boolean useRichText);
+    void onRichTextEditingChanged(RTEditText editor, boolean useRichText);
 
 }
