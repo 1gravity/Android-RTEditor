@@ -65,8 +65,10 @@ public class BarcodeFragment extends DialogFragment {
     public static BarcodeFragment newInstance(String encodeText, int width) {
         BarcodeFragment fragment = new BarcodeFragment();
         Bundle args = new Bundle();
-        args.putString(BARCODE_DATA, encodeText);
-        args.putInt(BARCODE_WIDTH, width);
+        if (encodeText != null) {
+            args.putString(BARCODE_DATA, encodeText);
+            args.putInt(BARCODE_WIDTH, width);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,16 +87,15 @@ public class BarcodeFragment extends DialogFragment {
 
         // barcode data
         final String data = args.getString(BARCODE_DATA);
-
         final EditText dataView = ((EditText) view.findViewById(R.id.barcodeData));
         if (data != null) {
             dataView.setText(data);
         }
 
         // barcode width
-        final int width = args.getInt(BARCODE_WIDTH) != 0 ? args.getInt(BARCODE_WIDTH) : 200;
+        int width = args.getInt(BARCODE_WIDTH);
         final EditText widthView = ((EditText) view.findViewById(R.id.barcodeWidth));
-        if (width > 1500) {
+        if (width > 10) {
             widthView.setText(String.valueOf(width));
         }
 

@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -31,13 +30,13 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Toast;
 
-import com.onegravity.rteditor.BarcodeFragment.BarcodeEvent;
-import com.onegravity.rteditor.LinkFragment.Link;
-import com.onegravity.rteditor.LinkFragment.LinkEvent;
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMedia;
+import com.onegravity.rteditor.barcode.Barcode;
+import com.onegravity.rteditor.barcode.BarcodeEvent;
+import com.onegravity.rteditor.barcode.BarcodeFragment;
 import com.onegravity.rteditor.effects.AbsoluteSizeEffect;
 import com.onegravity.rteditor.effects.AlignmentEffect;
 import com.onegravity.rteditor.effects.BackgroundColorEffect;
@@ -55,8 +54,12 @@ import com.onegravity.rteditor.effects.SuperscriptEffect;
 import com.onegravity.rteditor.effects.TypefaceEffect;
 import com.onegravity.rteditor.effects.UnderlineEffect;
 import com.onegravity.rteditor.fonts.RTTypeface;
+import com.onegravity.rteditor.link.Link;
+import com.onegravity.rteditor.link.LinkEvent;
+import com.onegravity.rteditor.link.LinkFragment;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
 import com.onegravity.rteditor.media.choose.MediaEvent;
+import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
@@ -88,7 +91,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      */
     private static final String ID_01_LINK_FRAGMENT = "ID_01_LINK_FRAGMENT";
     private static final String ID_02_BARCODE_FRAGMENT = "ID_02_BARCODE_FRAGMENT";
-
 
     /*
      * The toolbar(s) may automatically be shown or hidden when a rich text
@@ -457,6 +459,14 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
+    public void onInsertBarcode() {
+        RTEditText editor = getActiveEditor();
+        if (editor != null) {
+            mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(null, 0));
+        }
+    }
+
+    @Override
     /* @inheritDoc */
     public void onPickImage() {
         onPickCaptureImage(MediaAction.PICK_PICTURE);
@@ -466,18 +476,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     /* @inheritDoc */
     public void onCaptureImage() {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
-    }
-
-    @Override
-    public void onInsertBarcode() {
-        RTEditText editor = getActiveEditor();
-        if (editor != null) {
-            String data;
-            int width = 200;
-            data = editor.getSelectedText();
-
-            mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(data, width));
-        }
     }
 
     private void onPickCaptureImage(MediaAction mediaAction) {
@@ -493,8 +491,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    /* called from onEventMainThread(MediaEvent) */
-    private void insertImage(final RTEditText editor, final RTImage image) {
+    /* called from onEventMainThread(MediaEvent) and from onEventMainThread(BarcodeEvent event) */
+    private void insertImage(final RTEditText editor, final RTImage image, Barcode barcode) {
         if (image != null && editor != null) {
             Selection selection = new Selection(editor);
             Editable str = editor.getText();
@@ -509,6 +507,12 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
                 ImageSpan imageSpan = new ImageSpan(image, false);
                 str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                if (barcode != null) {
+                    BarcodeSpan barcodeSpan = new BarcodeSpan(barcode);
+                    str.setSpan(barcodeSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
                 int selStartAfter = editor.getSelectionStart();
                 int selEndAfter = editor.getSelectionEnd();
                 editor.onAddMedia(image);
@@ -704,35 +708,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    private String getLinkText(RTEditText editor, RTSpan<String> span) {
-        Spannable text = editor.getText();
-        final int spanStart = text.getSpanStart(span);
-        final int spanEnd = text.getSpanEnd(span);
-        String linkText = null;
-        if (spanStart >= 0 && spanEnd >= 0 && spanEnd <= text.length()) {
-            linkText = text.subSequence(spanStart, spanEnd).toString();
-            mLinkSelection = new Selection(spanStart, spanEnd);
-        } else {
-            mLinkSelection = editor.getSelection();
-        }
-        return linkText;
-    }
-
-    /**
-     * Media file was picked -> process the result.
-     */
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(MediaEvent event) {
-
-        RTEditText editor = mEditors.get(mActiveEditor);
-        RTMedia media = event.getMedia();
-        if (editor != null && media instanceof RTImage) {
-            insertImage(editor, (RTImage) media);
-            EventBus.getDefault().removeStickyEvent(event);
-            mActiveEditor = Integer.MAX_VALUE;
-        }
-    }
-
     /**
      * LinkFragment has closed -> process the result.
      */
@@ -772,20 +747,58 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
+    private String getLinkText(RTEditText editor, RTSpan<String> span) {
+        Spannable text = editor.getText();
+        final int spanStart = text.getSpanStart(span);
+        final int spanEnd = text.getSpanEnd(span);
+        String linkText = null;
+        if (spanStart >= 0 && spanEnd >= 0 && spanEnd <= text.length()) {
+            linkText = text.subSequence(spanStart, spanEnd).toString();
+            mLinkSelection = new Selection(spanStart, spanEnd);
+        } else {
+            mLinkSelection = editor.getSelection();
+        }
+        return linkText;
+    }
+
     /**
      * Media file was picked -> process the result.
      */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(BarcodeEvent event) {
-        RTEditText editor = getActiveEditor();
-        RTImage media = event.getBarcode().getImage();
-        if (editor != null && media != null) {
-            insertImage(editor, media);
+    public void onEventMainThread(MediaEvent event) {
+        RTEditText editor = mEditors.get(mActiveEditor);
+        RTMedia media = event.getMedia();
+        if (editor != null && media instanceof RTImage) {
+            insertImage(editor, (RTImage) media, null);
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }
     }
 
+    @Override
+    /* @inheritDoc */
+    public void onClick(RTEditText editor, BarcodeSpan span) {
+        Barcode barcode = span.getValue();
+        mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(barcode.getEncodeText(), barcode.getWidth()));
+    }
+
+    /**
+     * Barcode created -> insert the barcode image.
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(BarcodeEvent event) {
+        final String fragmentTag = event.getFragmentTag();
+        mRTApi.removeFragment(fragmentTag);
+
+        if (!event.wasCancelled() && ID_02_BARCODE_FRAGMENT.equals(fragmentTag)) {
+            RTEditText editor = getActiveEditor();
+            RTImage media = event.getBarcode().getImage();
+            if (editor != null && media != null) {
+                insertImage(editor, media, event.getBarcode());
+                mActiveEditor = Integer.MAX_VALUE;
+            }
+        }
+    }
 
     @Override
     public void onRichTextEditingChanged(RTEditText editor, boolean useRichText) {
