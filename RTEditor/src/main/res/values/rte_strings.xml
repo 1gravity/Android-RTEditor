@@ -17,14 +17,6 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Rich Text Editor Barcode -->
-    <string name="rte_barcode_enter_text">Text to encode</string>
-    <string name="rte_barcode_enter_width">QR Size (optional)</string>
-    <string name="rte_create_barcode">Create QR</string>
-    <string name="rte_barcode_big_image">Lower the width, max 1500</string>
-    <string name="rte_barcode_no_data">Not sufficient text to encode</string>
-
-
     <!-- Rich Text Editor Link -->
     <string name="rte_link_enter_url">URL (required)</string>
     <string name="rte_link_enter_url_text">Link Text (optional)</string>

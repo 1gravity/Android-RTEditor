@@ -129,12 +129,6 @@
             android:background="?attr/rte_icToolbarLink"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_barcode"
-            android:src="@drawable/ic_toolbar_barcode_selected"
-            style="@style/RTE_ToolbarButton"
-            />
-
-        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_image"
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarImage"/>

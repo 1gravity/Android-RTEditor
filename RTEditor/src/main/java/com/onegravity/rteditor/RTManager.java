@@ -31,7 +31,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Toast;
 
-import com.onegravity.rteditor.BarcodeFragment.BarcodeEvent;
 import com.onegravity.rteditor.LinkFragment.Link;
 import com.onegravity.rteditor.LinkFragment.LinkEvent;
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
@@ -84,11 +83,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RTManager implements RTToolbarListener, RTEditTextListener {
 
     /*
-     * Identifies the link and barcode dialog / fragment
+     * Identifies the link dialog / fragment
      */
     private static final String ID_01_LINK_FRAGMENT = "ID_01_LINK_FRAGMENT";
-    private static final String ID_02_BARCODE_FRAGMENT = "ID_02_BARCODE_FRAGMENT";
-
 
     /*
      * The toolbar(s) may automatically be shown or hidden when a rich text
@@ -468,18 +465,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
     }
 
-    @Override
-    public void onInsertBarcode() {
-        RTEditText editor = getActiveEditor();
-        if (editor != null) {
-            String data;
-            int width = 200;
-            data = editor.getSelectedText();
-
-            mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(data, width));
-        }
-    }
-
     private void onPickCaptureImage(MediaAction mediaAction) {
         RTEditText editor = getActiveEditor();
         if (editor != null && mRTApi != null) {
@@ -515,7 +500,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
                 Spannable newSpannable = editor.cloneSpannable();
 
-                mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
+                mOPManager.executed(editor, new RTOperationManager.TextChangeOperation(oldSpannable, newSpannable,
                         selection.start(), selection.end(), selStartAfter, selEndAfter));
             } catch (OutOfMemoryError e) {
                 str.delete(selection.start(), selection.end() + 1);
@@ -650,13 +635,14 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 toolbar.setAlignment(alignments.get(0));
             } else {
                 boolean isRTL = Helper.isRTL(editor.getText(), start, end);
-                toolbar.setAlignment(isRTL ? Alignment.ALIGN_OPPOSITE : Alignment.ALIGN_NORMAL);
+                toolbar.setAlignment(isRTL ? Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL);
             }
 
             // fonts
             if (typefaces != null && typefaces.size() == 1) {
                 toolbar.setFont(typefaces.get(0));
-            } else {
+            }
+            else {
                 toolbar.setFont(null);
             }
 
@@ -723,7 +709,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MediaEvent event) {
-
         RTEditText editor = mEditors.get(mActiveEditor);
         RTMedia media = event.getMedia();
         if (editor != null && media instanceof RTImage) {
@@ -771,21 +756,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
         }
     }
-
-    /**
-     * Media file was picked -> process the result.
-     */
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(BarcodeEvent event) {
-        RTEditText editor = getActiveEditor();
-        RTImage media = event.getBarcode().getImage();
-        if (editor != null && media != null) {
-            insertImage(editor, media);
-            EventBus.getDefault().removeStickyEvent(event);
-            mActiveEditor = Integer.MAX_VALUE;
-        }
-    }
-
 
     @Override
     public void onRichTextEditingChanged(RTEditText editor, boolean useRichText) {
