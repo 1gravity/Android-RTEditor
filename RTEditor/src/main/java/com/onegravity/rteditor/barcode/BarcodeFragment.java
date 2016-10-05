@@ -73,7 +73,8 @@ public class BarcodeFragment extends DialogFragment {
         return fragment;
     }
 
-    public BarcodeFragment() {}
+    public BarcodeFragment() {
+    }
 
     @NonNull
     @SuppressLint("InflateParams")
@@ -81,27 +82,30 @@ public class BarcodeFragment extends DialogFragment {
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getActivity();
         LayoutInflater li = LayoutInflater.from(context);
-        View view = li.inflate(R.layout.rte_barcode, null);
+        View bodyView = li.inflate(R.layout.rte_barcode_body, null);
+        View headerView = li.inflate(R.layout.rte_barcode_header, null);
+
 
         Bundle args = getArguments();
 
         // barcode data
         final String data = args.getString(BARCODE_DATA);
-        final EditText dataView = ((EditText) view.findViewById(R.id.barcodeData));
+        final EditText dataView = ((EditText) bodyView.findViewById(R.id.barcodeData));
         if (data != null) {
             dataView.setText(data);
         }
 
         // barcode width
         int width = args.getInt(BARCODE_WIDTH);
-        final EditText widthView = ((EditText) view.findViewById(R.id.barcodeWidth));
+        final EditText widthView = ((EditText) bodyView.findViewById(R.id.barcodeWidth));
         if (width > 10) {
             widthView.setText(String.valueOf(width));
         }
 
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle(R.string.rte_create_barcode)
-                .setView(view)
+                .setCustomTitle(headerView)
+                .setView(bodyView)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -140,8 +144,8 @@ public class BarcodeFragment extends DialogFragment {
         String widthString = widthView.getText().toString();
         try {
             width = Integer.parseInt(widthString);
+        } catch (NumberFormatException ignore) {
         }
-        catch (NumberFormatException ignore) {}
 
         String errorMessage = null;
 
@@ -249,7 +253,22 @@ public class BarcodeFragment extends DialogFragment {
                 barcode = new BarcodeImage(pathImage);
             }
 
+
+
+
+
+
+
+
+
+
+
             return barcode;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
         }
 
         @Override
