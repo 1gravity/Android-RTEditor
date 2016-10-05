@@ -126,16 +126,6 @@ public class BarcodeFragment extends DialogFragment {
                     }
                 });
 
-        if (data != null) {
-            builder.setNeutralButton(R.string.rte_remove_action, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Remove button
-                    EventBus.getDefault().post(new BarcodeEvent(BarcodeFragment.this, null, false));
-                }
-            });
-        }
-
         final AlertDialog dialog = builder.create();
 
         //Override the onClick method of the Positive Button, so as to not close the dialog when Click.
@@ -162,7 +152,7 @@ public class BarcodeFragment extends DialogFragment {
 
     private void validate(EditText dataView, EditText widthView, TextView errorView) throws WriterException, IOException {
         final String data = dataView.getText().toString().trim();
-        int width = 200;    // default size of the QR code
+        int width = 400;    // default size of the QR code
         String widthString = widthView.getText().toString();
         try {
             width = Integer.parseInt(widthString);
