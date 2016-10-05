@@ -132,9 +132,7 @@ public class BarcodeFragment extends DialogFragment {
             builder.setNeutralButton("Remove", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Barcode barcode = new Barcode(new BarcodeImage(filePath), null, 0);
-                    barcode.setRemoveRequest(true);
-                    EventBus.getDefault().post(new BarcodeEvent(BarcodeFragment.this, barcode, false));
+                    removeBarcode(filePath);
                 }
             });
         }
@@ -150,7 +148,12 @@ public class BarcodeFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         try {
-                            validate(dataView, widthView, errorView);
+                            if (data == null && filePath == null) {
+                                validate(dataView, widthView, errorView);
+                            } else {
+                                removeBarcode(filePath);
+                                validate(dataView, widthView, errorView);
+                            }
                         } catch (WriterException | IOException e) {
                             e.printStackTrace();
                         }
@@ -160,6 +163,12 @@ public class BarcodeFragment extends DialogFragment {
         });
 
         return dialog;
+    }
+
+    public void removeBarcode(String filePath) {
+        Barcode barcode = new Barcode(new BarcodeImage(filePath), null, 0);
+        barcode.setRemoveRequest(true);
+        EventBus.getDefault().post(new BarcodeEvent(BarcodeFragment.this, barcode, false));
     }
 
 

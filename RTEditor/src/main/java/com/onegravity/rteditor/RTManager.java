@@ -530,40 +530,26 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     private void removeImage(final RTEditText editor, final Barcode barcode) {
-        if (editor != null) {
+        if (editor != null && barcode != null) {
             Selection selection = new Selection(editor);
             Editable str = editor.getText();
-
-
             try {
-
                 Spannable oldSpannable = editor.cloneSpannable();
-
-                if (barcode != null) {
-                    barcode.getImage().remove();
-
-                    int start;
-                    int stop;
-
-                    if (selection.start() == 0) {
-                        start = 0;
-                        stop = 1;
-                    } else {
-                        start = selection.start() - 1;
-                        stop = selection.end();
-                    }
-
-
-                    str.delete(start, stop);
-                    Log.d("test", oldSpannable + " ");
+                barcode.getImage().remove();
+                int start;
+                int stop;
+                if (selection.start() == 0) {
+                    start = 0;
+                    stop = 1;
+                } else {
+                    start = selection.start() - 1;
+                    stop = selection.end();
                 }
+                str.delete(start, stop);
 
                 int selStartAfter = editor.getSelectionStart();
                 int selEndAfter = editor.getSelectionEnd();
-
                 Spannable newSpannable = editor.cloneSpannable();
-                Log.d("test", newSpannable + "");
-
                 mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
                         selection.start(), selection.end(), selStartAfter, selEndAfter));
             } catch (OutOfMemoryError e) {
@@ -571,8 +557,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
             }
         }
-
-
     }
 
     private RTEditText getActiveEditor() {
@@ -839,13 +823,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             RTEditText editor = getActiveEditor();
             RTImage media = event.getBarcode().getImage();
             boolean remove = event.getBarcode().getRemoveRequest();
-            Log.d("testRT", editor + " " + media + " " + remove);
             if (editor != null && media != null) {
                 if (!remove) {
                     insertImage(editor, media, event.getBarcode());
                     mActiveEditor = Integer.MAX_VALUE;
                 } else {
-                    Log.d("testRT", " remove");
                     removeImage(editor, event.getBarcode());
                 }
             }
