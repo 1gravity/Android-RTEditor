@@ -23,6 +23,7 @@ import android.text.Editable;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -788,11 +789,12 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(BarcodeEvent event) {
         final String fragmentTag = event.getFragmentTag();
-        mRTApi.removeFragment(fragmentTag);
-
+        Log.d("RTManager", event.wasCancelled() + " " + ID_02_BARCODE_FRAGMENT + " " + fragmentTag);
         if (!event.wasCancelled() && ID_02_BARCODE_FRAGMENT.equals(fragmentTag)) {
             RTEditText editor = getActiveEditor();
+
             RTImage media = event.getBarcode().getImage();
+            Log.d("RTManager", editor + " " + media);
             if (editor != null && media != null) {
                 insertImage(editor, media, event.getBarcode());
                 mActiveEditor = Integer.MAX_VALUE;

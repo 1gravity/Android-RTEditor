@@ -17,6 +17,7 @@
 package com.onegravity.rteditor.barcode;
 
 import android.app.Fragment;
+import android.util.Log;
 
 /**
  * This event is broadcast via EventBus when the dialog closes.

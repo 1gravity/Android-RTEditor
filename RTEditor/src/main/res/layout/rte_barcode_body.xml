@@ -14,7 +14,7 @@
         android:id="@+id/barcodeData"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@drawable/shape"
+        android:background="@drawable/shape_enabled"
         android:gravity="top"
         android:hint="@string/rte_barcode_enter_text"
         android:padding="4dp"/>
