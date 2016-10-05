@@ -63,16 +63,18 @@ import static android.graphics.Color.WHITE;
 
 public class BarcodeFragment extends DialogFragment {
 
+    private static final String BARCODE_PATH = "barcode_path";
     private static final String BARCODE_DATA = "barcode_data";
     private static final String BARCODE_WIDTH = "barcode_width";
 
     EditText dataView, widthView;
     ProgressBar progressBar;
 
-    public static BarcodeFragment newInstance(String encodeText, int width) {
+    public static BarcodeFragment newInstance(String filePath, String encodeText, int width) {
         BarcodeFragment fragment = new BarcodeFragment();
         Bundle args = new Bundle();
         if (encodeText != null) {
+            args.putString(BARCODE_PATH, filePath);
             args.putString(BARCODE_DATA, encodeText);
             args.putInt(BARCODE_WIDTH, width);
         }
@@ -112,7 +114,7 @@ public class BarcodeFragment extends DialogFragment {
         }
 
         final TextView errorView = (TextView) headerView.findViewById(R.id.barcodeError);
-
+        final String filePath = args.getString(BARCODE_PATH);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setCustomTitle(headerView)
@@ -125,6 +127,17 @@ public class BarcodeFragment extends DialogFragment {
                         EventBus.getDefault().post(new BarcodeEvent(BarcodeFragment.this, new Barcode(null, null, null, 0), true));
                     }
                 });
+
+        if (data != null && filePath != null) {
+            builder.setNeutralButton("Remove", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Barcode barcode = new Barcode(new BarcodeImage(filePath), null, 0);
+                    barcode.setRemoveRequest(true);
+                    EventBus.getDefault().post(new BarcodeEvent(BarcodeFragment.this, barcode, false));
+                }
+            });
+        }
 
         final AlertDialog dialog = builder.create();
 

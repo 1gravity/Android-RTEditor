@@ -26,6 +26,9 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
+
+import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -344,6 +347,15 @@ public class ConverterSpannedToHtml {
             mOut.append("<a href=\"");
             mOut.append(((URLSpan) style).getURL());
             mOut.append("\">");
+        } else if (style instanceof BarcodeSpan) {
+            BarcodeSpan span = ((BarcodeSpan) style);
+            RTImage image = span.getValue().getImage();
+            mImages.add(image);
+            String filePath = image.getFilePath(mRTFormat);
+            int height = image.getHeight();//need to add the dp values
+            mOut.append("<img src=\"" + filePath + "\" height=\"" + height + "\" width=\"" + height + "\">");
+            Log.d("path", filePath);
+            return false;    // don't output the dummy character underlying the image.
         } else if (style instanceof ImageSpan) {
             ImageSpan span = ((ImageSpan) style);
             RTImage image = span.getImage();

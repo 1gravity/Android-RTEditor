@@ -463,7 +463,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     public void onInsertBarcode() {
         RTEditText editor = getActiveEditor();
         if (editor != null) {
-            mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(null, 0));
+            mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(null, null, 0));
         }
     }
 
@@ -527,6 +527,52 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void removeImage(final RTEditText editor, final Barcode barcode) {
+        if (editor != null) {
+            Selection selection = new Selection(editor);
+            Editable str = editor.getText();
+
+
+            try {
+
+                Spannable oldSpannable = editor.cloneSpannable();
+
+                if (barcode != null) {
+                    barcode.getImage().remove();
+
+                    int start;
+                    int stop;
+
+                    if (selection.start() == 0) {
+                        start = 0;
+                        stop = 1;
+                    } else {
+                        start = selection.start() - 1;
+                        stop = selection.end();
+                    }
+
+
+                    str.delete(start, stop);
+                    Log.d("test", oldSpannable + " ");
+                }
+
+                int selStartAfter = editor.getSelectionStart();
+                int selEndAfter = editor.getSelectionEnd();
+
+                Spannable newSpannable = editor.cloneSpannable();
+                Log.d("test", newSpannable + "");
+
+                mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
+                        selection.start(), selection.end(), selStartAfter, selEndAfter));
+            } catch (OutOfMemoryError e) {
+                str.delete(selection.start(), selection.end() + 1);
+                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+            }
+        }
+
+
     }
 
     private RTEditText getActiveEditor() {
@@ -780,7 +826,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     /* @inheritDoc */
     public void onClick(RTEditText editor, BarcodeSpan span) {
         Barcode barcode = span.getValue();
-        mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(barcode.getEncodeText(), barcode.getWidth()));
+        mRTApi.openDialogFragment(ID_02_BARCODE_FRAGMENT, BarcodeFragment.newInstance(barcode.getPath(), barcode.getEncodeText(), barcode.getWidth()));
     }
 
     /**
@@ -792,9 +838,16 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         if (!event.wasCancelled() && ID_02_BARCODE_FRAGMENT.equals(fragmentTag)) {
             RTEditText editor = getActiveEditor();
             RTImage media = event.getBarcode().getImage();
+            boolean remove = event.getBarcode().getRemoveRequest();
+            Log.d("testRT", editor + " " + media + " " + remove);
             if (editor != null && media != null) {
-                insertImage(editor, media, event.getBarcode());
-                mActiveEditor = Integer.MAX_VALUE;
+                if (!remove) {
+                    insertImage(editor, media, event.getBarcode());
+                    mActiveEditor = Integer.MAX_VALUE;
+                } else {
+                    Log.d("testRT", " remove");
+                    removeImage(editor, event.getBarcode());
+                }
             }
         }
     }
