@@ -46,9 +46,9 @@ public class FileHelper {
     };
 
     /**
-     * Tries to open a known file browsers to pick a directory.
+     * Tries to open ic_toolbar_bgcolor_dark known file browsers to pick ic_toolbar_bgcolor_dark directory.
      *
-     * @return True if a filebrowser has been found (the result will be in the onActivityResult), False otherwise
+     * @return True if ic_toolbar_bgcolor_dark filebrowser has been found (the result will be in the onActivityResult), False otherwise
      */
     public static boolean pickDirectory(Activity activity, File startPath, int requestCode) {
         PackageManager packageMgr = activity.getPackageManager();

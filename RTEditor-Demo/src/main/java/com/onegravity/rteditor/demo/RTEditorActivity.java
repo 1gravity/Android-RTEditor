@@ -154,7 +154,7 @@ public class RTEditorActivity extends RTEditorBaseActivity {
                 /*
                  * Save file.
                  *
-                 * Of course this is a hack but since this is just a demo
+                 * Of course this is ic_toolbar_bgcolor_dark hack but since this is just ic_toolbar_bgcolor_dark demo
                  * to show how to integrate the rich text editor this is ok ;-)
                  */
 
@@ -240,8 +240,8 @@ public class RTEditorActivity extends RTEditorBaseActivity {
             return true;
         } else if (itemId == R.id.save) {
             /*
-             * Note that you need a third party file explorer that
-             * supports a pick directory Intent (like ES File Explorer or any
+             * Note that you need ic_toolbar_bgcolor_dark third party file explorer that
+             * supports ic_toolbar_bgcolor_dark pick directory Intent (like ES File Explorer or any
              * Open Intent file explorer).
              */
             File targetDir = getExternalFilesDir(null);

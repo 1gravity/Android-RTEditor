@@ -4,7 +4,7 @@
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  You may obtain ic_toolbar_bgcolor_dark copy of the License at
 
       http://www.apache.org/licenses/LICENSE-2.0
 
@@ -43,7 +43,7 @@
         <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_light</item>
         <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_light</item>
         <item name="rte_icToolbarLink">@drawable/selector_ic_toolbar_link_light</item>
-        <item name="rte_icToolbarBarcode">@drawable/ic_toolbar_barcode_selected</item>
+        <item name="rte_icToolbarBarcode">@drawable/ic_toolbar_barcode_light</item>
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
         <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_light</item>
@@ -79,7 +79,7 @@
         <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_dark</item>
         <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_dark</item>
         <item name="rte_icToolbarLink">@drawable/selector_ic_toolbar_link_dark</item>
-        <item name="rte_icToolbarBarcode">@drawable/ic_toolbar_barcode_selected</item>
+        <item name="rte_icToolbarBarcode">@drawable/ic_toolbar_barcode_light</item>
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_dark</item>
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_dark</item>
         <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_dark</item>

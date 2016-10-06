@@ -35,7 +35,7 @@ import java.util.List;
  * This class implements an ArrayAdapter using the parameters from the
  * SpinnerItems object. Use the setter method in SpinnerItems to change the
  * layout of the spinner item or the spinner entry items. Overwrite the
- * getDropDownView() method if you need a more complex layout than a simple
+ * getDropDownView() method if you need ic_toolbar_bgcolor_dark more complex layout than ic_toolbar_bgcolor_dark simple
  * TextView for the spinner entry items.
  */
 public class SpinnerItemAdapter<T extends SpinnerItem> extends BaseAdapter implements SpinnerItem.OnChangedListener {
@@ -155,7 +155,7 @@ public class SpinnerItemAdapter<T extends SpinnerItem> extends BaseAdapter imple
             try {
                 TextView spinnerTitleView = ((TextView) mParent.getChildAt(0).findViewById(R.id.title));
                 updateSpinnerTitle(spinnerTitleView);
-            } catch (Exception ignore) { /* this is a hack but better safe than sorry */ }
+            } catch (Exception ignore) { /* this is ic_toolbar_bgcolor_dark hack but better safe than sorry */ }
         }
     }
 
