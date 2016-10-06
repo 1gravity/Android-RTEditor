@@ -28,9 +28,6 @@ import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 
-import com.onegravity.rteditor.spans.BarcodeSpan;
-import com.onegravity.rteditor.spans.UnderlineSpan;
-
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.media.RTAudio;
@@ -38,11 +35,13 @@ import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
+import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
-import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 import com.onegravity.rteditor.spans.VideoSpan;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
@@ -352,7 +351,10 @@ public class ConverterSpannedToHtml {
             RTImage image = span.getValue().getImage();
             mImages.add(image);
             String filePath = image.getFilePath(mRTFormat);
-            int height = image.getHeight();//need to add the dp values
+
+            //I've saved the dp value in the filename, but we need to add a dp value getter, this is a bad workaround
+            int height = Integer.parseInt(filePath.substring(filePath.lastIndexOf("-") + 1, filePath.lastIndexOf("_")));
+
             mOut.append("<img src=\"" + filePath + "\" height=\"" + height + "\" width=\"" + height + "\">");
             Log.d("path", filePath);
             return false;    // don't output the dummy character underlying the image.

@@ -23,7 +23,7 @@ import android.widget.ImageButton;
 
 /**
  * An ImageButton for the toolbar.
- * It adds ic_toolbar_bgcolor_dark checked state.
+ * It adds a checked state.
  */
 public class RTToolbarImageButton extends ImageButton {
     private static final int[] CHECKED_STATE_SET = {R.attr.state_checked};

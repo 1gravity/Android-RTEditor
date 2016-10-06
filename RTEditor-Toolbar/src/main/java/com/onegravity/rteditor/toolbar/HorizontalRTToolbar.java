@@ -52,20 +52,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * This class is ic_toolbar_bgcolor_dark concrete implementation of the RTToolbar interface. It uses
- * toggle buttons for the effects with ic_toolbar_bgcolor_dark simple on/off (like bold/not bold) and
+ * This class is a concrete implementation of the RTToolbar interface. It uses
+ * toggle buttons for the effects with a simple on/off (like bold/not bold) and
  * Spinners for the more complex formatting (background color, font color, font
  * size).
  * <p>
- * While the included rte_toolar layout puts all icons in ic_toolbar_bgcolor_dark row it's easy to use
- * multiple toolbars, each with ic_toolbar_bgcolor_dark subset of formatting options (e.g. one for the
+ * While the included rte_toolar layout puts all icons in a row it's easy to use
+ * multiple toolbars, each with a subset of formatting options (e.g. one for the
  * character formatting, one for the paragraph formatting, one for all the rest
  * like insert image, undo/redo etc.).
  */
 public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View.OnClickListener {
 
     /*
-     * We need ic_toolbar_bgcolor_dark unique id for the toolbar because the RTManager is capable of managing multiple toolbars
+     * We need a unique id for the toolbar because the RTManager is capable of managing multiple toolbars
      */
     private static AtomicInteger sIdCounter = new AtomicInteger(0);
     private int mId;
@@ -160,7 +160,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         initImageButton(R.id.toolbar_clear);
 
         // enable/disable capture picture depending on whether the device
-        // has ic_toolbar_bgcolor_dark camera or not
+        // has a camera or not
         PackageManager packageMgr = getContext().getPackageManager();
         if (packageMgr.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             initImageButton(R.id.toolbar_image_capture);

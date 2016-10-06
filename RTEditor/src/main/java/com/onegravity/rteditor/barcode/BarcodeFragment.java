@@ -28,6 +28,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -174,7 +176,7 @@ public class BarcodeFragment extends DialogFragment {
 
     private void validate(EditText dataView, EditText widthView, TextView errorView) throws WriterException, IOException {
         final String data = dataView.getText().toString().trim();
-        int width = 400;    // default size of the QR code
+        int width = 100;    // default size of the QR code in DP
         String widthString = widthView.getText().toString();
         try {
             width = Integer.parseInt(widthString);
@@ -184,7 +186,7 @@ public class BarcodeFragment extends DialogFragment {
         String errorMessage = null;
 
         if (!data.isEmpty()) {
-            if (width <= 1500) {
+            if (width <= 400) {
                 FileSaveAsyncTask task = new FileSaveAsyncTask(getActivity());
                 task.execute(data, String.valueOf(width));
             } else {
@@ -230,11 +232,13 @@ public class BarcodeFragment extends DialogFragment {
             String directory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + activity.getPackageName() + "/files/images";
 
             data = params[0];
-            width = Integer.parseInt(params[1]);
+
+            /*Transform the DP value into PX*/
+            width = Integer.parseInt(params[1]) * (activity.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
 
             File dir = new File(directory);
             if (!dir.exists()) dir.mkdirs();
-            final String pathImage = directory + "/BARCODE-" + uniqueFileName + ".bmp";
+            final String filePath = directory + "/BARCODE-" + params[1] + "_" + uniqueFileName + ".bmp";
 
             try {
                 Bitmap bitmap = encodeAsBitmap(data, width);//create the qr image
@@ -244,7 +248,7 @@ public class BarcodeFragment extends DialogFragment {
                 byte[] mBitmapData = byteOutputStream.toByteArray();
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(mBitmapData);
 
-                OutputStream outputStream = new FileOutputStream(pathImage);
+                OutputStream outputStream = new FileOutputStream(filePath);
                 byteOutputStream.writeTo(outputStream);
 
                 byte[] buffer = new byte[1024];
@@ -260,7 +264,7 @@ public class BarcodeFragment extends DialogFragment {
             } catch (Exception ignore) {
             }
 
-            return new BarcodeImage(pathImage);
+            return new BarcodeImage(filePath);
         }
 
         @Override
