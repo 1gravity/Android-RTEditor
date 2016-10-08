@@ -15,17 +15,17 @@
   limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.onegravity.rteditor.demo">
+<manifest package="com.onegravity.rteditor.demo"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true"
-        android:xlargeScreens="true" />
+        android:xlargeScreens="true"/>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name="com.onegravity.rteditor.demo.RTApplication"
@@ -37,19 +37,24 @@
             android:name="com.onegravity.rteditor.demo.RTEditorActivity">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />/>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.LAUNCHER"/>/>
             </intent-filter>
 
         </activity>
 
         <activity
             android:name="com.onegravity.rteditor.demo.RTEditorActivityWithFragment">
+        </activity>
+
+        <activity
+            android:name="com.onegravity.rteditor.demo.RTEditorPreview">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.EMBED" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.EMBED"/>
             </intent-filter>
 
         </activity>

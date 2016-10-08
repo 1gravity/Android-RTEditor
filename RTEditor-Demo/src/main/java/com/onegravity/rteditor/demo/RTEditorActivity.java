@@ -258,6 +258,11 @@ public class RTEditorActivity extends RTEditorBaseActivity {
         } else if (itemId == R.id.editor_fragment) {
             startAndFinish(RTEditorActivityWithFragment.class);
             return true;
+        } else if (itemId == R.id.editor_preview) {
+            Intent i = new Intent(this, RTEditorPreview.class);
+            i.putExtra("text", mRTMessageField.getText(RTFormat.HTML) + "\n" +
+                    mRTSignatureField.getText(RTFormat.HTML));
+            startActivity(i);
         }
         return false;
     }

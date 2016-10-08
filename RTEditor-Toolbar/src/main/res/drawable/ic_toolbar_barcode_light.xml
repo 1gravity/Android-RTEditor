@@ -1,0 +1,30 @@
+<!--
+  ~
+  ~   Copyright (C) 2015-2016 Emanuel Moecklin
+  ~
+  ~   Licensed under the Apache License, Version 2.0 (the "License");
+  ~   you may not use this file except in compliance with the License.
+  ~   You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="36dp"
+        android:height="36dp"
+        android:viewportWidth="24.000002"
+        android:viewportHeight="24.000002">
+    <path
+        android:fillColor="#E4E4E4"
+        android:pathData="M0 0h24v24H0z"/>
+    <path
+        android:pathData="m3,3 l0,6 6,0 0,-6 -6,0zM15,3 L15,9 21,9 21,3 15,3zM5,5 L7,5 7,7 5,7 5,5zM11,5 L11,7 11,9 13,9 13,7 13,5 11,5zM17,5 L19,5 19,7 17,7 17,5zM5,11 L5,13 7,13 7,11 5,11zM9,11 L9,13 11,13 11,15 13,15 13,13 13,11 11,11 9,11zM15,11 L15,13 17,13 17,11 15,11zM17,13 L17,15 19,15 19,13 17,13zM19,13 L21,13 21,11 19,11 19,13zM19,15 L19,17 19,19 21,19 21,17 21,15 19,15zM19,19 L17,19 17,21 19,21 19,19zM17,19 L17,17 17,15 15,15 15,17 13,17 11,17 11,19 11,21 13,21 13,19 15,19 17,19zM3,15 L3,21 9,21 9,15 3,15zM5,17 L7,17 7,19 5,19 5,17z"
+        android:fillColor="#404040"/>
+</vector>

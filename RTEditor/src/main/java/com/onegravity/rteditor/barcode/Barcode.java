@@ -18,6 +18,7 @@ package com.onegravity.rteditor.barcode;
 
 import android.graphics.Bitmap;
 
+import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.media.RTImage;
 
 /**
@@ -28,6 +29,7 @@ public class Barcode {
     final private Bitmap mBitmap;
     final private String mEncodeText;
     final private int mWidth;
+    private boolean mRemoveRequest = false;
 
     Barcode(RTImage barcode, String encodeText, int width) {
         mBarcode = barcode;
@@ -68,5 +70,17 @@ public class Barcode {
 
     public boolean isValid() {
         return !mEncodeText.isEmpty() && mWidth != 0;
+    }
+
+    public String getPath() {
+        return mBarcode.getFilePath(RTFormat.PLAIN_TEXT);
+    }
+
+    public boolean getRemoveRequest() {
+        return mRemoveRequest;
+    }
+
+    public void setRemoveRequest(boolean remove) {
+        mRemoveRequest = remove;
     }
 }

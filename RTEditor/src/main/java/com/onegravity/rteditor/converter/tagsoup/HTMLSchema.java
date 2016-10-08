@@ -262,11 +262,11 @@ public class HTMLSchema extends Schema implements HTMLModels {
         parent("wbr", "body");
         parent("xmp", "body");
         attribute("a", "hreflang", "NMTOKEN", null);
-        attribute("a", "shape", "CDATA", "rect");
+        attribute("a", "shape_enabled", "CDATA", "rect");
         attribute("a", "tabindex", "NMTOKEN", null);
         attribute("applet", "align", "NMTOKEN", null);
         attribute("area", "nohref", "BOOLEAN", null);
-        attribute("area", "shape", "CDATA", "rect");
+        attribute("area", "shape_enabled", "CDATA", "rect");
         attribute("area", "tabindex", "NMTOKEN", null);
         attribute("br", "clear", "CDATA", "none");
         attribute("button", "disabled", "BOOLEAN", null);

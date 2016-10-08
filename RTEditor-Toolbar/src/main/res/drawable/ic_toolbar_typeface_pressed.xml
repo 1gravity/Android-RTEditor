@@ -1,0 +1,32 @@
+<!--
+  ~
+  ~   Copyright (C) 2015-2016 Emanuel Moecklin
+  ~
+  ~   Licensed under the Apache License, Version 2.0 (the "License");
+  ~   you may not use this file except in compliance with the License.
+  ~   You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="54dp"
+        android:height="36dp"
+        android:viewportHeight="24.00"
+        android:viewportWidth="36.00">
+    <path
+        android:fillColor="#FF34B5E5"
+        android:pathData="M 0,0 36,0 36,24 0,24 Z"/>
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 11.003906 5 L 5.5039062 19 L 7.7539062 19 L 8.8730469 16 L 15.123047 16 L 16.244141 19 L 18.494141 19 L 13.003906 5 L 11.003906 5 z M 12.003906 7.6699219 L 14.382812 14 L 9.6230469 14 L 12.003906 7.6699219 z M 30 9.5292969 L 26 13.529297 L 26.939453 14.470703 L 30 11.416016 L 33.060547 14.470703 L 34 13.529297 L 30 9.5292969 z "
+        />
+</vector>
