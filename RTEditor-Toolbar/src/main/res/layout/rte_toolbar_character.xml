@@ -32,32 +32,32 @@
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_bold"
-            style="@style/RTE_ToolbarButton"
+            style="?attr/rte_ToolbarButton"
             android:background="?attr/rte_icToolbarBold"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_italic"
-            style="@style/RTE_ToolbarButton"
+            style="?attr/rte_ToolbarButton"
             android:background="?attr/rte_icToolbarItalic"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_underline"
-            style="@style/RTE_ToolbarButton"
+            style="?attr/rte_ToolbarButton"
             android:background="?attr/rte_icToolbarUnderline"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_strikethrough"
-            style="@style/RTE_ToolbarButton"
+            style="?attr/rte_ToolbarButton"
             android:background="?attr/rte_icToolbarStrikethrough"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_superscript"
-            style="@style/RTE_ToolbarButton"
+            style="?attr/rte_ToolbarButton"
             android:background="?attr/rte_icToolbarSuperscript"/>
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_subscript"
-            style="@style/RTE_ToolbarButton"
+            style="?attr/rte_ToolbarButton"
             android:background="?attr/rte_icToolbarSubscript"/>
 
         <include layout="@layout/rte_toolbar_divider"/>
