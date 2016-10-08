@@ -37,6 +37,8 @@ public interface RTToolbarListener {
 
     void onPickImage();
 
+    void onPickGif();
+
     void onCaptureImage();
 
     void onInsertBarcode();

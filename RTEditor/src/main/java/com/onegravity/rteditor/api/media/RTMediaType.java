@@ -27,6 +27,7 @@ package com.onegravity.rteditor.api.media;
  */
 public enum RTMediaType {
     IMAGE("images"),
+    GIF("gifs"),
     VIDEO("videos"),
     AUDIO("audios");
 

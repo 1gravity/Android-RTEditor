@@ -24,9 +24,9 @@ import android.webkit.MimeTypeMap;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
-
 import com.onegravity.rteditor.utils.io.FilenameUtils;
 import com.onegravity.rteditor.utils.io.IOUtils;
 
@@ -48,9 +48,9 @@ public abstract class MediaProcessor implements Runnable {
 
     final private String mOriginalFile;
 
-    protected final RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+    protected final RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mMediaFactory;
 
-    public MediaProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, MediaProcessorListener listener) {
+    public MediaProcessor(String originalFile, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory, MediaProcessorListener listener) {
         mOriginalFile = originalFile;
         mMediaFactory = mediaFactory;
         mListener = listener;

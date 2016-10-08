@@ -18,6 +18,7 @@ package com.onegravity.rteditor.api.format;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterHtmlToSpanned;
@@ -32,7 +33,7 @@ import java.util.List;
  * The text may contain referenced images.
  * Audio and video files aren't supported yet.
  */
-public class RTHtml<I extends RTImage, A extends RTAudio, V extends RTVideo> extends RTText {
+public class RTHtml<I extends RTImage, G extends RTGif, A extends RTAudio, V extends RTVideo> extends RTText {
 
     private List<I> mImages;
 
@@ -60,7 +61,7 @@ public class RTHtml<I extends RTImage, A extends RTAudio, V extends RTVideo> ext
     }
 
     @Override
-    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory) {
         if (destFormat instanceof RTFormat.PlainText) {
             return ConverterHtmlToText.convert(this);
         } else if (destFormat instanceof RTFormat.Spanned) {

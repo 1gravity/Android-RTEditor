@@ -18,6 +18,7 @@ package com.onegravity.rteditor.api.format;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
@@ -75,7 +76,7 @@ public abstract class RTText {
      * @return The converted RTText
      * @throws UnsupportedOperationException if this RTText doesn't support the conversion.
      */
-    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory) {
         if (destFormat == mRTFormat) {
             return this;
         }

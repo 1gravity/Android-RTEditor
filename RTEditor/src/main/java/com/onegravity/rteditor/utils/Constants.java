@@ -24,11 +24,12 @@ public abstract class Constants {
      */
     public enum MediaAction {
         PICK_PICTURE(101),
-        PICK_VIDEO(102),
-        PICK_AUDIO(103),
-        CAPTURE_PICTURE(104),
-        CAPTURE_VIDEO(105),
-        CAPTURE_AUDIO(106);
+        PICK_GIF(102),
+        PICK_VIDEO(103),
+        PICK_AUDIO(104),
+        CAPTURE_PICTURE(105),
+        CAPTURE_VIDEO(106),
+        CAPTURE_AUDIO(107);
 
         private int mRequestCode;
 
@@ -41,6 +42,6 @@ public abstract class Constants {
         }
     }
 
-    public final static int CROP_IMAGE = 107;
+    public final static int CROP_IMAGE = 108;
 
 }

@@ -23,6 +23,7 @@ import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.format.RTPlainText;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
@@ -41,10 +42,10 @@ public class ConverterTextToHtml {
 
     private static final boolean USE_REPLACE_ALL = false;
 
-    public static RTHtml<RTImage, RTAudio, RTVideo> convert(RTPlainText input) {
+    public static RTHtml<RTImage, RTGif, RTAudio, RTVideo> convert(RTPlainText input) {
         String text = input.getText();
         String result = convert(text);
-        return new RTHtml<RTImage, RTAudio, RTVideo>(RTFormat.HTML, result);
+        return new RTHtml<RTImage, RTGif, RTAudio, RTVideo>(RTFormat.HTML, result);
     }
 
     public static String convert(String text) {
