@@ -88,7 +88,7 @@ public abstract class Helper {
      * @return A int value to represent px equivalent to dp depending on device density
      */
     public static int convertDpToPixel(int dp) {
-        return (int) (dp * (getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp * (getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class Helper {
      * @return A int value to represent dp equivalent to px value
      */
     public static int convertPixelsToDp(int px) {
-        return (int) (px / (getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px / (getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     private static DisplayMetrics getDisplayMetrics() {
