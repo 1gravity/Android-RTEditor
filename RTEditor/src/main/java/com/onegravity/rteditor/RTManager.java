@@ -585,13 +585,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
             str.insert(selection.start(), "\uFFFC");
 
-            Log.d("test", "insert gif");
-
             try {
                 // now add the actual image and inform the RTOperationManager about the operation
                 Spannable oldSpannable = editor.cloneSpannable();
 
-                GifSpan gifSpan = new GifSpan(editor, gif, false);
+                GifSpan gifSpan = new GifSpan(gif, false);
                 str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 int selStartAfter = editor.getSelectionStart();
