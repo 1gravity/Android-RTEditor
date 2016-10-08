@@ -17,6 +17,7 @@
 package com.onegravity.rteditor.api;
 
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMediaSource;
 import com.onegravity.rteditor.api.media.RTVideo;
@@ -31,7 +32,7 @@ import java.io.Serializable;
  *
  * @see RTMediaFactoryImpl
  */
-public interface RTMediaFactory<I extends RTImage, A extends RTAudio, V extends RTVideo> extends Serializable {
+public interface RTMediaFactory<I extends RTImage, G extends RTGif, A extends RTAudio, V extends RTVideo> extends Serializable {
 
     /**
      * Use case 1: Inserting media objects into the rich text editor.
@@ -42,6 +43,8 @@ public interface RTMediaFactory<I extends RTImage, A extends RTAudio, V extends 
      * available any more (deleted or no access any more).
      */
     public I createImage(RTMediaSource mediaSource);
+
+    public G createGif(RTMediaSource mediaSource);
 
     public A createAudio(RTMediaSource mediaSource);
 
@@ -67,6 +70,8 @@ public interface RTMediaFactory<I extends RTImage, A extends RTAudio, V extends 
      * use case (e.g. ContentProvider vs. SQLite database).
      */
     public I createImage(String path);
+
+    public G createGif(String path);
 
     public A createAudio(String path);
 

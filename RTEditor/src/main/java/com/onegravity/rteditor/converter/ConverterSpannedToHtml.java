@@ -31,6 +31,7 @@ import android.util.Log;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
@@ -78,7 +79,7 @@ public class ConverterSpannedToHtml {
     /**
      * Converts a spanned text to HTML
      */
-    public RTHtml<RTImage, RTAudio, RTVideo> convert(final Spanned text, RTFormat.Html rtFormat) {
+    public RTHtml<RTImage, RTGif, RTAudio, RTVideo> convert(final Spanned text, RTFormat.Html rtFormat) {
         mText = text;
         mRTFormat = rtFormat;
 
@@ -89,7 +90,7 @@ public class ConverterSpannedToHtml {
         // convert paragraphs
         convertParagraphs();
 
-        return new RTHtml<RTImage, RTAudio, RTVideo>(rtFormat, mOut.toString(), mImages);
+        return new RTHtml<RTImage, RTGif, RTAudio, RTVideo>(rtFormat, mOut.toString(), mImages);
     }
 
     // ****************************************** Process Paragraphs *******************************************

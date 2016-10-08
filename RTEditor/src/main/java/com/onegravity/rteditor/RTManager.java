@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.barcode.Barcode;
@@ -61,6 +62,7 @@ import com.onegravity.rteditor.link.LinkFragment;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
 import com.onegravity.rteditor.media.choose.MediaEvent;
 import com.onegravity.rteditor.spans.BarcodeSpan;
+import com.onegravity.rteditor.spans.GifSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
@@ -72,6 +74,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -474,13 +477,20 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
+    public void onPickGif() {
+        onPickCaptureImage(MediaAction.PICK_GIF);
+    }
+
+    @Override
     /* @inheritDoc */
     public void onCaptureImage() {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
     }
 
+
     private void onPickCaptureImage(MediaAction mediaAction) {
         RTEditText editor = getActiveEditor();
+
         if (editor != null && mRTApi != null) {
             mActiveEditor = editor.getId();
 
@@ -555,6 +565,41 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             } catch (OutOfMemoryError e) {
                 str.delete(selection.start(), selection.end() + 1);
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void insertGif(RTEditText editor, RTGif gif) {
+        if (gif != null && editor != null) {
+            Selection selection = new Selection(editor);
+            Editable str = editor.getText();
+
+            // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
+            // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
+            str.insert(selection.start(), "\uFFFC");
+
+            Log.d("test", "insert gif");
+
+            try {
+                // now add the actual image and inform the RTOperationManager about the operation
+                Spannable oldSpannable = editor.cloneSpannable();
+
+                GifSpan gifSpan = new GifSpan(editor, gif, false);
+                str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                int selStartAfter = editor.getSelectionStart();
+                int selEndAfter = editor.getSelectionEnd();
+                editor.onAddMedia(gif);
+
+                Spannable newSpannable = editor.cloneSpannable();
+
+                mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
+                        selection.start(), selection.end(), selStartAfter, selEndAfter));
+            } catch (OutOfMemoryError e) {
+                str.delete(selection.start(), selection.end() + 1);
+                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -804,7 +849,14 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }
+
+        if (editor != null && media instanceof RTGif) {
+            insertGif(editor, (RTGif) media);
+            EventBus.getDefault().removeStickyEvent(event);
+            mActiveEditor = Integer.MAX_VALUE;
+        }
     }
+
 
     @Override
     /* @inheritDoc */

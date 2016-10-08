@@ -21,9 +21,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.onegravity.rteditor.R;
-import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.media.MediaUtils;
@@ -42,7 +42,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
     }
 
     transient protected MonitoredActivity mActivity;
-    transient protected RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+    transient protected RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mMediaFactory;
 
     // the type of chooser (see MediaChooserActivity.REQUEST_PICK_PICTURE etc.)
     transient protected MediaAction mMediaAction;
@@ -54,7 +54,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
     private String mOriginalFile;
 
     MediaChooserManager(MonitoredActivity activity, MediaAction mediaAction,
-                        RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory,
                         MediaChooserListener listener, Bundle savedInstanceState) {
         mActivity = activity;
         mMediaFactory = mediaFactory;
@@ -73,7 +73,7 @@ abstract class MediaChooserManager implements MediaProcessorListener {
     /**
      * Call this method, to start the chooser, i.e, The camera app or the gallery depending upon the type
      *
-     * @param False if it's not possible to choose a media (e.g. when no sdcard is available to take a picture)
+     * @return False if it's not possible to choose a media (e.g. when no sdcard is available to take a picture)
      * @throws IllegalArgumentException
      */
     abstract boolean chooseMedia() throws IllegalArgumentException;

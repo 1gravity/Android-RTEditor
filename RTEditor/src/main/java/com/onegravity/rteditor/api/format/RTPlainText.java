@@ -20,6 +20,7 @@ import android.text.SpannedString;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterTextToHtml;
@@ -40,7 +41,7 @@ public final class RTPlainText extends RTText {
     }
 
     @Override
-    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory) {
         if (destFormat instanceof RTFormat.Html) {
             return ConverterTextToHtml.convert(this);
         } else if (destFormat instanceof RTFormat.Spanned) {

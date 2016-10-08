@@ -37,6 +37,7 @@ import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.format.RTPlainText;
 import com.onegravity.rteditor.api.format.RTText;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
@@ -83,7 +84,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
 
     private RTEditTextListener mListener;
 
-    private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+    private RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mMediaFactory;
 
     // used to check if selection has changed
     private int mOldSelStart = -1;
@@ -173,7 +174,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
      * @param listener     The RTEditTextListener (the RTManager)
      * @param mediaFactory The RTMediaFactory
      */
-    void register(RTEditTextListener listener, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+    void register(RTEditTextListener listener, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory) {
         mListener = listener;
         mMediaFactory = mediaFactory;
     }
@@ -295,7 +296,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
         }
 
         RTText rtText = useRTFormatting ?
-                new RTHtml<RTImage, RTAudio, RTVideo>(RTFormat.HTML, content) :
+                new RTHtml<RTImage, RTGif, RTAudio, RTVideo>(RTFormat.HTML, content) :
                 new RTPlainText(content);
 
         setText(rtText);
@@ -479,7 +480,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
     }
 
     synchronized private void setParagraphsAreUp2Date(boolean value) {
-        if (! mIgnoreParagraphChanges) {
+        if (!mIgnoreParagraphChanges) {
             mParagraphsAreUp2Date = value;
         }
     }
@@ -518,12 +519,11 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        if(state instanceof SavedState) {
-            SavedState savedState = (SavedState)state;
+        if (state instanceof SavedState) {
+            SavedState savedState = (SavedState) state;
             super.onRestoreInstanceState(savedState.getSuperState());
             setRichTextEditing(savedState.useRTFormatting(), savedState.getContent());
-        }
-        else {
+        } else {
             super.onRestoreInstanceState(state);
         }
 
@@ -571,6 +571,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
                     public SavedState createFromParcel(Parcel in) {
                         return new SavedState(in);
                     }
+
                     public SavedState[] newArray(int size) {
                         return new SavedState[size];
                     }
@@ -621,7 +622,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher,
                 if (mListener != null && !mIgnoreTextChanges) {
                     Spannable newSpannable = cloneSpannable();
                     mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
-                                            getSelectionStart(), getSelectionEnd());
+                            getSelectionStart(), getSelectionEnd());
                 }
                 mLayoutChanged = true;
             }

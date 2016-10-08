@@ -22,10 +22,12 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.support.annotation.AttrRes;
 import android.util.AndroidRuntimeException;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMediaSource;
 import com.onegravity.rteditor.api.media.RTVideo;
@@ -43,7 +45,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
  * as extra in an Intent) the receiver of that Intent will be able to use the
  * RTMediaFactory but not the RTProxy part.
  */
-public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo> {
+public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> {
 
     private static final long serialVersionUID = -3877685955074371741L;
 
@@ -98,14 +100,14 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
      */
 
     transient final private RTProxy mRTProxy;    // not Serializable
-    final private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
+    final private RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mMediaFactory;
 
     /**
      * @param context      Can be an Application or an Activity context
      * @param rtProxy      The RTProxy provided by the app.
      * @param mediaFactory the RTMediaFactory provided by the app.
      */
-    public RTApi(Context context, RTProxy rtProxy, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+    public RTApi(Context context, RTProxy rtProxy, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory) {
         synchronized (sTheLock) {
             sAppContext = context.getApplicationContext();
         }
@@ -182,7 +184,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
      * Since the class is part of the app and not the rich text editor component
      * we allow access through this method as a convenience.
      */
-    public RTMediaFactory<RTImage, RTAudio, RTVideo> getMediaFactory() {
+    public RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> getMediaFactory() {
         return mMediaFactory;
     }
 
@@ -190,6 +192,11 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     /* @inheritDoc */
     public RTImage createImage(RTMediaSource mediaSource) {
         return mMediaFactory.createImage(mediaSource);
+    }
+
+    @Override
+    public RTGif createGif(RTMediaSource mediaSource) {
+        return mMediaFactory.createGif(mediaSource);
     }
 
     @Override
@@ -208,6 +215,11 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     /* @inheritDoc */
     public RTImage createImage(String path) {
         return mMediaFactory.createImage(path);
+    }
+
+    @Override
+    public RTGif createGif(String path) {
+        return mMediaFactory.createGif(path);
     }
 
     @Override

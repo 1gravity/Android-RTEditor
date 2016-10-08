@@ -18,6 +18,7 @@ package com.onegravity.rteditor.media.choose.processor;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
@@ -29,7 +30,7 @@ public class VideoProcessor extends MediaProcessor {
         public void onVideoProcessed(RTVideo video);
     }
 
-    public VideoProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, VideoProcessorListener listener) {
+    public VideoProcessor(String originalFile, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory, VideoProcessorListener listener) {
         super(originalFile, mediaFactory, listener);
     }
 

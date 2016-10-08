@@ -37,10 +37,17 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
 dependencies {
     compile 'com.1gravity:android-colorpicker:2.0.2'
     compile 'com.google.zxing:core:3.3.0'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
 }
+
 
 apply from: '../android-artifacts.gradle'
 apply from: '../central-publish.gradle'
