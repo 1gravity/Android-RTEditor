@@ -17,6 +17,7 @@
 package com.onegravity.rteditor;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -526,7 +527,28 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 }
 
                 if (gif != null) {
+                    Drawable drawable = gif.getDrawable();
+                    drawable.setCallback(new Drawable.Callback() {
+                        @Override
+                        public void invalidateDrawable(Drawable who) {
+                            editor.invalidate();
+                        }
+
+                        @Override
+                        public void scheduleDrawable(Drawable who, Runnable what, long when) {
+                            editor.postDelayed(what, when);
+                        }
+
+                        @Override
+                        public void unscheduleDrawable(Drawable who, Runnable what) {
+                            editor.removeCallbacks(what);
+                        }
+                    });
+                    gif.setDrawable(drawable);
+
                     GifSpan gifSpan = new GifSpan(gif, false);
+
+
                     str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 int selStartAfter = editor.getSelectionStart();
@@ -572,39 +594,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             } catch (OutOfMemoryError e) {
                 str.delete(selection.start(), selection.end() + 1);
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void insertGif(RTEditText editor, RTGif gif) {
-        if (gif != null && editor != null) {
-            Selection selection = new Selection(editor);
-            Editable str = editor.getText();
-
-            // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
-            // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
-            str.insert(selection.start(), "\uFFFC");
-
-            try {
-                // now add the actual image and inform the RTOperationManager about the operation
-                Spannable oldSpannable = editor.cloneSpannable();
-
-                GifSpan gifSpan = new GifSpan(gif, false);
-                str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                int selStartAfter = editor.getSelectionStart();
-                int selEndAfter = editor.getSelectionEnd();
-                editor.onAddMedia(gif);
-
-                Spannable newSpannable = editor.cloneSpannable();
-
-                mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
-                        selection.start(), selection.end(), selStartAfter, selEndAfter));
-            } catch (OutOfMemoryError e) {
-                str.delete(selection.start(), selection.end() + 1);
-                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -857,12 +846,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
         if (editor != null && media instanceof RTGif) {
             insertImage(editor, null, (RTGif) media, null);
-            EventBus.getDefault().removeStickyEvent(event);
-            mActiveEditor = Integer.MAX_VALUE;
-        }
-
-        if (editor != null && media instanceof RTGif) {
-            insertGif(editor, (RTGif) media);
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }

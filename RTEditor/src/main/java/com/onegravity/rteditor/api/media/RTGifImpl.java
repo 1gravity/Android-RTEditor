@@ -20,11 +20,7 @@ package com.onegravity.rteditor.api.media;
 
 import android.graphics.drawable.Drawable;
 
-import com.onegravity.rteditor.api.format.RTFormat;
-
 import java.io.IOException;
-
-import pl.droidsonroids.gif.GifDrawable;
 
 /**
  * This is a basic implementation of the RTImage interface.
@@ -32,15 +28,21 @@ import pl.droidsonroids.gif.GifDrawable;
 public class RTGifImpl extends RTMediaImpl implements RTGif {
     private static final long serialVersionUID = -5252562131414951720L;
 
-    public RTGifImpl(String filePath) {
+    Drawable mDrawable;
+
+    public RTGifImpl(String filePath, Drawable drawable) {
         super(filePath);
+        this.mDrawable = drawable;
+
     }
 
     @Override
-    public GifDrawable getDrawable() throws IOException {
-        GifDrawable gd = new GifDrawable(getFilePath(RTFormat.SPANNED));
-        gd.setBounds(0, 0, gd.getIntrinsicWidth(), gd.getIntrinsicHeight());
-        gd.invalidateSelf();
-        return gd;
+    public Drawable getDrawable() throws IOException {
+        return mDrawable;
+    }
+
+    @Override
+    public void setDrawable(Drawable drawable) {
+        this.mDrawable = drawable;
     }
 }

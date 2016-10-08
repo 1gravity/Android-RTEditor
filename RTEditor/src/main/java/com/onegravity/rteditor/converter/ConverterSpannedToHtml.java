@@ -367,7 +367,7 @@ public class ConverterSpannedToHtml {
         } else if (style instanceof GifSpan) {
             GifSpan span = ((GifSpan) style);
             RTGif gif = span.getGif();
-            //mImages.add(gif);
+            //mImages.add(gif); ??
             String filePath = gif.getFilePath(mRTFormat);
             mOut.append("<img src=\"" + filePath + "\">");
             return false;    // don't output the dummy character underlying the image.

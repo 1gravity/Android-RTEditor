@@ -18,6 +18,8 @@
 
 package com.onegravity.rteditor.spans;
 
+import android.graphics.drawable.Drawable;
+
 import com.onegravity.rteditor.api.media.RTGif;
 
 import java.io.IOException;
@@ -34,4 +36,6 @@ public class GifSpan extends MediaSpan {
     public RTGif getGif() {
         return (RTGif) mMedia;
     }
+
+
 }

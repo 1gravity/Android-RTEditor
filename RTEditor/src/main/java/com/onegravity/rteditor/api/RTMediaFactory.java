@@ -22,6 +22,7 @@ import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMediaSource;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -44,7 +45,7 @@ public interface RTMediaFactory<I extends RTImage, G extends RTGif, A extends RT
      */
     public I createImage(RTMediaSource mediaSource);
 
-    public G createGif(RTMediaSource mediaSource);
+    public G createGif(RTMediaSource mediaSource) throws IOException;
 
     public A createAudio(RTMediaSource mediaSource);
 
@@ -71,7 +72,7 @@ public interface RTMediaFactory<I extends RTImage, G extends RTGif, A extends RT
      */
     public I createImage(String path);
 
-    public G createGif(String path);
+    public G createGif(String path) throws IOException;
 
     public A createAudio(String path);
 

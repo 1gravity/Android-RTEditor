@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import pl.droidsonroids.gif.GifDrawable;
+
 /**
  * This is a basic implementation of the RTMediaFactory using either the
  * internal (as in Context.context.getFilesDir() or the primary external
@@ -90,10 +92,12 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTGif, RTAudi
 
     @Override
      /* @inheritDoc */
-    public RTGif createGif(RTMediaSource mediaSource) {
+    public RTGif createGif(RTMediaSource mediaSource) throws IOException {
         File targetFile = loadMedia(mediaSource);
-        return targetFile == null ? null :
-                new RTGifImpl(targetFile.getPath());
+        if (targetFile == null) return null;
+        GifDrawable gd = new GifDrawable(targetFile.getPath());
+        gd.setBounds(0, 0, gd.getIntrinsicWidth(), gd.getIntrinsicHeight());
+        return new RTGifImpl(targetFile.getPath(), gd);
     }
 
     @Override
@@ -154,8 +158,10 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTGif, RTAudi
 
     @Override
      /* @inheritDoc */
-    public RTGif createGif(String path) {
-        return new RTGifImpl(path);
+    public RTGif createGif(String path) throws IOException {
+        GifDrawable gd = new GifDrawable(path);
+        gd.setBounds(0, 0, gd.getIntrinsicWidth(), gd.getIntrinsicHeight());
+        return new RTGifImpl(path, gd);
     }
 
     @Override

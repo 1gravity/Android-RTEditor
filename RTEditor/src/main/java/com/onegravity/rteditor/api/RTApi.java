@@ -32,6 +32,8 @@ import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMediaSource;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import java.io.IOException;
+
 /**
  * The RTApi is a convenience class that combines the RTProxy and the
  * RTMediaFactory implementations in one class and acts as a proxy to them. It
@@ -195,7 +197,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTGif, RTAudio, R
     }
 
     @Override
-    public RTGif createGif(RTMediaSource mediaSource) {
+    public RTGif createGif(RTMediaSource mediaSource) throws IOException {
         return mMediaFactory.createGif(mediaSource);
     }
 
@@ -218,7 +220,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTGif, RTAudio, R
     }
 
     @Override
-    public RTGif createGif(String path) {
+    public RTGif createGif(String path) throws IOException {
         return mMediaFactory.createGif(path);
     }
 
