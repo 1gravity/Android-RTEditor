@@ -576,6 +576,41 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
+    private void insertGif(RTEditText editor, RTGif gif) {
+        if (gif != null && editor != null) {
+            Selection selection = new Selection(editor);
+            Editable str = editor.getText();
+
+            // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
+            // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
+            str.insert(selection.start(), "\uFFFC");
+
+            Log.d("test", "insert gif");
+
+            try {
+                // now add the actual image and inform the RTOperationManager about the operation
+                Spannable oldSpannable = editor.cloneSpannable();
+
+                GifSpan gifSpan = new GifSpan(editor, gif, false);
+                str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                int selStartAfter = editor.getSelectionStart();
+                int selEndAfter = editor.getSelectionEnd();
+                editor.onAddMedia(gif);
+
+                Spannable newSpannable = editor.cloneSpannable();
+
+                mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
+                        selection.start(), selection.end(), selStartAfter, selEndAfter));
+            } catch (OutOfMemoryError e) {
+                str.delete(selection.start(), selection.end() + 1);
+                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private RTEditText getActiveEditor() {
         for (RTEditText editor : mEditors.values()) {
             if (editor.hasFocus()) {
@@ -824,6 +859,12 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
         if (editor != null && media instanceof RTGif) {
             insertImage(editor, null, (RTGif) media, null);
+            EventBus.getDefault().removeStickyEvent(event);
+            mActiveEditor = Integer.MAX_VALUE;
+        }
+
+        if (editor != null && media instanceof RTGif) {
+            insertGif(editor, (RTGif) media);
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }
