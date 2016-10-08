@@ -81,6 +81,26 @@ public abstract class Helper {
         return Math.round((float) spSize / getDisplayDensity4Fonts());
     }
 
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density.
+     *
+     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @return A int value to represent px equivalent to dp depending on device density
+     */
+    public static int convertDpToPixel(int dp) {
+        return (int) (dp * (getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     *
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @return A int value to represent dp equivalent to px value
+     */
+    public static int convertPixelsToDp(int px) {
+        return (int) (px / (getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
     private static DisplayMetrics getDisplayMetrics() {
         Display display = ((WindowManager) RTApi.getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -112,6 +132,7 @@ public abstract class Helper {
 
     /**
      * This method encodes the query part of an url
+     *
      * @param url an url (e.g. http://www.1gravity.com?query=üö)
      * @return The url with an encoded query, e.g. http://www.1gravity.com?query%3D%C3%BC%C3%B6
      */
@@ -133,23 +154,24 @@ public abstract class Helper {
 
             URI baseUri = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, uri.getFragment());
             return baseUri + queryString;
+        } catch (UnsupportedEncodingException ignore) {
+        } catch (URISyntaxException ignore) {
         }
-        catch (UnsupportedEncodingException ignore) {}
-        catch (URISyntaxException ignore) {}
 
         return uri.toString();
     }
 
     /**
      * This method decodes an url with encoded query string
+     *
      * @param url an url with encoded query string (e.g. http://www.1gravity.com?query%C3%BC%C3%B6)
      * @return The decoded url, e.g. http://www.1gravity.com?query=üö
      */
     public static String decodeQuery(String url) {
         try {
             return URLDecoder.decode(url, "UTF-8");
+        } catch (UnsupportedEncodingException ignore) {
         }
-        catch (UnsupportedEncodingException ignore) {}
 
         return url;
     }
@@ -201,9 +223,8 @@ public abstract class Helper {
 
         try {
             Bidi bidi = new Bidi(s.subSequence(start, end).toString(), Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
-            return ! bidi.baseIsLeftToRight();
-        }
-        catch (IndexOutOfBoundsException e) {
+            return !bidi.baseIsLeftToRight();
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }

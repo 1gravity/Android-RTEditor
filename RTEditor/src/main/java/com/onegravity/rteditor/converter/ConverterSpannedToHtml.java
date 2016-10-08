@@ -351,10 +351,7 @@ public class ConverterSpannedToHtml {
             RTImage image = span.getValue().getImage();
             mImages.add(image);
             String filePath = image.getFilePath(mRTFormat);
-
-            //I've saved the dp value in the filename, but we need to add a dp value getter, this is a bad workaround
-            int height = Integer.parseInt(filePath.substring(filePath.lastIndexOf("-") + 1, filePath.lastIndexOf("_")));
-
+            int height = image.getHeightDP();
             mOut.append("<img src=\"" + filePath + "\" height=\"" + height + "\" width=\"" + height + "\">");
             Log.d("path", filePath);
             return false;    // don't output the dummy character underlying the image.

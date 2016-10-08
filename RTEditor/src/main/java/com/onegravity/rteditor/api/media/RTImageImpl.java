@@ -16,6 +16,8 @@
 
 package com.onegravity.rteditor.api.media;
 
+import com.onegravity.rteditor.utils.Helper;
+
 /**
  * This is a basic implementation of the RTImage interface.
  */
@@ -26,4 +28,13 @@ public class RTImageImpl extends RTMediaImpl implements RTImage {
         super(filePath);
     }
 
+    @Override
+    public int getWidthDP() {
+        return Helper.convertPixelsToDp(getWidth());
+    }
+
+    @Override
+    public int getHeightDP() {
+        return Helper.convertPixelsToDp(getHeight());
+    }
 }
