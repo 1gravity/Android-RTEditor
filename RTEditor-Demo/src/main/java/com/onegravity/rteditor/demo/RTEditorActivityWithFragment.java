@@ -200,6 +200,11 @@ public class RTEditorActivityWithFragment extends RTEditorBaseActivity {
         } else if (itemId == R.id.editor_activity) {
             startAndFinish(RTEditorActivity.class);
             return true;
+        } else if (itemId == R.id.editor_preview) {
+            Intent i = new Intent(this, RTEditorPreview.class);
+            i.putExtra("text", mFragment.getMessage() + "\n" +
+                    mFragment.getSignature());
+            startActivity(i);
         }
         return false;
     }
