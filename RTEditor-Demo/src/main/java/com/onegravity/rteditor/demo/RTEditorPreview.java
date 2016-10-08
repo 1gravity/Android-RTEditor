@@ -2,6 +2,7 @@ package com.onegravity.rteditor.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.WebView;
 
 public class RTEditorPreview extends AppCompatActivity {

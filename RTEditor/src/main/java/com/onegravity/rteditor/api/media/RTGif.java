@@ -22,9 +22,11 @@ import android.graphics.drawable.Drawable;
 
 import java.io.IOException;
 
+import pl.droidsonroids.gif.GifDrawable;
+
 /**
  * Each embedded image must implement this interface
  */
 public interface RTGif extends RTMedia {
-    public Drawable getDrawable() throws IOException;
+    public GifDrawable getDrawable() throws IOException;
 }

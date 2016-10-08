@@ -37,9 +37,10 @@ public class RTGifImpl extends RTMediaImpl implements RTGif {
     }
 
     @Override
-    public Drawable getDrawable() throws IOException {
+    public GifDrawable getDrawable() throws IOException {
         GifDrawable gd = new GifDrawable(getFilePath(RTFormat.SPANNED));
         gd.setBounds(0, 0, gd.getIntrinsicWidth(), gd.getIntrinsicHeight());
+        gd.invalidateSelf();
         return gd;
     }
 }

@@ -18,10 +18,6 @@
 
 package com.onegravity.rteditor.spans;
 
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-
-import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.api.media.RTGif;
 
 import java.io.IOException;
@@ -31,27 +27,8 @@ import java.io.IOException;
  */
 public class GifSpan extends MediaSpan {
 
-    private RTEditText mEditor;
-
-    public GifSpan(final RTEditText editor, final RTGif image, boolean isSaved) throws IOException {
-        super(image, isSaved);
-        mEditor = editor;
-        image.getDrawable().setCallback(new Drawable.Callback() {
-            @Override
-            public void invalidateDrawable(@NonNull Drawable who) {
-                mEditor.invalidate();
-            }
-
-            @Override
-            public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
-                mEditor.postDelayed(what, when);
-            }
-
-            @Override
-            public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
-                mEditor.removeCallbacks(what);
-            }
-        });
+    public GifSpan(final RTGif image, boolean isSaved) throws IOException {
+        super(image, isSaved, image.getDrawable());
     }
 
     public RTGif getGif() {

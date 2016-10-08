@@ -23,7 +23,6 @@ import android.text.Editable;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -503,8 +502,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     /* called from onEventMainThread(MediaEvent) and from onEventMainThread(BarcodeEvent event) */
-    private void insertImage(final RTEditText editor, final RTImage image, Barcode barcode) {
-        if (image != null && editor != null) {
+    private void insertImage(final RTEditText editor, final RTImage image, final RTGif gif, Barcode barcode) {
+        if (editor != null) {
             Selection selection = new Selection(editor);
             Editable str = editor.getText();
 
@@ -516,14 +515,20 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 // now add the actual image and inform the RTOperationManager about the operation
                 Spannable oldSpannable = editor.cloneSpannable();
 
-                ImageSpan imageSpan = new ImageSpan(image, false);
-                str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (image != null) {
+                    ImageSpan imageSpan = new ImageSpan(image, false);
+                    str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                if (barcode != null) {
-                    BarcodeSpan barcodeSpan = new BarcodeSpan(barcode);
-                    str.setSpan(barcodeSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (barcode != null) {
+                        BarcodeSpan barcodeSpan = new BarcodeSpan(barcode);
+                        str.setSpan(barcodeSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
 
+                if (gif != null) {
+                    GifSpan gifSpan = new GifSpan(gif, false);
+                    str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
                 int selStartAfter = editor.getSelectionStart();
                 int selEndAfter = editor.getSelectionEnd();
                 editor.onAddMedia(image);
@@ -535,6 +540,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             } catch (OutOfMemoryError e) {
                 str.delete(selection.start(), selection.end() + 1);
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -565,41 +572,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             } catch (OutOfMemoryError e) {
                 str.delete(selection.start(), selection.end() + 1);
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void insertGif(RTEditText editor, RTGif gif) {
-        if (gif != null && editor != null) {
-            Selection selection = new Selection(editor);
-            Editable str = editor.getText();
-
-            // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
-            // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
-            str.insert(selection.start(), "\uFFFC");
-
-            Log.d("test", "insert gif");
-
-            try {
-                // now add the actual image and inform the RTOperationManager about the operation
-                Spannable oldSpannable = editor.cloneSpannable();
-
-                GifSpan gifSpan = new GifSpan(editor, gif, false);
-                str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                int selStartAfter = editor.getSelectionStart();
-                int selEndAfter = editor.getSelectionEnd();
-                editor.onAddMedia(gif);
-
-                Spannable newSpannable = editor.cloneSpannable();
-
-                mOPManager.executed(editor, new TextChangeOperation(oldSpannable, newSpannable,
-                        selection.start(), selection.end(), selStartAfter, selEndAfter));
-            } catch (OutOfMemoryError e) {
-                str.delete(selection.start(), selection.end() + 1);
-                mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -845,13 +817,13 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         RTEditText editor = mEditors.get(mActiveEditor);
         RTMedia media = event.getMedia();
         if (editor != null && media instanceof RTImage) {
-            insertImage(editor, (RTImage) media, null);
+            insertImage(editor, (RTImage) media, null, null);
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }
 
         if (editor != null && media instanceof RTGif) {
-            insertGif(editor, (RTGif) media);
+            insertImage(editor, null, (RTGif) media, null);
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }
@@ -877,7 +849,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             boolean remove = event.getBarcode().getRemoveRequest();
             if (editor != null && media != null) {
                 if (!remove) {
-                    insertImage(editor, media, event.getBarcode());
+                    insertImage(editor, media, null, event.getBarcode());
                     mActiveEditor = Integer.MAX_VALUE;
                 } else {
                     removeImage(editor, event.getBarcode());

@@ -38,6 +38,7 @@ import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
 import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
+import com.onegravity.rteditor.spans.GifSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
@@ -361,6 +362,13 @@ public class ConverterSpannedToHtml {
             RTImage image = span.getImage();
             mImages.add(image);
             String filePath = image.getFilePath(mRTFormat);
+            mOut.append("<img src=\"" + filePath + "\">");
+            return false;    // don't output the dummy character underlying the image.
+        } else if (style instanceof GifSpan) {
+            GifSpan span = ((GifSpan) style);
+            RTGif gif = span.getGif();
+            //mImages.add(gif);
+            String filePath = gif.getFilePath(mRTFormat);
             mOut.append("<img src=\"" + filePath + "\">");
             return false;    // don't output the dummy character underlying the image.
         } else if (style instanceof AudioSpan) {

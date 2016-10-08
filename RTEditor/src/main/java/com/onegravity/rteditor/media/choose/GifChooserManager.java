@@ -54,7 +54,6 @@ class GifChooserManager extends MediaChooserManager implements GifProcessorListe
     @SuppressWarnings("incomplete-switch")
     @Override
     boolean chooseMedia() throws IllegalArgumentException {
-        Log.d("test", "choser");
         if (mListener == null) {
             throw new IllegalArgumentException("GifChooserListener cannot be null");
         }

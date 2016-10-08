@@ -86,7 +86,6 @@ public class MediaChooserActivity extends MonitoredActivity implements
                     break;
 
                 case PICK_GIF:
-                    Log.d("test1", mMediaAction.name());
                     mMediaChooserMgr = new GifChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
                     break;
 
@@ -100,9 +99,6 @@ public class MediaChooserActivity extends MonitoredActivity implements
                     mMediaChooserMgr = new AudioChooserManager(this, mMediaAction, mMediaFactory, this, savedInstanceState);
                     break;
             }
-            Log.d("test", mMediaAction.name());
-            Log.d("test0", mMediaChooserMgr.getClass().getName() + "");
-
             if (mMediaChooserMgr == null) {
                 finish();
             } else if (!isWorkInProgress()) {
