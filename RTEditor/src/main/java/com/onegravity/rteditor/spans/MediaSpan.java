@@ -16,6 +16,8 @@
 
 package com.onegravity.rteditor.spans;
 
+import android.graphics.drawable.Drawable;
+
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.media.RTMedia;
@@ -35,6 +37,12 @@ public abstract class MediaSpan extends android.text.style.ImageSpan {
 
     public MediaSpan(RTMedia media, boolean isSaved) {
         super(RTApi.getApplicationContext(), MediaUtils.createFileUri(media.getFilePath(RTFormat.SPANNED)));
+        mMedia = media;
+        mIsSaved = isSaved;
+    }
+
+    public MediaSpan(RTMedia media, boolean isSaved, Drawable drawable) {
+        super(drawable);
         mMedia = media;
         mIsSaved = isSaved;
     }

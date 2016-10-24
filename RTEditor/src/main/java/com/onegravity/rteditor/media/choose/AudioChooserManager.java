@@ -21,6 +21,7 @@ import android.os.Bundle;
 
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.media.MonitoredActivity;
@@ -37,7 +38,7 @@ class AudioChooserManager extends MediaChooserManager implements AudioProcessorL
     }
 
     AudioChooserManager(MonitoredActivity activity,
-                        MediaAction mediaAction, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        MediaAction mediaAction, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory,
                         AudioChooserListener listener, Bundle savedInstanceState) {
         super(activity, mediaAction, mediaFactory, listener, savedInstanceState);
     }

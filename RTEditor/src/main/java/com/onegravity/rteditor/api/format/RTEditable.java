@@ -22,6 +22,7 @@ import android.view.inputmethod.BaseInputConnection;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
@@ -29,7 +30,7 @@ import com.onegravity.rteditor.effects.Effects;
 
 /**
  * RTText representing rich text in android.text.Spanned format.
- *
+ * <p>
  * Use this class if the source text is an RTEditText.
  * This allows to pre-process the text before converting it (e.g. to eliminate
  * certain spans and to clean up the paragraph formatting).
@@ -46,13 +47,13 @@ public final class RTEditable extends RTSpanned {
     }
 
     @Override
-    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory) {
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory) {
         if (destFormat instanceof RTFormat.Html) {
             clean();
             return new ConverterSpannedToHtml().convert(mEditor.getText(), (RTFormat.Html) destFormat);
         } else if (destFormat instanceof RTFormat.PlainText) {
             clean();
-            RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(mEditor.getText(), RTFormat.HTML);
+            RTHtml<RTImage, RTGif, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(mEditor.getText(), RTFormat.HTML);
             RTText rtText = rtHtml.convertTo(RTFormat.PLAIN_TEXT, mediaFactory);
             return new RTPlainText(rtText.getText());
         }

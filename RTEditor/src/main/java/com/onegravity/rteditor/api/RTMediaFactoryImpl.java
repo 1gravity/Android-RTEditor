@@ -21,6 +21,8 @@ import android.util.Log;
 
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTAudioImpl;
+import com.onegravity.rteditor.api.media.RTGif;
+import com.onegravity.rteditor.api.media.RTGifImpl;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTImageImpl;
 import com.onegravity.rteditor.api.media.RTMediaSource;
@@ -29,7 +31,6 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.api.media.RTVideoImpl;
 import com.onegravity.rteditor.media.MediaUtils;
 import com.onegravity.rteditor.utils.Helper;
-
 import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.File;
@@ -38,12 +39,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import pl.droidsonroids.gif.GifDrawable;
+
 /**
  * This is a basic implementation of the RTMediaFactory using either the
  * internal (as in Context.context.getFilesDir() or the primary external
  * file system (as in Context.getExternalFilesDir(String).
  */
-public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVideo> {
+public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> {
     private static final long serialVersionUID = 6970361368051595063L;
 
     private File mStoragePath;
@@ -85,6 +88,16 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
         File targetFile = loadMedia(mediaSource);
         return targetFile == null ? null :
                 new RTImageImpl(targetFile.getAbsolutePath());
+    }
+
+    @Override
+     /* @inheritDoc */
+    public RTGif createGif(RTMediaSource mediaSource) throws IOException {
+        File targetFile = loadMedia(mediaSource);
+        if (targetFile == null) return null;
+        GifDrawable gd = new GifDrawable(targetFile.getPath());
+        gd.setBounds(0, 0, gd.getIntrinsicWidth(), gd.getIntrinsicHeight());
+        return new RTGifImpl(targetFile.getPath(), gd);
     }
 
     @Override
@@ -141,6 +154,14 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
     /* @inheritDoc */
     public RTImage createImage(String path) {
         return new RTImageImpl(path);
+    }
+
+    @Override
+     /* @inheritDoc */
+    public RTGif createGif(String path) throws IOException {
+        GifDrawable gd = new GifDrawable(path);
+        gd.setBounds(0, 0, gd.getIntrinsicWidth(), gd.getIntrinsicHeight());
+        return new RTGifImpl(path, gd);
     }
 
     @Override

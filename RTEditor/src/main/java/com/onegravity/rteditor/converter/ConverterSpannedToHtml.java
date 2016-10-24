@@ -31,12 +31,14 @@ import android.util.Log;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
 import com.onegravity.rteditor.spans.BarcodeSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
+import com.onegravity.rteditor.spans.GifSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
@@ -78,7 +80,7 @@ public class ConverterSpannedToHtml {
     /**
      * Converts a spanned text to HTML
      */
-    public RTHtml<RTImage, RTAudio, RTVideo> convert(final Spanned text, RTFormat.Html rtFormat) {
+    public RTHtml<RTImage, RTGif, RTAudio, RTVideo> convert(final Spanned text, RTFormat.Html rtFormat) {
         mText = text;
         mRTFormat = rtFormat;
 
@@ -89,7 +91,7 @@ public class ConverterSpannedToHtml {
         // convert paragraphs
         convertParagraphs();
 
-        return new RTHtml<RTImage, RTAudio, RTVideo>(rtFormat, mOut.toString(), mImages);
+        return new RTHtml<RTImage, RTGif, RTAudio, RTVideo>(rtFormat, mOut.toString(), mImages);
     }
 
     // ****************************************** Process Paragraphs *******************************************
@@ -360,6 +362,13 @@ public class ConverterSpannedToHtml {
             RTImage image = span.getImage();
             mImages.add(image);
             String filePath = image.getFilePath(mRTFormat);
+            mOut.append("<img src=\"" + filePath + "\">");
+            return false;    // don't output the dummy character underlying the image.
+        } else if (style instanceof GifSpan) {
+            GifSpan span = ((GifSpan) style);
+            RTGif gif = span.getGif();
+            //mImages.add(gif); ??
+            String filePath = gif.getFilePath(mRTFormat);
             mOut.append("<img src=\"" + filePath + "\">");
             return false;    // don't output the dummy character underlying the image.
         } else if (style instanceof AudioSpan) {

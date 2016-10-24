@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.media.MediaUtils;
@@ -51,7 +52,7 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
     private VideoChooserListener mListener;
 
     VideoChooserManager(MonitoredActivity activity, MediaAction mediaAction,
-                        RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
+                        RTMediaFactory<RTImage, RTGif, RTAudio, RTVideo> mediaFactory,
                         VideoChooserListener listener, Bundle savedInstanceState) {
 
         super(activity, mediaAction, mediaFactory, listener, savedInstanceState);

@@ -36,6 +36,7 @@
     
     <!-- Media Library -->
     <string name="rte_pick_image">Select an image</string>
+    <string name="rte_pick_gif">Select a gif</string>
     <string name="rte_pick_audio">Select an audio file</string>
     <string name="rte_pick_video">Select a video</string>
     <string name="rte_processing_image">Processing image\u2026</string>

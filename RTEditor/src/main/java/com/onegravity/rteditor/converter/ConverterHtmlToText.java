@@ -24,6 +24,7 @@ import android.text.Spanned;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.format.RTPlainText;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
@@ -54,7 +55,7 @@ public class ConverterHtmlToText {
     private static final char NBSP_CHARACTER = (char) 0x00a0;    // utf-8 non-breaking space
     private static final char NBSP_REPLACEMENT = (char) 0x20;    // space
 
-    public static RTPlainText convert(RTHtml<? extends RTImage, ? extends RTAudio, ? extends RTVideo> input) {
+    public static RTPlainText convert(RTHtml<? extends RTImage, ? extends RTGif, ? extends RTAudio, ? extends RTVideo> input) {
         String result = Html.fromHtml(input.getText(), null, new HtmlToTextTagHandler())
                 .toString()
                 .replace(PREVIEW_OBJECT_CHARACTER, PREVIEW_OBJECT_REPLACEMENT)

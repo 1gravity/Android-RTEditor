@@ -23,6 +23,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Layout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -155,6 +156,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         initImageButton(R.id.toolbar_barcode);
         initImageButton(R.id.toolbar_link);
         initImageButton(R.id.toolbar_image);
+        initImageButton(R.id.toolbar_gif);
         initImageButton(R.id.toolbar_undo);
         initImageButton(R.id.toolbar_redo);
         initImageButton(R.id.toolbar_clear);
@@ -646,6 +648,8 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                 mListener.onInsertBarcode();
             } else if (id == R.id.toolbar_image) {
                 mListener.onPickImage();
+            } else if (id == R.id.toolbar_gif) {
+                mListener.onPickGif();
             } else if (id == R.id.toolbar_image_capture) {
                 mListener.onCaptureImage();
             } else if (id == R.id.toolbar_clear) {

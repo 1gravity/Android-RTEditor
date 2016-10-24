@@ -17,13 +17,13 @@
 package com.onegravity.rteditor;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.barcode.Barcode;
@@ -61,6 +62,7 @@ import com.onegravity.rteditor.link.LinkFragment;
 import com.onegravity.rteditor.media.choose.MediaChooserActivity;
 import com.onegravity.rteditor.media.choose.MediaEvent;
 import com.onegravity.rteditor.spans.BarcodeSpan;
+import com.onegravity.rteditor.spans.GifSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
@@ -72,6 +74,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -474,13 +477,20 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     @Override
+    public void onPickGif() {
+        onPickCaptureImage(MediaAction.PICK_GIF);
+    }
+
+    @Override
     /* @inheritDoc */
     public void onCaptureImage() {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
     }
 
+
     private void onPickCaptureImage(MediaAction mediaAction) {
         RTEditText editor = getActiveEditor();
+
         if (editor != null && mRTApi != null) {
             mActiveEditor = editor.getId();
 
@@ -493,8 +503,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     /* called from onEventMainThread(MediaEvent) and from onEventMainThread(BarcodeEvent event) */
-    private void insertImage(final RTEditText editor, final RTImage image, Barcode barcode) {
-        if (image != null && editor != null) {
+    private void insertImage(final RTEditText editor, final RTImage image, final RTGif gif, Barcode barcode) {
+        if (editor != null) {
             Selection selection = new Selection(editor);
             Editable str = editor.getText();
 
@@ -506,14 +516,41 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 // now add the actual image and inform the RTOperationManager about the operation
                 Spannable oldSpannable = editor.cloneSpannable();
 
-                ImageSpan imageSpan = new ImageSpan(image, false);
-                str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (image != null) {
+                    ImageSpan imageSpan = new ImageSpan(image, false);
+                    str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                if (barcode != null) {
-                    BarcodeSpan barcodeSpan = new BarcodeSpan(barcode);
-                    str.setSpan(barcodeSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (barcode != null) {
+                        BarcodeSpan barcodeSpan = new BarcodeSpan(barcode);
+                        str.setSpan(barcodeSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
 
+                if (gif != null) {
+                    Drawable drawable = gif.getDrawable();
+                    drawable.setCallback(new Drawable.Callback() {
+                        @Override
+                        public void invalidateDrawable(Drawable who) {
+                            editor.invalidate();
+                        }
+
+                        @Override
+                        public void scheduleDrawable(Drawable who, Runnable what, long when) {
+                            editor.postDelayed(what, when);
+                        }
+
+                        @Override
+                        public void unscheduleDrawable(Drawable who, Runnable what) {
+                            editor.removeCallbacks(what);
+                        }
+                    });
+                    gif.setDrawable(drawable);
+
+                    GifSpan gifSpan = new GifSpan(gif, false);
+
+
+                    str.setSpan(gifSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
                 int selStartAfter = editor.getSelectionStart();
                 int selEndAfter = editor.getSelectionEnd();
                 editor.onAddMedia(image);
@@ -525,6 +562,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             } catch (OutOfMemoryError e) {
                 str.delete(selection.start(), selection.end() + 1);
                 mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -800,11 +839,18 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         RTEditText editor = mEditors.get(mActiveEditor);
         RTMedia media = event.getMedia();
         if (editor != null && media instanceof RTImage) {
-            insertImage(editor, (RTImage) media, null);
+            insertImage(editor, (RTImage) media, null, null);
+            EventBus.getDefault().removeStickyEvent(event);
+            mActiveEditor = Integer.MAX_VALUE;
+        }
+
+        if (editor != null && media instanceof RTGif) {
+            insertImage(editor, null, (RTGif) media, null);
             EventBus.getDefault().removeStickyEvent(event);
             mActiveEditor = Integer.MAX_VALUE;
         }
     }
+
 
     @Override
     /* @inheritDoc */
@@ -825,7 +871,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             boolean remove = event.getBarcode().getRemoveRequest();
             if (editor != null && media != null) {
                 if (!remove) {
-                    insertImage(editor, media, event.getBarcode());
+                    insertImage(editor, media, null, event.getBarcode());
                     mActiveEditor = Integer.MAX_VALUE;
                 } else {
                     removeImage(editor, event.getBarcode());

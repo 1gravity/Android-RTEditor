@@ -29,6 +29,7 @@ import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.format.RTSpanned;
 import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTGif;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.HTMLSchema;
@@ -82,7 +83,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     };
 
     private String mSource;
-    private RTMediaFactory<? extends RTImage, ? extends RTAudio, ? extends RTVideo> mMediaFactory;
+    private RTMediaFactory<? extends RTImage, ? extends RTGif, ? extends RTAudio, ? extends RTVideo> mMediaFactory;
     private Parser mParser;
     private SpannableStringBuilder mResult;
 
@@ -111,8 +112,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         private static final HTMLSchema SCHEMA = new HTMLSchema();
     }
 
-    public RTSpanned convert(RTHtml<? extends RTImage, ? extends RTAudio, ? extends RTVideo> input,
-                             RTMediaFactory<? extends RTImage, ? extends RTAudio, ? extends RTVideo> mediaFactory) {
+    public RTSpanned convert(RTHtml<? extends RTImage, ? extends RTGif, ? extends RTAudio, ? extends RTVideo> input,
+                             RTMediaFactory<? extends RTImage, ? extends RTGif, ? extends RTAudio, ? extends RTVideo> mediaFactory) {
         mSource = input.getText();
         mMediaFactory = mediaFactory;
 
@@ -792,16 +793,35 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
-    private static class Bold {}
-    private static class Italic {}
-    private static class Underline {}
-    private static class Strikethrough {}
-    private static class Super {}
-    private static class Sub {}
-    private static class Big {}
-    private static class Small {}
-    private static class Monospace {}
-    private static class Blockquote {}
+    private static class Bold {
+    }
+
+    private static class Italic {
+    }
+
+    private static class Underline {
+    }
+
+    private static class Strikethrough {
+    }
+
+    private static class Super {
+    }
+
+    private static class Sub {
+    }
+
+    private static class Big {
+    }
+
+    private static class Small {
+    }
+
+    private static class Monospace {
+    }
+
+    private static class Blockquote {
+    }
 
     private abstract static class List {
         int mNrOfIndents;
@@ -845,7 +865,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             mBGColor = color;
             return this;
         }
-        
+
         private Font setFontFace(String fontFace) {
             mFontFace = fontFace;
             return this;
