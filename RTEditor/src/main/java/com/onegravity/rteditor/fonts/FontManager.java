@@ -175,18 +175,24 @@ public class FontManager {
 
     private static Collection<String> listFontFiles(Resources res) {
         Collection<String> fonts = new ArrayList<String>();
-        listFontFiles(res.getAssets(), fonts, "");
+        listFontFiles(res.getAssets(), fonts, "", 0);
         return fonts;
     }
 
-    private static void listFontFiles(AssetManager assets, Collection<String> fonts, String path) {
+    private static void listFontFiles(AssetManager assets, Collection<String> fonts, String path,
+                                      int level) {
+        if (level >= 8) {
+            // on certain devices we run into stack overflows because of the recursion
+            // --> limit the depth of the recursion to 8 calls
+            return;
+        }
         try {
             String[] list = assets.list(path);
             if (list != null && list.length > 0) {
                 // it's a folder
                 for (String file : list) {
                     String prefix = "".equals(path) ? "" : path + File.separator;
-                    listFontFiles(assets, fonts, prefix + file);
+                    listFontFiles(assets, fonts, prefix + file, ++level);
                 }
             } else if (path.endsWith("ttf")) {
                 // it's a font file
