@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/rte_link_enter_url"
-        android:inputType="text"/>
+        android:inputType="textWebEmailAddress"/>
 
     <EditText
         android:id="@+id/linkText"
