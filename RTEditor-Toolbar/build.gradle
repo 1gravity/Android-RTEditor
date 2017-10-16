@@ -18,7 +18,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -31,14 +31,15 @@ android {
             minifyEnabled false
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
-    // use this to compile/run locally
-    compile project(':RTEditor')
-
-    // or this to use the latest published library
-    //compile 'com.1gravity:android-rteditor-core:1.6.3'
+    debugCompile project(':RTEditor')
+    releaseCompile "com.1gravity:android-rteditor-core:$lib_version"
 }
 
 apply from: '../android-artifacts.gradle'

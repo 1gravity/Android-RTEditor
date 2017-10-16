@@ -27,6 +27,7 @@ android {
         versionCode 11
         versionName "1.3.2"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -37,6 +38,10 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
     task indexAssets {
@@ -76,9 +81,6 @@ android {
 }
 
 dependencies {
-    // use this to compile/run locally
-    compile project(':RTEditor-Toolbar')
-
-    // or this to use the latest published library
-    //compile 'com.1gravity:android-rteditor:1.6.3'
+    debugCompile project(':RTEditor-Toolbar')
+    releaseCompile "com.1gravity:android-rteditor:$lib_version"
 }

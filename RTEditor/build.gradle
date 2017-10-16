@@ -18,7 +18,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -34,6 +34,10 @@ android {
             debuggable false
             minifyEnabled false
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
