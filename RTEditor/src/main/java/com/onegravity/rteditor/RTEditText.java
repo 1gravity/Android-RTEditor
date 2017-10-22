@@ -42,9 +42,11 @@ import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
+import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.LinkSpan.LinkSpanListener;
 import com.onegravity.rteditor.spans.MediaSpan;
+import com.onegravity.rteditor.spans.NumberSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.RTLayout;
@@ -95,6 +97,14 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     // if True then text changes are not registered for undo/redo
     // we need this during the actual undo/redo operation (or an undo would create a change event itself)
     private boolean mIgnoreTextChanges;
+
+    // Keep track of ordered list spans.
+    // If one of them is selected, then append zero with char after new line.
+    // This fixes the bug when bullet/number span is not applied to empty string
+    private boolean mIsBulletSpanSelected;
+    private boolean mIsNumberSpanSelected;
+    // The length of text before new char is added
+    private int mPreviousTextLength;
 
     private int mSelStartBefore;        // selection start before text changed
     private int mSelEndBefore;          // selection end before text changed
@@ -414,6 +424,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
             mOldSpannable = cloneSpannable();
         }
         mLayoutChanged = true;
+        mPreviousTextLength = s.length();
     }
 
     @Override
@@ -425,6 +436,13 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     @Override
     /* TextWatcher */
     public synchronized void afterTextChanged(Editable s) {
+        if (mIsBulletSpanSelected || mIsNumberSpanSelected) {
+            boolean mBackSpace = mPreviousTextLength >= s.length();
+            if (!mBackSpace && s.toString().endsWith("\n")) {
+                // append zero width character
+                this.append("\u200B");
+            }
+        }
         String theText = s.toString();
         String newText = mNewText == null ? "" : mNewText;
         if (mListener != null && !mIgnoreTextChanges && !newText.equals(theText)) {
@@ -442,6 +460,23 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     /* SpanWatcher */
     public void onSpanAdded(Spannable text, Object what, int start, int end) {
         mTextChanged = true;
+        // we need to keep track of ordered list spans
+        if (what instanceof BulletSpan) {
+            mIsBulletSpanSelected = true;
+            // if text was empty then append zero width char
+            // in order for the bullet to be shown when the span is selected
+            if (text.toString().isEmpty()) {
+                this.append("\u200B");
+            }
+        } else if (what instanceof NumberSpan) {
+            mIsNumberSpanSelected = true;
+            // if text was empty then append zero width char
+            // in order for the number to be shown when the span is selected
+            if (text.toString().isEmpty()) {
+                this.append("\u200B");
+            }
+        }
+
         if (what instanceof RTSpan && what instanceof ParagraphStyle) {
             setParagraphsAreUp2Date(false);
         }
@@ -460,6 +495,13 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     /* SpanWatcher */
     public void onSpanRemoved(Spannable text, Object what, int start, int end) {
         mTextChanged = true;
+        // we need to keep track of ordered list spans
+        if (what instanceof BulletSpan) {
+            mIsBulletSpanSelected = false;
+        } else if (what instanceof NumberSpan) {
+            mIsNumberSpanSelected = false;
+        }
+
         if (what instanceof RTSpan && what instanceof ParagraphStyle) {
             setParagraphsAreUp2Date(false);
         }
