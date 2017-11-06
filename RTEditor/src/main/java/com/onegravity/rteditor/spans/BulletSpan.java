@@ -68,7 +68,7 @@ public class BulletSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagra
             p.setStyle(Paint.Style.FILL);
 
             // draw the bullet point
-            int size = Math.max(Math.round((baseline - top) / 9f), 4);
+            int size = Math.round((p.getTextSize()) / 5f);
             draw(c, p, x, dir, top, bottom, size);
 
             // restore paint

@@ -35,7 +35,6 @@ public class NumberSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagra
     private final int mGapWidth;
     private final boolean mIgnoreSpan;
 
-    private float mTextSize = 10f;
     private float mWidth;
 
     public NumberSpan(int nr, int gapWidth, boolean isEmpty, boolean isFirst, boolean isLast) {
@@ -65,8 +64,6 @@ public class NumberSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagra
             Paint.Style oldStyle = p.getStyle();
             float oldTextSize = p.getTextSize();
             p.setStyle(Paint.Style.FILL);
-            mTextSize = baseline - top;
-            p.setTextSize(mTextSize);
             mWidth = p.measureText(mNr + ".");
 
             // draw the number
