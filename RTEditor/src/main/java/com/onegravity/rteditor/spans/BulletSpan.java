@@ -33,7 +33,7 @@ import android.text.style.LeadingMarginSpan;
  * we ignore the leading margin for the last, empty paragraph unless it's the
  * only one
  */
-public class BulletSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagraphSpan<Boolean> {
+public class BulletSpan extends BaseListItemSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagraphSpan<Boolean> {
 
     private static Path sBulletPath = null;
 
@@ -68,7 +68,7 @@ public class BulletSpan implements LeadingMarginSpan, RTSpan<Boolean>, RTParagra
             p.setStyle(Paint.Style.FILL);
 
             // draw the bullet point
-            int size = Math.max(Math.round((baseline - top) / 9f), 4);
+            int size = Math.max(Math.round(determineTextSize(spanned, start, end, p.getTextSize()) / 9f), 4);
             draw(c, p, x, dir, top, bottom, size);
 
             // restore paint
