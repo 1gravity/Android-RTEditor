@@ -18,9 +18,11 @@ package com.onegravity.rteditor.media.choose;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -92,8 +94,16 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
             imagePath.mkdirs();
             if (imagePath.exists() && imageFile.createNewFile()) {
                 setOriginalFile(imageFile.getAbsolutePath());
+                Uri uriForCamera;
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // There are compatibility issues with FileProvider Uris on lower versions
+                    uriForCamera = Uri.fromFile(imageFile);
+                } else {
+                    uriForCamera = FileProvider.getUriForFile(mActivity, "com.onegravity.rteditor.fileprovider", imageFile);
+                }
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        .putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
+                        .putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera);
                 startActivity(intent);
             } else {
                 Toast.makeText(mActivity, "Can't take picture without an sdcard", Toast.LENGTH_SHORT).show();
