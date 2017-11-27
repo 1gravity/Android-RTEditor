@@ -19,8 +19,6 @@
     android:versionCode="1"
     android:versionName="1.0">
 
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
-
     <application>
         <provider
             android:name="android.support.v4.content.FileProvider"
