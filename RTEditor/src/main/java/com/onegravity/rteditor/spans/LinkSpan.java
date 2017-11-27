@@ -27,7 +27,7 @@ import android.view.View;
 public class LinkSpan extends URLSpan implements RTSpan<String> {
 
     public interface LinkSpanListener {
-        public void onClick(LinkSpan linkSpan);
+        void onClick(LinkSpan linkSpan);
     }
 
     public LinkSpan(String url) {

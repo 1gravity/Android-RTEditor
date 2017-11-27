@@ -44,7 +44,7 @@ public class ConverterTextToHtml {
     public static RTHtml<RTImage, RTAudio, RTVideo> convert(RTPlainText input) {
         String text = input.getText();
         String result = convert(text);
-        return new RTHtml<RTImage, RTAudio, RTVideo>(RTFormat.HTML, result);
+        return new RTHtml<>(RTFormat.HTML, result);
     }
 
     public static String convert(String text) {

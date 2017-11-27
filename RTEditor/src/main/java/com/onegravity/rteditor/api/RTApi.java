@@ -64,7 +64,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
      * The application context used throughout the different rich text editor
      * components.
      */
-    private static Object sTheLock = new Object();    // synchronize access to sAppContext
+    private static final Object sTheLock = new Object();    // synchronize access to sAppContext
     private static Context sAppContext;
     private static boolean sDarkTheme;
 

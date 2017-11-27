@@ -81,13 +81,13 @@ public class ConverterSpannedToHtml {
         mRTFormat = rtFormat;
 
         mOut = new StringBuilder();
-        mImages = new ArrayList<RTImage>();
+        mImages = new ArrayList<>();
         mParagraphStyles.clear();
 
         // convert paragraphs
         convertParagraphs();
 
-        return new RTHtml<RTImage, RTAudio, RTVideo>(rtFormat, mOut.toString(), mImages);
+        return new RTHtml<>(rtFormat, mOut.toString(), mImages);
     }
 
     // ****************************************** Process Paragraphs *******************************************
@@ -237,22 +237,19 @@ public class ConverterSpannedToHtml {
      */
     private void withinParagraph(final Spanned text, int start, int end) {
         // create sorted set of CharacterStyles
-        SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
-            @Override
-            public int compare(CharacterStyle s1, CharacterStyle s2) {
-                int start1 = text.getSpanStart(s1);
-                int start2 = text.getSpanStart(s2);
-                if (start1 != start2)
-                    return start1 - start2;        // span which starts first comes first
+        SortedSet<CharacterStyle> sortedSpans = new TreeSet<>((s1, s2) -> {
+            int start1 = text.getSpanStart(s1);
+            int start2 = text.getSpanStart(s2);
+            if (start1 != start2)
+                return start1 - start2;        // span which starts first comes first
 
-                int end1 = text.getSpanEnd(s1);
-                int end2 = text.getSpanEnd(s2);
-                if (end1 != end2) return end2 - end1;                // longer span comes first
+            int end1 = text.getSpanEnd(s1);
+            int end2 = text.getSpanEnd(s2);
+            if (end1 != end2) return end2 - end1;                // longer span comes first
 
-                // if the paragraphs have the same span [start, end] we compare their name
-                // compare the name only because local + anonymous classes have no canonical name
-                return s1.getClass().getName().compareTo(s2.getClass().getName());
-            }
+            // if the paragraphs have the same span [start, end] we compare their name
+            // compare the name only because local + anonymous classes have no canonical name
+            return s1.getClass().getName().compareTo(s2.getClass().getName());
         });
         List<CharacterStyle> spanList = Arrays.asList(text.getSpans(start, end, CharacterStyle.class));
         sortedSpans.addAll(spanList);

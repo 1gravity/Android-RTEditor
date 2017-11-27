@@ -54,7 +54,7 @@ public class SpinnerItemAdapter<T extends SpinnerItem> extends BaseAdapter imple
 
     private Handler mHandler;
 
-    final private SparseArray<View> mViewCache = new SparseArray<View>();
+    final private SparseArray<View> mViewCache = new SparseArray<>();
 
     private int mSelectedBackgroundId;
 

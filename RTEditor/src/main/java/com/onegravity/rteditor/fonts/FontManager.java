@@ -71,15 +71,12 @@ public class FontManager {
      * Use this method to preload fonts asynchronously e.g. when the app starts up.
      */
     public static void preLoadFonts(final Context context) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (ASSET_FONTS_BY_NAME) {
-                    getAssetFonts(context);
-                }
-                synchronized (SYSTEM_FONTS_BY_NAME) {
-                    getSystemFonts();
-                }
+        new Thread(() -> {
+            synchronized (ASSET_FONTS_BY_NAME) {
+                getAssetFonts(context);
+            }
+            synchronized (SYSTEM_FONTS_BY_NAME) {
+                getSystemFonts();
             }
         }).start();
     }

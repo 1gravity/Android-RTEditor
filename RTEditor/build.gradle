@@ -15,12 +15,15 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion project.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion project.minSdkVersion
         targetSdkVersion 27
     }
 
@@ -38,10 +41,19 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     api 'com.1gravity:android-colorpicker:2.0.3'
+
+    // Kotlin
+    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
 apply from: '../android-artifacts.gradle'
