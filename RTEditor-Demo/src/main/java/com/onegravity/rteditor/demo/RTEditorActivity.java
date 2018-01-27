@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Emanuel Moecklin
+ * Copyright (C) 2015-2018 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,39 +83,39 @@ public class RTEditorActivity extends RTEditorBaseActivity {
         RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this, true));
         mRTManager = new RTManager(rtApi, savedInstanceState);
 
-        ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.rte_toolbar_container);
+        ViewGroup toolbarContainer = findViewById(R.id.rte_toolbar_container);
 
         // register toolbar 0 (if it exists)
-        RTToolbar rtToolbar0 = (RTToolbar) findViewById(R.id.rte_toolbar);
+        RTToolbar rtToolbar0 = findViewById(R.id.rte_toolbar);
         if (rtToolbar0 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar0);
         }
 
         // register toolbar 1 (if it exists)
-        RTToolbar rtToolbar1 = (RTToolbar) findViewById(R.id.rte_toolbar_character);
+        RTToolbar rtToolbar1 = findViewById(R.id.rte_toolbar_character);
         if (rtToolbar1 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar1);
         }
 
         // register toolbar 2 (if it exists)
-        RTToolbar rtToolbar2 = (RTToolbar) findViewById(R.id.rte_toolbar_paragraph);
+        RTToolbar rtToolbar2 = findViewById(R.id.rte_toolbar_paragraph);
         if (rtToolbar2 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar2);
         }
 
         // set subject
-        mSubjectField = (EditText) findViewById(R.id.subject);
+        mSubjectField = findViewById(R.id.subject);
         mSubjectField.setText(subject);
 
         // register message editor
-        mRTMessageField = (RTEditText) findViewById(R.id.rtEditText_1);
+        mRTMessageField = findViewById(R.id.rtEditText_1);
         mRTManager.registerEditor(mRTMessageField, true);
         if (message != null) {
             mRTMessageField.setRichTextEditing(true, message);
         }
 
         // register signature editor
-        mRTSignatureField = (RTEditText) findViewById(R.id.rtEditText_2);
+        mRTSignatureField = findViewById(R.id.rtEditText_2);
         mRTManager.registerEditor(mRTSignatureField, true);
         if (signature != null) {
             mRTSignatureField.setRichTextEditing(true, signature);
