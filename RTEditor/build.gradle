@@ -49,10 +49,10 @@ android {
 }
 
 dependencies {
-    compile "org.greenrobot:eventbus:3.0.0"
+    api "org.greenrobot:eventbus:3.1.1"
 
     // used for the material design (dialogs and tab layout)
-    compile "com.android.support:appcompat-v7:27.0.2"
+    api "com.android.support:appcompat-v7:27.1.0"
 
     // Kotlin
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
