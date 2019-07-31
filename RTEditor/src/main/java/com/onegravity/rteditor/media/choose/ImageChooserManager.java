@@ -26,6 +26,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.onegravity.rteditor.BuildConfig;
 import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
@@ -100,7 +101,7 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
                     // There are compatibility issues with FileProvider Uris on lower versions
                     uriForCamera = Uri.fromFile(imageFile);
                 } else {
-                    uriForCamera = FileProvider.getUriForFile(mActivity, "com.onegravity.rteditor.fileprovider", imageFile);
+                    uriForCamera = FileProvider.getUriForFile(mActivity, BuildConfig.APPLICATION_ID, imageFile);
                 }
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                         .putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera);
