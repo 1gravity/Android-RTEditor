@@ -22,9 +22,9 @@ The editor offers the following <b>character formatting</b> options:
 * Text size
 * Text color
 * Background color
+* Undo/Redo
 
 It also supports the following <b>paragraph formatting</b>:
-
 <ol><li>Numbered</li></ol>
 <ul>
 <li>Bullet points</li>
@@ -34,9 +34,18 @@ It also supports the following <b>paragraph formatting</b>:
 <div align="right">Right alignment</div>
 </ul>
 
-* [Links](http://www.1gravity.com)
-* Images: [![Images](https://github.com/Vishal-beep136/Android-RTEditor/blob/master/art/screenshot_dark.png)](http://www.1gravity.com)
-* Undo/Redo
+
+* [1 Gravity.com](http://www.1gravity.com)
+
+
+### Dark Mode
+![Demo App](https://github.com/Vishal-beep136/Android-RTEditor/blob/master/art/DARK%20MODE.png)
+
+### Light Mode
+![Demo App](https://github.com/Vishal-beep136/Android-RTEditor/blob/master/art/LIGHT%20MODE.png)
+
+
+
 
 
 Setup
