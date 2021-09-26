@@ -1,11 +1,11 @@
 # Android-RTEditor
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Demo App](http://1gravity.com/images/demo_app_1.2.0.svg)](https://play.google.com/store/apps/details?id=com.onegravity.rteditor.demo)
+[![Demo App](https://github.com/Vishal-beep136/Android-RTEditor/blob/master/art/demo_app_1.2.0.svg)](https://play.google.com/store/apps/details?id=com.onegravity.rteditor.demo)
 
 The Android RTEditor is a rich text editor component for Android that can be used as a drop in for EditText.
 
-![Images](http://www.1gravity.com/images/richtexteditor.png)
+![Images](https://github.com/Vishal-beep136/Android-RTEditor/blob/master/art/feature.png)
 
 Features
 --------
@@ -35,7 +35,7 @@ It also supports the following <b>paragraph formatting</b>:
 </ul>
 
 * [Links](http://www.1gravity.com)
-* Images: [![Images](http://www.1gravity.com/images/ANDROID.png)](http://www.1gravity.com)
+* Images: [![Images](https://github.com/Vishal-beep136/Android-RTEditor/blob/master/art/screenshot_dark.png)](http://www.1gravity.com)
 * Undo/Redo
 
 
