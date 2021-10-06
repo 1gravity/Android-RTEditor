@@ -59,7 +59,7 @@ import java.util.Set;
 /**
  * The actual rich text editor (extending android.widget.EditText).
  */
-public class RTEditText extends EditText implements TextWatcher, SpanWatcher, LinkSpanListener {
+public class RTEditText extends androidx.appcompat.widget.AppCompatEditText implements TextWatcher, SpanWatcher, LinkSpanListener {
 
     // don't allow any formatting in text mode
     private boolean mUseRTFormatting = true;

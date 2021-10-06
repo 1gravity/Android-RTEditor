@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Emanuel Moecklin
+ * Copyright (C) 2015-2021 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,19 +44,19 @@ public class SpinnerItemAdapter<T extends SpinnerItem> extends BaseAdapter imple
     final private int mSpinnerItemId;
 
     private int mSelectedItem;
-    private List<T> mItems;
+    private final List<T> mItems;
 
-    private LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
 
     // we need this to update the spinner text, for some reason the layout view
     private ViewGroup mParent;
     private String mSpinnerTitle;
 
-    private Handler mHandler;
+    private final Handler mHandler;
 
     final private SparseArray<View> mViewCache = new SparseArray<>();
 
-    private int mSelectedBackgroundId;
+    private final int mSelectedBackgroundId;
 
     public SpinnerItemAdapter(Context context, SpinnerItems<T> spinnerItems, int spinnerId, int spinnerItemId) {
         mSelectedItem = spinnerItems.getSelectedItem();
@@ -106,16 +106,13 @@ public class SpinnerItemAdapter<T extends SpinnerItem> extends BaseAdapter imple
 
     @Override
     public void onSpinnerItemChanged(final Object tag) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                int position = (Integer) tag;
-                int key = (position << 16) + getItemViewType(position);
-                SpinnerItem spinnerItem = mItems.get(position);
-                View spinnerItemView = mViewCache.get(key);
-                if (spinnerItemView != null) {
-                    bindView(position, spinnerItemView, spinnerItem);
-                }
+        mHandler.post(() -> {
+            int position = (Integer) tag;
+            int key = (position << 16) + getItemViewType(position);
+            SpinnerItem spinnerItem = mItems.get(position);
+            View spinnerItemView = mViewCache.get(key);
+            if (spinnerItemView != null) {
+                bindView(position, spinnerItemView, spinnerItem);
             }
         });
     }

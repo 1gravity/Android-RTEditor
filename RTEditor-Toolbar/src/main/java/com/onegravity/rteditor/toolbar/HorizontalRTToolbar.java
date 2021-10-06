@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Emanuel Moecklin
+ * Copyright (C) 2015-2021 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.onegravity.rteditor.toolbar;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Layout;
@@ -29,9 +28,8 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-import com.onegravity.colorpicker.ColorPickerDialog;
+import com.onegravity.colorpicker.ColorPicker;
 import com.onegravity.colorpicker.ColorPickerListener;
-import com.onegravity.colorpicker.SetColorPickerListenerEvent;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.RTToolbarListener;
 import com.onegravity.rteditor.effects.Effects;
@@ -67,7 +65,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     /*
      * We need a unique id for the toolbar because the RTManager is capable of managing multiple toolbars
      */
-    private static AtomicInteger sIdCounter = new AtomicInteger(0);
+    private static final AtomicInteger sIdCounter = new AtomicInteger(0);
     private int mId;
 
     private RTToolbarListener mListener;
@@ -107,7 +105,6 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     private int mCustomColorFont = Color.BLACK;
     private int mCustomColorBG = Color.BLACK;
 
-    private int mPickerId = -1;
     private ColorPickerListener mColorPickerListener;
 
     // ****************************************** Initialize Methods *******************************************
@@ -131,7 +128,6 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         synchronized (sIdCounter) {
             mId = sIdCounter.getAndIncrement();
         }
-        SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
     }
 
     @Override
@@ -161,7 +157,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         // enable/disable capture picture depending on whether the device
         // has a camera or not
         PackageManager packageMgr = getContext().getPackageManager();
-        if (packageMgr.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (packageMgr.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
             initImageButton(R.id.toolbar_image_capture);
         } else {
             View imageCapture = findViewById(R.id.toolbar_image_capture);
@@ -214,7 +210,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         /*
          * Create the spinner items
          */
-        SpinnerItems<FontSpinnerItem> spinnerItems = new SpinnerItems<FontSpinnerItem>();
+        SpinnerItems<FontSpinnerItem> spinnerItems = new SpinnerItems<>();
         spinnerItems.add(new FontSpinnerItem(null));        // empty element
         for (RTTypeface typeface : fonts) {
             spinnerItems.add(new FontSpinnerItem(typeface));
@@ -224,7 +220,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     }
 
     private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
-        SpinnerItems<FontSizeSpinnerItem> spinnerItems = new SpinnerItems<FontSizeSpinnerItem>();
+        SpinnerItems<FontSizeSpinnerItem> spinnerItems = new SpinnerItems<>();
         Resources res = getResources();
 
         // empty size
@@ -241,7 +237,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     }
 
     private SpinnerItems<FontColorSpinnerItem> getFontColorItems() {
-        SpinnerItems<FontColorSpinnerItem> spinnerItems = new SpinnerItems<FontColorSpinnerItem>();
+        SpinnerItems<FontColorSpinnerItem> spinnerItems = new SpinnerItems<>();
         Context context = getContext();
 
         // empty color
@@ -265,7 +261,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     }
 
     private SpinnerItems<BGColorSpinnerItem> getBGColorItems() {
-        SpinnerItems<BGColorSpinnerItem> spinnerItems = new SpinnerItems<BGColorSpinnerItem>();
+        SpinnerItems<BGColorSpinnerItem> spinnerItems = new SpinnerItems<>();
         Context context = getContext();
 
         // empty color
@@ -295,7 +291,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             Context context = getContext();
 
             // create custom adapter
-            final SpinnerItemAdapter<T> dropDownNavAdapter = new SpinnerItemAdapter<T>(context, spinnerItems, spinnerId, spinnerItemId);
+            final SpinnerItemAdapter<T> dropDownNavAdapter = new SpinnerItemAdapter<>(context, spinnerItems, spinnerId, spinnerItemId);
 
             // configure spinner
             spinner.setPadding(spinner.getPaddingLeft(), 0, spinner.getPaddingRight(), 0);
@@ -304,7 +300,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             // default and the OnItemSelectedListener won't get called
             spinner.setSelection(spinnerItems.getSelectedItem());
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                private AtomicBoolean mFirstCall = new AtomicBoolean(true);
+                private final AtomicBoolean mFirstCall = new AtomicBoolean(true);
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -323,15 +319,6 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         }
 
         return null;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (mColorPickerListener != null && mPickerId != -1) {
-            SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
-        }
     }
 
     // ****************************************** RTToolbar Methods *******************************************
@@ -501,7 +488,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         void onItemSelected(T spinnerItem, int position);
     }
 
-    private DropDownNavListener<FontSpinnerItem> mFontListener = new DropDownNavListener<FontSpinnerItem>() {
+    private final DropDownNavListener<FontSpinnerItem> mFontListener = new DropDownNavListener<FontSpinnerItem>() {
         @Override
         public void onItemSelected(FontSpinnerItem spinnerItem, int position) {
             RTTypeface typeface = spinnerItem.getTypeface();
@@ -509,7 +496,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         }
     };
 
-    private DropDownNavListener<FontSizeSpinnerItem> mFontSizeListener = new DropDownNavListener<FontSizeSpinnerItem>() {
+    private final DropDownNavListener<FontSizeSpinnerItem> mFontSizeListener = new DropDownNavListener<FontSizeSpinnerItem>() {
         @Override
         public void onItemSelected(FontSizeSpinnerItem spinnerItem, int position) {
             int size = spinnerItem.getFontSize();
@@ -519,7 +506,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         }
     };
 
-    private DropDownNavListener<FontColorSpinnerItem> mFontColorListener = new DropDownNavListener<FontColorSpinnerItem>() {
+    private final DropDownNavListener<FontColorSpinnerItem> mFontColorListener = new DropDownNavListener<FontColorSpinnerItem>() {
         @Override
         public void onItemSelected(final FontColorSpinnerItem spinnerItem, int position) {
             if (spinnerItem.isCustom()) {
@@ -534,12 +521,9 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                         }
                     }
                     @Override
-                    public void onDialogClosing() {
-                        mPickerId = -1;
-                    }
+                    public void onDialogClosing() { }
                 };
-                mPickerId = new ColorPickerDialog(getContext(), mCustomColorFont, false).show();
-                SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
+                new ColorPicker(getContext(), mCustomColorFont, false, mColorPickerListener).show();
             } else if (mListener != null) {
                 Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
                 mListener.onEffectSelected(Effects.FONTCOLOR, color);
@@ -547,7 +531,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         }
     };
 
-    private DropDownNavListener<BGColorSpinnerItem> mBGColorListener = new DropDownNavListener<BGColorSpinnerItem>() {
+    private final DropDownNavListener<BGColorSpinnerItem> mBGColorListener = new DropDownNavListener<BGColorSpinnerItem>() {
         @Override
         public void onItemSelected(final BGColorSpinnerItem spinnerItem, int position) {
             if (spinnerItem.isCustom()) {
@@ -561,12 +545,9 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                             mListener.onEffectSelected(Effects.BGCOLOR, color);
                         }
                     }
-                    public void onDialogClosing() {
-                        mPickerId = -1;
-                    }
+                    public void onDialogClosing() { }
                 };
-                mPickerId = new ColorPickerDialog(getContext(), mCustomColorBG, false).show();
-                SetColorPickerListenerEvent.setListener(mPickerId, mColorPickerListener);
+                new ColorPicker(getContext(), mCustomColorBG, false, mColorPickerListener).show();
             } else if (mListener != null) {
                 Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
                 mListener.onEffectSelected(Effects.BGCOLOR, color);
@@ -661,7 +642,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             }
 
             else if (id == R.id.toolbar_dec_indent) {
-                mListener.onEffectSelected(Effects.INDENTATION, -Helper.getLeadingMarging());
+                mListener.onEffectSelected(Effects.INDENTATION, Helper.getLeadingMarging());
             }
 
             else if (id == R.id.toolbar_link) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Emanuel Moecklin
+ * Copyright (C) 2015-2021 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTApi;
@@ -31,22 +31,22 @@ public class MonitoredActivity extends AppCompatActivity {
 
     protected Handler mHandler;
 
-    private final ArrayList<LifeCycleListener> mListeners = new ArrayList<LifeCycleListener>();
+    private final ArrayList<LifeCycleListener> mListeners = new ArrayList<>();
 
     // ****************************************** MonitoredActivity Methods *******************************************
 
-    public static interface LifeCycleListener {
-        public void onActivityCreated(Activity activity);
+    public interface LifeCycleListener {
+        void onActivityCreated(Activity activity);
 
-        public void onActivityDestroyed(Activity activity);
+        void onActivityDestroyed(Activity activity);
 
-        public void onActivityPaused(Activity activity);
+        void onActivityPaused(Activity activity);
 
-        public void onActivityResumed(Activity activity);
+        void onActivityResumed(Activity activity);
 
-        public void onActivityStarted(Activity activity);
+        void onActivityStarted(Activity activity);
 
-        public void onActivityStopped(Activity activity);
+        void onActivityStopped(Activity activity);
     }
 
     public static class LifeCycleAdapter implements LifeCycleListener {
@@ -158,7 +158,7 @@ public class MonitoredActivity extends AppCompatActivity {
         // make the progress dialog uncancelable, so that we can guarantee
         // that the thread is done before the activity gets destroyed
         ProgressDialog dialog = ProgressDialog.show(this, null, getString(msgId), true, false);
-        Job<T> managedJob = new Job<T>(job, dialog);
+        Job<T> managedJob = new Job<>(job, dialog);
         return managedJob.runForegroundJob();
     }
 
@@ -172,12 +172,12 @@ public class MonitoredActivity extends AppCompatActivity {
         // make the progress dialog uncancelable, so that we can guarantee
         // that the thread is done before the activity gets destroyed
         ProgressDialog dialog = ProgressDialog.show(this, null, getString(msgId), true, false);
-        Job<Object> managedJob = new Job<Object>(runnable, dialog);
+        Job<Object> managedJob = new Job<>(runnable, dialog);
         managedJob.runBackgroundJob();
     }
 
     public interface ForegroundJob<T> {
-        public T runForegroundJob();
+        T runForegroundJob();
     }
 
     private class Job<T> extends LifeCycleAdapter implements ForegroundJob<T> {

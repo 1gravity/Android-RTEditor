@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2015-2018 Emanuel Moecklin
+  Copyright (C) 2015-2021 Emanuel Moecklin
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
   limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
@@ -23,27 +24,31 @@
         android:alphabeticShortcut="l"
         android:icon="?attr/rte_icMenuRotateLeft"
         android:orderInCategory="1"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
 
     <item
         android:id="@+id/rotate_right"
         android:alphabeticShortcut="r"
         android:icon="?attr/rte_icMenuRotateRight"
         android:orderInCategory="2"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        tools:ignore="MenuTitle"/>
 
     <item
         android:id="@+id/save"
         android:alphabeticShortcut="s"
         android:icon="?attr/rte_icMenuSave"
         android:orderInCategory="3"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        tools:ignore="MenuTitle"/>
 
     <item
         android:id="@+id/cancel"
         android:alphabeticShortcut="q"
         android:icon="?attr/rte_icMenuCloseClearCancel"
         android:orderInCategory="4"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        tools:ignore="MenuTitle"/>
 
 </menu>

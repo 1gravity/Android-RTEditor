@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Emanuel Moecklin
+ * Copyright (C) 2015-2021 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class Effects {
     /*
      * ALL_EFFECTS is a list of all defined effects, for simpler iteration over all effects.
      */
-    public static final ArrayList<Effect> ALL_EFFECTS = new ArrayList<Effect>();
+    public static final ArrayList<Effect> ALL_EFFECTS = new ArrayList<>();
 
     static {
         // character effects
@@ -81,7 +81,7 @@ public class Effects {
     /*
      * FORMATTING_EFFECTS is a list of all effects which will be removed when the formatting is removed from the text.
      */
-    public static final ArrayList<Effect> FORMATTING_EFFECTS = new ArrayList<Effect>();
+    public static final ArrayList<Effect> FORMATTING_EFFECTS = new ArrayList<>();
 
     static {
         // character effects

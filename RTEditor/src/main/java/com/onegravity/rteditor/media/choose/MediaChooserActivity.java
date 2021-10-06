@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Emanuel Moecklin
+ * Copyright (C) 2015-2021 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,6 +108,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         if (mSelectedMedia != null) {
             outState.putSerializable("mSelectedMedia", mSelectedMedia);
         }
@@ -131,6 +132,8 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK) {
 
             if (requestCode == MediaAction.PICK_PICTURE.requestCode() && data != null) {
@@ -140,7 +143,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
             } else if (requestCode == Constants.CROP_IMAGE) {
                 String path = data.getStringExtra(CropImageActivity.IMAGE_DESTINATION_FILE);
                 if (path != null && mSelectedMedia instanceof RTImage) {
-                    EventBus.getDefault().postSticky( new MediaEvent(mSelectedMedia) );
+                    EventBus.getDefault().postSticky(new MediaEvent(mSelectedMedia));
                     finish();
                 }
             }

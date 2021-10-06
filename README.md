@@ -41,7 +41,7 @@ It also supports the following <b>paragraph formatting</b>:
 
 Setup
 -----
-####**Dependencies**
+#### Dependencies
 
 Add this to your Gradle build file:
 ```
@@ -50,7 +50,7 @@ dependencies {
 }
 ```
 
-####**Manifest**
+#### Manifest
 
 Add these two Activity definitions to your manifest:
 ```
@@ -61,7 +61,7 @@ Add these two Activity definitions to your manifest:
     android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
 ```
 
-#### **Proguard**
+#### Proguard
 
 If you use Proguard in your app, please add the following lines to your configuration file:
 ```
@@ -69,13 +69,6 @@ If you use Proguard in your app, please add the following lines to your configur
 -keepclassmembers class * extends com.onegravity.rteditor.spans.RTSpan {
     public <init>(int);
 }
-
-# EventBus see: http://greenrobot.org/eventbus/documentation/proguard/
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
 ```
 
 The "Signature" attribute is required to be able to access generic type, which the rich text editor code does:
@@ -86,7 +79,7 @@ protected BooleanEffect() {
 }
 ```
 
-####**Theming**
+#### Theming
 
 The toolbar uses a couple of custom attributes that need to be defined or it will crash when being inflated.
 You need to use a theme based on either RTE_ThemeLight or RTE_ThemeDark or define all rich text editor attributes (rte_toolbar_themes.xml) in your own theme. 
@@ -108,7 +101,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 The 3 main components
 ---------------------
-####**RTEditText**
+#### RTEditText
 is the EditText drop in component. Add it to your layout like you would EditText:
 ```xml
 <com.onegravity.rteditor.RTEditText
@@ -122,7 +115,7 @@ In code you would typically use methods to set and get the text content:
   * set text: <code>RTEditText.setRichTextEditing(true, "My content");</code>
   * get text: <code>RTEditText.getText(RTFormat.HTML)</code>
 
-####**RTToolbar**
+#### RTToolbar
 is an interface for the toolbar used to apply text and paragraph formatting and other features listed above. The actual RTToolbar implementation is in a separate module and is a scrollable ribbon but alternative implementations aren't too hard to realize (popup, action buttons, floating buttons...). The toolbar implementation is easy to integrate into your layout:
 ```xml
 <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
@@ -146,7 +139,7 @@ Note that inflating the toolbar might take a moment (noticable) on certain devic
 
 In code you'd typically not interact with the toolbar (see RTManager below for the one exception).
 
-####**RTManager**
+#### RTManager
 is the glue that holds the rich text editors (RTEditText), the toolbar and your app together. Each rich text editor and each toolbar needs to be registered with the RTManager before they are functional. Multiple editors and multiple toolbars can be registered. The RTManager is instantiated by your app in code usually in the onCreate passing in an RTApi object that gives the rich text editor access to its context (your app).
 A typical initialization process looks like this (normally in the onCreate method):
 
@@ -202,12 +195,12 @@ The RTApi is a convenience class giving the various rich text editor components 
 RTApi rtApi = new RTApi(this, new RTProxyImpl(this), new RTMediaFactoryImpl(this, true));
 ```
 
-####**Context**
+#### Context
 
 The first parameter is merely a Context object (Application or Activity context).
 The RTApi will only store the Application context so no issue with leaking the Activity context here.  
 
-####**RTProxy**
+#### RTProxy
 
 The RTProxy allows the rich text editor to call Activity related methods like:
 * startActivityForResult/runOnUiThread and Toast methods: for picking images to embed in the text
@@ -216,7 +209,7 @@ The RTProxy allows the rich text editor to call Activity related methods like:
 RTProxyImpl is the standard implementation for RTProxy and there's usually no need to use a custom implementation.
 RTProxyImpl stores the Activity context in a SoftReference.
 
-####**RTMediaFactory**
+#### RTMediaFactory
 
 The most interesting class is RTMediaFactory.
 By overriding it, different storage scenarios for embedded images (and potentially videos and audio files in the future) can be implemented (SQLite database, file system, cloud storage, access through ContentProvider etc.).
@@ -234,7 +227,7 @@ In order to create that file during build time, please copy the following code t
 
 ```
 task indexAssets {
-    description 'Index Build Variant assets for faster lookup by AssetManager'
+    description 'Index main.kotlin.Build Variant assets for faster lookup by AssetManager'
 
     ext.assetsSrcDir = file( "${projectDir}/src/main/assets" )
 
@@ -303,7 +296,7 @@ If you have an issues with this library, please open a issue here: https://githu
 License
 -------
 
-Copyright 2015-2018 Emanuel Moecklin
+Copyright 2015-2021 Emanuel Moecklin
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

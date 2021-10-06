@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Emanuel Moecklin
+ * Copyright (C) 2015-2021 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,9 @@
  * limitations under the License.
  */
 
-buildscript {
-    ext.kotlin_version = '1.2.21'
-
-    repositories {
-        jcenter()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
-allprojects {
-    ext.compileSdkVersion = 27
-    ext.minSdkVersion = 14
-
-    ext.lib_version = '1.6.7'
-
-    repositories {
-        jcenter()
-        google()
-    }
+object Build {
+    const val buildToolsVersion = "31.0.0"
+    const val compileSdkVersion = 30
+    const val minSdkVersion = 16
+    const val targetSdkVersion = 30
 }

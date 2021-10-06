@@ -24,9 +24,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.widget.ImageView;
 
-abstract class ImageViewTouchBase extends ImageView {
+abstract class ImageViewTouchBase extends androidx.appcompat.widget.AppCompatImageView {
 
     @SuppressWarnings("unused")
     private static final String TAG = "ImageViewTouchBase";
