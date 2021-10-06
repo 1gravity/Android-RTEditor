@@ -57,3 +57,34 @@ afterEvaluate {
         }
     }
 }
+
+fun sourceFiles() = android.sourceSets.findByName("main")?.java?.getSourceFiles()
+
+tasks.register<Javadoc>("withJavadoc") {
+    isFailOnError = false
+    dependsOn(tasks.named("compileDebugSources"), tasks.named("compileReleaseSources"))
+
+    // add Android runtime classpath
+    android.bootClasspath.forEach { classpath += project.fileTree(it) }
+
+    // add classpath for all dependencies
+    android.libraryVariants.forEach { variant ->
+        variant.javaCompileProvider.get().classpath.files.forEach { file ->
+            classpath += project.fileTree(file)
+        }
+    }
+
+    source = sourceFiles() ?: source
+}
+
+tasks.register<Jar>("withJavadocJar") {
+    archiveClassifier.set("javadoc")
+    dependsOn(tasks.named("withJavadoc"))
+    val destination = tasks.named<Javadoc>("withJavadoc").get().destinationDir
+    from(destination)
+}
+
+tasks.register<Jar>("withSourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceFiles())
+}

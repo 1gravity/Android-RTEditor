@@ -53,7 +53,7 @@ public class RTEditorActivity extends RTEditorBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // read parameters
-        String subject = null;
+        String subject;
         String message = null;
         String signature = null;
         if (savedInstanceState == null) {
@@ -139,7 +139,7 @@ public class RTEditorActivity extends RTEditorBaseActivity {
         mRTManager.onSaveInstanceState(outState);
 
         String subject = mSubjectField.getText().toString();
-        if (subject != null) outState.putString(PARAM_SUBJECT, subject);
+        outState.putString(PARAM_SUBJECT, subject);
 
         outState.putBoolean(PARAM_DARK_THEME, mUseDarkTheme);
         outState.putBoolean(PARAM_SPLIT_TOOLBAR, mSplitToolbar);
@@ -147,6 +147,7 @@ public class RTEditorActivity extends RTEditorBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null && data.getData().getPath() != null) {
             String filePath = data.getData().getPath();
 

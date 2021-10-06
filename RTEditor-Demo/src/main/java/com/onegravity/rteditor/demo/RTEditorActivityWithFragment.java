@@ -89,6 +89,7 @@ public class RTEditorActivityWithFragment extends RTEditorBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null && data.getData().getPath() != null) {
             String filePath = data.getData().getPath();
 
