@@ -41,8 +41,8 @@ android {
 }
 
 dependencies {
-    implementation("com.1gravity:android-rteditor:1.7.2")
-//    implementation(project(":RTEditor"))
+//    implementation("com.1gravity:android-rteditor:1.7.2")
+    implementation(project(":RTEditor"))
 
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("org.greenrobot:eventbus:3.1.1")

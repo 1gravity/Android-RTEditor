@@ -111,8 +111,7 @@ public class LinkFragment extends DialogFragment {
         return fragment;
     }
 
-    public LinkFragment() {
-    }
+    public LinkFragment() { }
 
     @SuppressLint("InflateParams")
     @Override
@@ -150,35 +149,33 @@ public class LinkFragment extends DialogFragment {
                 .setTitle(R.string.rte_create_a_link)
                 .setView(view)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // OK button
-                        validate(dialog, addressView, textView);
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Cancel button
-                        EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(null, url), true));
-                    }
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                    // Cancel button
+                    EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(null, url), true));
                 });
 
         if (address != null) {
-            builder.setNeutralButton(R.string.rte_remove_action, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Remove button
-                    EventBus.getDefault().post(new LinkEvent(LinkFragment.this, null, false));
-                }
+            builder.setNeutralButton(R.string.rte_remove_action, (dialog, which) -> {
+                // Remove button
+                EventBus.getDefault().post(new LinkEvent(LinkFragment.this, null, false));
             });
         }
 
-        return builder.create();
+        final Dialog dialog = builder.create();
+        dialog.setOnShowListener((dialogInterface) ->
+                ((AlertDialog)dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setOnClickListener((button) -> {
+                            if (validate(addressView, textView)) {
+                                try { dialog.dismiss(); } catch (Exception ignore) {}
+                            }
+                        })
+        );
+
+        return dialog;
     }
 
-    private void validate(DialogInterface dialog, TextView addressView, TextView textView) {
+    private boolean validate(TextView addressView, TextView textView) {
         // retrieve link address and do some cleanup
         final String address = addressView.getText().toString().trim();
 
@@ -202,11 +199,12 @@ public class LinkFragment extends DialogFragment {
             }
 
             EventBus.getDefault().post(new LinkEvent(LinkFragment.this, new Link(linkText, newAddress), false));
-            try { dialog.dismiss(); } catch (Exception ignore) {}
+            return true;
         } else {
             // invalid address (neither a url nor an email address
             String errorMessage = getString(R.string.rte_invalid_link, address);
             addressView.setError(errorMessage);
+            return false;
         }
     }
 
