@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
+import com.onegravity.rteditor.R;
+
 /**
  * An ImageButton for the toolbar.
  * It adds a checked state.

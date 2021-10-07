@@ -18,6 +18,13 @@
 <resources>
 
     <declare-styleable name="Theme">
+        <!-- crop image -->
+        <attr name="rte_darkTheme" format="boolean" />
+        <attr name="rte_icMenuSave" format="reference" />
+        <attr name="rte_icMenuCloseClearCancel" format="reference" />
+        <attr name="rte_icMenuRotateLeft" format="reference" />
+        <attr name="rte_icMenuRotateRight" format="reference" />
+
         <attr name="rte_ToolbarButton" format="reference"/>
         <attr name="rte_ToolbarSpinner" format="reference"/>
         <attr name="rte_ToolbarSpinnerItem" format="reference"/>

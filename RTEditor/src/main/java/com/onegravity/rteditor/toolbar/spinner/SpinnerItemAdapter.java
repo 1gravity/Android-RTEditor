@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.onegravity.rteditor.toolbar.R;
+import com.onegravity.rteditor.R;
 
 import java.util.List;
 

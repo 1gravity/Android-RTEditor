@@ -18,6 +18,5 @@ rootProject.name = "Android-RTEditor"
 
 include(
         ":RTEditor",
-        ":RTEditor-Toolbar",
         ":RTEditor-Demo"
 )

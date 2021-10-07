@@ -30,6 +30,7 @@ import android.widget.Spinner;
 
 import com.onegravity.colorpicker.ColorPicker;
 import com.onegravity.colorpicker.ColorPickerListener;
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.RTToolbarListener;
 import com.onegravity.rteditor.effects.Effects;
