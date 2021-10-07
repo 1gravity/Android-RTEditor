@@ -43,7 +43,7 @@ dependencies {
 
 val sourceFiles = android.sourceSets.getByName("main").java.getSourceFiles()
 
-val withJavad3oc = tasks.register<Javadoc>("withJavadoc") {
+tasks.register<Javadoc>("withJavadoc") {
     isFailOnError = false
     dependsOn(tasks.named("compileDebugSources"), tasks.named("compileReleaseSources"))
 
