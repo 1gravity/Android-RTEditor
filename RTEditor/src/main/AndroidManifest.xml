@@ -20,15 +20,20 @@
     android:versionName="1.0">
 
     <application>
+        <activity
+            android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
+
+        <activity
+            android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
+
         <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.onegravity.rteditor.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.onegravity.rteditor.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 </manifest>

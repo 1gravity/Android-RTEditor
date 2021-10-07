@@ -16,6 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.onegravity.rteditor.demo">
 
     <supports-screens
@@ -25,7 +26,8 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:name="com.onegravity.rteditor.demo.RTApplication"
@@ -54,11 +56,10 @@
 
         </activity>
 
-        <activity
-            android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
-
-        <activity
-            android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            tools:replace="android:authorities"
+            android:authorities="${applicationId}.provider"/>
 
     </application>
 

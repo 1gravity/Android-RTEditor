@@ -100,7 +100,7 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
                     // There are compatibility issues with FileProvider Uris on lower versions
                     uriForCamera = Uri.fromFile(imageFile);
                 } else {
-                    uriForCamera = FileProvider.getUriForFile(mActivity, "com.onegravity.rteditor.fileprovider", imageFile);
+                    uriForCamera = FileProvider.getUriForFile(mActivity, mActivity.getPackageName() + ".provider", imageFile);
                 }
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                         .putExtra(MediaStore.EXTRA_OUTPUT, uriForCamera);

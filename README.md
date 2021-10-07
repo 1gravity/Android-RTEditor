@@ -46,19 +46,18 @@ Setup
 Add this to your Gradle build file:
 ```
 dependencies {
-    compile 'com.1gravity:android-rteditor:1.6.7'
+    compile 'com.1gravity:android-rteditor:1.7.0'
 }
 ```
 
 #### Manifest
 
-Add these two Activity definitions to your manifest:
+Add this to your manifest:
 ```
-<activity
-    android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
-
-<activity
-    android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            tools:replace="android:authorities"
+            android:authorities="${applicationId}.provider"/>
 ```
 
 #### Proguard
