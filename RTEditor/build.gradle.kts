@@ -40,24 +40,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 }
 
-afterEvaluate {
-    publishing {
-        repositories(project)
-        publications {
-            val publicationName = project.properties["POM_NAME"]?.toString() ?: "publication"
-            create<MavenPublication>(publicationName) {
-                configure(project)
-            }
-            signing {
-                sign(publishing.publications.getByName(publicationName))
-            }
-        }
-    }
-}
+val sourceFiles = android.sourceSets.getByName("main").java.getSourceFiles()
 
-fun sourceFiles() = android.sourceSets.findByName("main")?.java?.getSourceFiles()
-
-tasks.register<Javadoc>("withJavadoc") {
+val withJavad3oc = tasks.register<Javadoc>("withJavadoc") {
     isFailOnError = false
     dependsOn(tasks.named("compileDebugSources"), tasks.named("compileReleaseSources"))
 
@@ -71,17 +56,32 @@ tasks.register<Javadoc>("withJavadoc") {
         }
     }
 
-    source = sourceFiles() ?: source
+    source = sourceFiles
 }
 
-tasks.register<Jar>("withJavadocJar") {
+val withJavadocJar = tasks.register<Jar>("withJavadocJar") {
     archiveClassifier.set("javadoc")
     dependsOn(tasks.named("withJavadoc"))
     val destination = tasks.named<Javadoc>("withJavadoc").get().destinationDir
     from(destination)
 }
 
-tasks.register<Jar>("withSourcesJar") {
+val withSourcesJar = tasks.register<Jar>("withSourcesJar") {
     archiveClassifier.set("sources")
-    from(sourceFiles())
+    from(sourceFiles)
+}
+
+afterEvaluate {
+    publishing {
+        repositories(project)
+        publications {
+            val publicationName = project.properties["POM_NAME"]?.toString() ?: "publication"
+            create<MavenPublication>(publicationName) {
+                configure(project, withJavadocJar, withSourcesJar)
+            }
+            signing {
+                sign(publishing.publications.getByName(publicationName))
+            }
+        }
+    }
 }

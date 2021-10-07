@@ -34,3 +34,4 @@ allprojects {
         maven("https://jitpack.io")
     }
 }
+

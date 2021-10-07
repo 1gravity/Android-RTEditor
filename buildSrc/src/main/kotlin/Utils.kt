@@ -1,6 +1,8 @@
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.get
 import java.net.URI
 
@@ -19,13 +21,14 @@ fun PublishingExtension.repositories(project: Project) {
     }
 }
 
-fun MavenPublication.configure(project: Project) {
+fun MavenPublication.configure(project: Project, vararg artifacts: TaskProvider<Jar>) {
     val props: MutableMap<String, *> = project.properties
     groupId = props["POM_GROUP_ID"].toString()
     artifactId = props["POM_ARTIFACT_ID"].toString()
     version = props["POM_VERSION_NAME"].toString()
 
     from(project.components["release"])
+    artifacts.forEach { artifact(it) }
 
     pom {
         name.set(props["POM_NAME"].toString())
