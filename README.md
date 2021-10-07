@@ -22,6 +22,7 @@ The editor offers the following <b>character formatting</b> options:
 * Text size
 * Text color
 * Background color
+* Undo/Redo
 
 It also supports the following <b>paragraph formatting</b>:
 
@@ -35,9 +36,8 @@ It also supports the following <b>paragraph formatting</b>:
 </ul>
 
 * [Links](http://www.1gravity.com)
-* Images: [![Images](http://www.1gravity.com/images/ANDROID.png)](http://www.1gravity.com)
-* Undo/Redo
 
+* Images: [![Images](https://github.com/1gravity/Android-RTEditor/blob/master/art/smiley.png)](http://www.1gravity.com)
 
 Setup
 -----
