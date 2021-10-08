@@ -90,15 +90,76 @@ tasks {
 }
 
 afterEvaluate {
+    fun Project.getRepositoryUrl(): java.net.URI {
+        val isReleaseBuild = properties["POM_VERSION_NAME"]?.toString()?.contains("SNAPSHOT") == false
+        val releaseRepoUrl = properties["RELEASE_REPOSITORY_URL"]?.toString() ?: "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        val snapshotRepoUrl = properties["SNAPSHOT_REPOSITORY_URL"]?.toString() ?: "https://oss.sonatype.org/content/repositories/snapshots/"
+        return uri(if (isReleaseBuild) releaseRepoUrl else snapshotRepoUrl)
+    }
+
     publishing {
-        repositories(project)
         publications {
-            val publicationName = project.properties["POM_NAME"]?.toString() ?: "publication"
-            create<MavenPublication>(publicationName) {
-                val javadocTask = tasks.named<Jar>("withJavadocJar")
-                val sourceTask = tasks.named<Jar>("withSourcesJar")
-                configure(project, javadocTask, sourceTask)
+            val props = project.properties
+
+            // 1. configure repositories
+            repositories {
+                maven {
+                    url = getRepositoryUrl()
+                    // credentials are stored in ~/.gradle/gradle.properties with ~ being the path of the home directory
+                    credentials {
+                        username = props["oss.username"]?.toString() ?: throw IllegalStateException("oss.username not found")
+                        password = props["oss.password"]?.toString() ?: throw IllegalStateException("oss.password not found")
+                    }
+                }
             }
+
+            // 2. configure publication
+            val publicationName = props["POM_NAME"]?.toString() ?: "publication"
+            create<MavenPublication>(publicationName) {
+                groupId = props["POM_GROUP_ID"].toString()
+                artifactId = props["POM_ARTIFACT_ID"].toString()
+                version = props["POM_VERSION_NAME"].toString()
+
+                from(project.components["release"])
+                artifact(tasks.named<Jar>("withJavadocJar"))
+                artifact(tasks.named<Jar>("withSourcesJar"))
+
+                pom {
+                    name.set(props["POM_NAME"].toString())
+                    description.set(props["POM_DESCRIPTION"].toString())
+                    url.set(props["POM_URL"].toString())
+                    packaging = props["POM_PACKAGING"].toString()
+
+                    scm {
+                        url.set(props["POM_SCM_URL"].toString())
+                        connection.set(props["POM_SCM_CONNECTION"].toString())
+                        developerConnection.set(props["POM_SCM_DEV_CONNECTION"].toString())
+                    }
+
+                    organization {
+                        name.set(props["POM_COMPANY_NAME"].toString())
+                        url.set(props["POM_COMPANY_URL"].toString())
+                    }
+
+                    developers {
+                        developer {
+                            id.set(props["POM_DEVELOPER_ID"].toString())
+                            name.set(props["POM_DEVELOPER_NAME"].toString())
+                            email.set(props["POM_DEVELOPER_EMAIL"].toString())
+                        }
+                    }
+
+                    licenses {
+                        license {
+                            name.set(props["POM_LICENCE_NAME"].toString())
+                            url.set(props["POM_LICENCE_URL"].toString())
+                            distribution.set(props["POM_LICENCE_DIST"].toString())
+                        }
+                    }
+                }
+            }
+
+            // 3. sign the artifacts
             signing {
                 sign(publishing.publications.getByName(publicationName))
             }
