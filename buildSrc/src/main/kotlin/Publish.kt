@@ -12,10 +12,10 @@ fun PublishingExtension.repositories(project: Project) {
             url = URI(project.getRepositoryUrl())
             // credentials are stored in ~/.gradle/gradle.properties with ~ being the path of the home directory
             credentials {
-                username = project.properties["NEXUS_USERNAME"]?.toString()
-                        ?: throw IllegalStateException("user/NEXUS_USERNAME name not found")
-                password = project.properties["NEXUS_PASSWORD"]?.toString()
-                        ?: throw IllegalStateException("password/NEXUS_PASSWORD not found")
+                username = project.properties["oss.username"]?.toString()
+                        ?: throw IllegalStateException("oss.username not found")
+                password = project.properties["oss.password"]?.toString()
+                        ?: throw IllegalStateException("oss.password not found")
             }
         }
     }

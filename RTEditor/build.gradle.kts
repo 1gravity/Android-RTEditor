@@ -41,35 +41,52 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 }
 
-val sourceFiles = android.sourceSets.getByName("main").java.getSourceFiles()
+tasks {
+    val sourceFiles = android.sourceSets.getByName("main").java.srcDirs
 
-tasks.register<Javadoc>("withJavadoc") {
-    isFailOnError = false
-    dependsOn(tasks.named("compileDebugSources"), tasks.named("compileReleaseSources"))
+    register<Javadoc>("withJavadoc") {
+        isFailOnError = false
+        dependsOn(android.libraryVariants.toList().last().javaCompileProvider)
+        if (! project.plugins.hasPlugin("org.jetbrains.kotlin.android")) {
+            setSource(sourceFiles)
+        }
 
-    // add Android runtime classpath
-    android.bootClasspath.forEach { classpath += project.fileTree(it) }
+        // add Android runtime classpath
+        android.bootClasspath.forEach { classpath += project.fileTree(it) }
 
-    // add classpath for all dependencies
-    android.libraryVariants.forEach { variant ->
-        variant.javaCompileProvider.get().classpath.files.forEach { file ->
-            classpath += project.fileTree(file)
+        // add classpath for all dependencies
+        android.libraryVariants.forEach { variant ->
+            variant.javaCompileProvider.get().classpath.files.forEach { file ->
+                classpath += project.fileTree(file)
+            }
+        }
+
+        // We don't need javadoc for internals.
+        exclude("**/internal/*")
+
+        // Append Java 8 and Android references
+        val options = options as StandardJavadocDocletOptions
+        options.links("https://developer.android.com/reference")
+        options.links("https://docs.oracle.com/javase/8/docs/api/")
+
+        // Workaround for the following error when running on on JDK 9+
+        // "The code being documented uses modules but the packages defined in ... are in the unnamed module."
+        if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+            options.addStringOption("-release", "8")
         }
     }
 
-    source = sourceFiles
-}
+    register<Jar>("withJavadocJar") {
+        archiveClassifier.set("javadoc")
+        dependsOn(named("withJavadoc"))
+        val destination = named<Javadoc>("withJavadoc").get().destinationDir
+        from(destination)
+    }
 
-val withJavadocJar = tasks.register<Jar>("withJavadocJar") {
-    archiveClassifier.set("javadoc")
-    dependsOn(tasks.named("withJavadoc"))
-    val destination = tasks.named<Javadoc>("withJavadoc").get().destinationDir
-    from(destination)
-}
-
-val withSourcesJar = tasks.register<Jar>("withSourcesJar") {
-    archiveClassifier.set("sources")
-    from(sourceFiles)
+    register<Jar>("withSourcesJar") {
+        archiveClassifier.set("sources")
+        from(sourceFiles)
+    }
 }
 
 afterEvaluate {
@@ -78,7 +95,9 @@ afterEvaluate {
         publications {
             val publicationName = project.properties["POM_NAME"]?.toString() ?: "publication"
             create<MavenPublication>(publicationName) {
-                configure(project, withJavadocJar, withSourcesJar)
+                val javadocTask = tasks.named<Jar>("withJavadocJar")
+                val sourceTask = tasks.named<Jar>("withSourcesJar")
+                configure(project, javadocTask, sourceTask)
             }
             signing {
                 sign(publishing.publications.getByName(publicationName))
