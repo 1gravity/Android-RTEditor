@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-    implementation("com.1gravity:android-colorpicker:2.2.1")
+    implementation("com.1gravity:android-colorpicker:2.2.2")
     implementation("org.greenrobot:eventbus:3.1.1")
     implementation("androidx.appcompat:appcompat:1.3.1")
 }
@@ -110,8 +110,8 @@ afterEvaluate {
                     url = getRepositoryUrl()
                     // credentials are stored in ~/.gradle/gradle.properties with ~ being the path of the home directory
                     credentials {
-                        username = props["oss.username"]?.toString() ?: throw IllegalStateException("oss.username not found")
-                        password = props["oss.password"]?.toString() ?: throw IllegalStateException("oss.password not found")
+                        username = props["ossUsername"]?.toString() ?: throw IllegalStateException("ossUsername not found")
+                        password = props["ossPassword"]?.toString() ?: throw IllegalStateException("ossPassword not found")
                     }
                 }
             }
@@ -164,6 +164,10 @@ afterEvaluate {
 
             // 3. sign the artifacts
             signing {
+                val signingInMemoryKeyId = props["signingInMemoryKeyId"]?.toString() ?: throw IllegalStateException("signingInMemoryKeyId not found")
+                val signingInMemoryKeyPassword = props["signingInMemoryKeyPassword"]?.toString() ?: throw IllegalStateException("signingInMemoryKeyPassword not found")
+                val signingInMemoryKey = props["signingInMemoryKey"]?.toString() ?: throw IllegalStateException("signingInMemoryKey not found")
+                useInMemoryPgpKeys(signingInMemoryKeyId, signingInMemoryKey, signingInMemoryKeyPassword)
                 sign(publishing.publications.getByName(publicationName))
             }
         }
