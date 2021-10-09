@@ -54,10 +54,10 @@ dependencies {
 
 Add this to your manifest:
 ```
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            tools:replace="android:authorities"
-            android:authorities="${applicationId}.provider"/>
+<provider
+    android:name="androidx.core.content.FileProvider"
+    tools:replace="android:authorities"
+    android:authorities="${applicationId}.provider"/>
 ```
 
 #### Proguard
