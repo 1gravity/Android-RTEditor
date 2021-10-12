@@ -164,10 +164,10 @@ afterEvaluate {
 
             // 3. sign the artifacts
             signing {
-                val signingInMemoryKeyId = props["signingInMemoryKeyId"]?.toString() ?: throw IllegalStateException("signingInMemoryKeyId not found")
-                val signingInMemoryKeyPassword = props["signingInMemoryKeyPassword"]?.toString() ?: throw IllegalStateException("signingInMemoryKeyPassword not found")
-                val signingInMemoryKey = props["signingInMemoryKey"]?.toString() ?: throw IllegalStateException("signingInMemoryKey not found")
-                useInMemoryPgpKeys(signingInMemoryKeyId, signingInMemoryKey, signingInMemoryKeyPassword)
+                val signingKeyId = props["signingKeyId"]?.toString() ?: throw IllegalStateException("signingKeyId not found")
+                val signingKeyPassword = props["signingKeyPassword"]?.toString() ?: throw IllegalStateException("signingKeyPassword not found")
+                val signingKey = props["signingKey"]?.toString() ?: throw IllegalStateException("signingKey not found")
+                useInMemoryPgpKeys(signingKeyId, signingKey, signingKeyPassword)
                 sign(publishing.publications.getByName(publicationName))
             }
         }
