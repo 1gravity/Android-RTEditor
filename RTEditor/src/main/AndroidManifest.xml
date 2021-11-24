@@ -21,9 +21,11 @@
 
     <application>
         <activity
+            android:exported="false"
             android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"/>
 
         <activity
+            android:exported="false"
             android:name="com.onegravity.rteditor.media.crop.CropImageActivity"/>
 
         <provider

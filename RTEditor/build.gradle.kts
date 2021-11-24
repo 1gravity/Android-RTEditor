@@ -36,9 +36,9 @@ android {
 }
 
 dependencies {
-    implementation("com.1gravity:android-colorpicker:2.2.2")
+    implementation("com.1gravity:android-colorpicker:2.2.3")
     implementation("org.greenrobot:eventbus:3.1.1")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.4.0")
 }
 
 tasks {

@@ -36,6 +36,7 @@
         android:theme="@style/ThemeLight">
 
         <activity
+            android:exported="true"
             android:name="com.onegravity.rteditor.demo.RTEditorActivity">
 
             <intent-filter>
@@ -47,6 +48,7 @@
         </activity>
 
         <activity
+            android:exported="true"
             android:name="com.onegravity.rteditor.demo.RTEditorActivityWithFragment">
 
             <intent-filter>
