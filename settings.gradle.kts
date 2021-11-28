@@ -16,6 +16,11 @@
 
 rootProject.name = "Android-RTEditor"
 
+plugins {
+        // See https://jmfayard.github.io/refreshVersions
+        id("de.fayard.refreshVersions") version "0.23.0"
+}
+
 include(
         ":RTEditor",
         ":RTEditor-Demo"
