@@ -190,7 +190,6 @@ public class RTEditText extends androidx.appcompat.widget.AppCompatEditText impl
      */
     void unregister() {
         mListener = null;
-        mMediaFactory = null;
     }
 
     /**

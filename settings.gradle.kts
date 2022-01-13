@@ -18,7 +18,7 @@ rootProject.name = "Android-RTEditor"
 
 plugins {
         // See https://jmfayard.github.io/refreshVersions
-        id("de.fayard.refreshVersions") version "0.23.0"
+        id("de.fayard.refreshVersions") version "0.30.2"
 }
 
 include(
