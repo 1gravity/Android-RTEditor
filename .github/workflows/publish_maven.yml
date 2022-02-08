@@ -56,7 +56,7 @@ jobs:
           -PONEGRAVITY_KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
           -PONEGRAVITY_OPENSOURCE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
           -PONEGRAVITY_OPENSOURCE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
-          :library:assembleRelease
+          :RTEditor:assembleRelease
 
       # Generates source and Javadoc jar artifacts
       - name: Create source and Javadoc jar
@@ -72,7 +72,7 @@ jobs:
           -PONEGRAVITY_KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
           -PONEGRAVITY_OPENSOURCE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
           -PONEGRAVITY_OPENSOURCE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
-          :library:withJavadocJar :library:withSourceJar
+          :RTEditor:withJavadocJar :library:withSourceJar
 
       # Runs upload, and then closes & releases the repository
       - name: Publish to MavenCentral
