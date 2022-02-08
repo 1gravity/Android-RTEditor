@@ -84,8 +84,8 @@ dependencies {
     implementation("org.greenrobot:eventbus:_")
 }
 
-//play {
-//    val apiKeyFile = project.property("googlePlayApiKey").toString()
-//    serviceAccountCredentials.set(file(apiKeyFile))
-//    track.set("internal")
-//}
+play {
+    val apiKeyFile = project.property("googlePlayApiKey").toString()
+    serviceAccountCredentials.set(file(apiKeyFile))
+    track.set("internal")
+}
