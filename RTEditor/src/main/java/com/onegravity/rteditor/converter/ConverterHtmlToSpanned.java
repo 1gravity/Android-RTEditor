@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Emanuel Moecklin
+ * Copyright (C) 2015-2022 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,6 +97,9 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     private static final Set<String> sIgnoreTags = new HashSet<String>();
 
     static {
+        SpannableStringBuilder s = new SpannableStringBuilder("hello");
+        s.append(s.subSequence(0, s.length()));
+
         sIgnoreTags.add("header");
         sIgnoreTags.add("style");
         sIgnoreTags.add("meta");

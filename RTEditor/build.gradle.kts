@@ -25,8 +25,8 @@ android {
     }
 
     lint {
-        isAbortOnError = true
-        disable("UnusedResources")
+        abortOnError = true
+        disable += "UnusedResources"
     }
 
     compileOptions {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Emanuel Moecklin
+ * Copyright (C) 2015-2022 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ rootProject.name = "Android-RTEditor"
 
 plugins {
         // See https://jmfayard.github.io/refreshVersions
-        id("de.fayard.refreshVersions") version "0.30.2"
+        id("de.fayard.refreshVersions") version "0.40.1"
 }
 
 include(

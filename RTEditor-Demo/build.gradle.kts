@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Emanuel Moecklin
+ * Copyright (C) 2015-2022 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.github.triplet.play") version "3.7.0"
 }
 
 android {
@@ -28,6 +28,11 @@ android {
         applicationId = "com.onegravity.rteditor.demo"
         minSdk = Build.minSdkVersion
         targetSdk = Build.targetSdkVersion
+
+        versionCode = project.properties["BUILD_NUMBER"]
+            ?.toString()?.toInt()?.minus(1643908089)
+            ?: 12
+        versionName = Build.versionName
     }
 
     compileOptions {
@@ -38,6 +43,37 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.property("ONEGRAVITY_KEYSTORE_FILE").toString())
+            storePassword = project.property("ONEGRAVITY_KEYSTORE_PASSWORD").toString()
+            keyAlias = project.property("ONEGRAVITY_OPENSOURCE_KEY_ALIAS").toString()
+            keyPassword = project.property("ONEGRAVITY_OPENSOURCE_KEY_PASSWORD").toString()
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName(name)
+        }
+
+        getByName("release") {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName(name)
+        }
+    }
 }
 
 dependencies {
@@ -47,3 +83,9 @@ dependencies {
     implementation(AndroidX.appCompat)
     implementation("org.greenrobot:eventbus:_")
 }
+
+//play {
+//    val apiKeyFile = project.property("googlePlayApiKey").toString()
+//    serviceAccountCredentials.set(file(apiKeyFile))
+//    track.set("internal")
+//}

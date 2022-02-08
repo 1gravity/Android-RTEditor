@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Emanuel Moecklin
+ * Copyright (C) 2015-2022 Emanuel Moecklin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  */
 
 object Build {
-    const val buildToolsVersion = "31.0.0"
+    const val buildToolsVersion = "32.0.0"
     const val compileSdkVersion = 31
     const val minSdkVersion = 16
     const val targetSdkVersion = 31
+    const val versionName = "1.4.0"
 }
