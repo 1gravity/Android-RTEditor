@@ -44,19 +44,19 @@ jobs:
           encodedString: ${{ secrets.GOOGLE_PLAY_API_KEY }}
 
       - name: Build release artifacts
-        run: ./gradlew
-          -PossUsername=${{ secrets.OSSRH_USERNAME }}
-          -PossPassword=${{ secrets.OSSRH_PASSWORD }}
-          -PsigningKeyId=${{ secrets.SIGNINGKEYID }}
-          -PsigningKeyPassword="${{ secrets.SIGNINGKEYPASSWORD }}"
-          -PsigningKey="${{ secrets.SIGNINGKEY }}"
-          -PBUILD_NUMBER="${{ env.BUILD_NUMBER }}"
-          -PgooglePlayApiKey="../${{ steps.decode_api_key.outputs.filePath }}"
-          -PONEGRAVITY_KEYSTORE_FILE="../${{ steps.decode_keystore.outputs.filePath }}"
-          -PONEGRAVITY_KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
-          -PONEGRAVITY_OPENSOURCE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
-          -PONEGRAVITY_OPENSOURCE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
-          :RTEditor:assembleRelease --stacktrace
+        env:
+          ossUsername: ${{ secrets.OSSRH_USERNAME }}
+          ossPassword: ${{ secrets.OSSRH_PASSWORD }}
+          signingKeyId: ${{ secrets.SIGNINGKEYID }}
+          signingKeyPassword: ${{ secrets.SIGNINGKEYPASSWORD }}
+          signingKey: ${{ secrets.SIGNINGKEY }}
+          BUILD_NUMBER: "${{ env.BUILD_NUMBER }}"
+          ONEGRAVITY_KEYSTORE_FILE: "../${{ steps.decode_keystore.outputs.filePath }}"
+          ONEGRAVITY_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          ONEGRAVITY_OPENSOURCE_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          ONEGRAVITY_OPENSOURCE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          googlePlayApiKey: "../${{ steps.decode_api_key.outputs.filePath }}"
+        run: ./gradlew :RTEditor:assembleRelease --stacktrace
 
       # Generates source and Javadoc jar artifacts
       - name: Create source and Javadoc jar

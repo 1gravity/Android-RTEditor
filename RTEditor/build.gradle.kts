@@ -93,10 +93,13 @@ tasks {
 }
 
 afterEvaluate {
+    fun Project.get(name: String, def: String = "$name not found") =
+            properties[name]?.toString() ?: System.getenv(name) ?: def
+
     fun Project.getRepositoryUrl(): java.net.URI {
-        val isReleaseBuild = properties["POM_VERSION_NAME"]?.toString()?.contains("SNAPSHOT") == false
-        val releaseRepoUrl = properties["RELEASE_REPOSITORY_URL"]?.toString() ?: "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-        val snapshotRepoUrl = properties["SNAPSHOT_REPOSITORY_URL"]?.toString() ?: "https://oss.sonatype.org/content/repositories/snapshots/"
+        val isReleaseBuild = !get("POM_VERSION_NAME").contains("SNAPSHOT")
+        val releaseRepoUrl = get("RELEASE_REPOSITORY_URL", "https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+        val snapshotRepoUrl = get("SNAPSHOT_REPOSITORY_URL", "https://oss.sonatype.org/content/repositories/snapshots/")
         return uri(if (isReleaseBuild) releaseRepoUrl else snapshotRepoUrl)
     }
 
@@ -110,53 +113,53 @@ afterEvaluate {
                     url = getRepositoryUrl()
                     // credentials are stored in ~/.gradle/gradle.properties with ~ being the path of the home directory
                     credentials {
-                        username = props["ossUsername"]?.toString() ?: "ossUsername not found"
-                        password = props["ossPassword"]?.toString() ?: "ossPassword not found"
+                        username = project.get("ossUsername")
+                        password = project.get("ossPassword")
                     }
                 }
             }
 
             // 2. configure publication
-            val publicationName = props["POM_NAME"]?.toString() ?: "publication"
+            val publicationName = project.get("POM_NAME", "publication")
             create<MavenPublication>(publicationName) {
                 from(project.components["release"])
                 artifact(tasks.named<Jar>("withJavadocJar"))
                 artifact(tasks.named<Jar>("withSourcesJar"))
 
                 pom {
-                    groupId = props["POM_GROUP_ID"].toString()
-                    artifactId = props["POM_ARTIFACT_ID"].toString()
-                    version = props["POM_VERSION_NAME"].toString()
+                    groupId = project.get("POM_GROUP_ID")
+                    artifactId = project.get("POM_ARTIFACT_ID")
+                    version = project.get("POM_VERSION_NAME")
 
-                    name.set(props["POM_NAME"].toString())
-                    description.set(props["POM_DESCRIPTION"].toString())
-                    url.set(props["POM_URL"].toString())
-                    packaging = props["POM_PACKAGING"].toString()
+                    name.set(project.get("POM_NAME"))
+                    description.set(project.get("POM_DESCRIPTION"))
+                    url.set(project.get("POM_URL"))
+                    packaging = project.get("POM_PACKAGING")
 
                     scm {
-                        url.set(props["POM_SCM_URL"].toString())
-                        connection.set(props["POM_SCM_CONNECTION"].toString())
-                        developerConnection.set(props["POM_SCM_DEV_CONNECTION"].toString())
+                        url.set(project.get("POM_SCM_URL"))
+                        connection.set(project.get("POM_SCM_CONNECTION"))
+                        developerConnection.set(project.get("POM_SCM_DEV_CONNECTION"))
                     }
 
                     organization {
-                        name.set(props["POM_COMPANY_NAME"].toString())
-                        url.set(props["POM_COMPANY_URL"].toString())
+                        name.set(project.get("POM_COMPANY_NAME"))
+                        url.set(project.get("POM_COMPANY_URL"))
                     }
 
                     developers {
                         developer {
-                            id.set(props["POM_DEVELOPER_ID"].toString())
-                            name.set(props["POM_DEVELOPER_NAME"].toString())
-                            email.set(props["POM_DEVELOPER_EMAIL"].toString())
+                            id.set(project.get("POM_DEVELOPER_ID"))
+                            name.set(project.get("POM_DEVELOPER_NAME"))
+                            email.set(project.get("POM_DEVELOPER_EMAIL"))
                         }
                     }
 
                     licenses {
                         license {
-                            name.set(props["POM_LICENCE_NAME"].toString())
-                            url.set(props["POM_LICENCE_URL"].toString())
-                            distribution.set(props["POM_LICENCE_DIST"].toString())
+                            name.set(project.get("POM_LICENCE_NAME"))
+                            url.set(project.get("POM_LICENCE_URL"))
+                            distribution.set(project.get("POM_LICENCE_DIST"))
                         }
                     }
                 }
@@ -164,9 +167,9 @@ afterEvaluate {
 
             // 3. sign the artifacts
             signing {
-                val signingKeyId = props["signingKeyId"]?.toString() ?: "signingKeyId not found"
-                val signingKeyPassword = props["signingKeyPassword"]?.toString() ?: "signingKeyPassword not found"
-                val signingKey = props["signingKey"]?.toString() ?: "signingKey not found"
+                val signingKeyId = project.get("signingKeyId")
+                val signingKeyPassword = project.get("signingKeyPassword")
+                val signingKey = project.get("signingKey")
                 useInMemoryPgpKeys(signingKeyId, signingKey, signingKeyPassword)
                 sign(publishing.publications.getByName(publicationName))
             }
