@@ -20,6 +20,9 @@ plugins {
     id("com.github.triplet.play") version "3.7.0"
 }
 
+fun Project.get(name: String, def: String = "$name not found") =
+        properties[name]?.toString() ?: System.getenv(name) ?: def
+
 android {
     compileSdk = Build.compileSdkVersion
     buildToolsVersion = Build.buildToolsVersion
@@ -49,9 +52,6 @@ android {
             enableSplit = false
         }
     }
-
-    fun Project.get(name: String, def: String = "$name not found") =
-            properties[name]?.toString() ?: System.getenv(name) ?: def
 
     signingConfigs {
         create("release") {
@@ -88,7 +88,7 @@ dependencies {
 }
 
 play {
-    val apiKeyFile = project.property("googlePlayApiKey").toString()
+    val apiKeyFile = project.get("googlePlayApiKey")
     serviceAccountCredentials.set(file(apiKeyFile))
     track.set("internal")
 }
