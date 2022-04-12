@@ -70,8 +70,8 @@ jobs:
 
       # Runs upload, and then closes & releases the repository
       - name: Publish to MavenCentral
-        env:
-          BUILD_NUMBER: "${{ env.BUILD_NUMBER }}"
-          ONEGRAVITY_KEYSTORE_FILE: "../${{ steps.decode_keystore.outputs.filePath }}"
-          googlePlayApiKey: "../${{ steps.decode_api_key.outputs.filePath }}"
-        run: ./gradlew publish --max-workers 1 --stacktrace
+        run: ./gradlew
+          -PBUILD_NUMBER="${{ env.BUILD_NUMBER }}"
+          -PONEGRAVITY_KEYSTORE_FILE="../${{ steps.decode_keystore.outputs.filePath }}"
+          -PgooglePlayApiKey="../${{ steps.decode_api_key.outputs.filePath }}"
+          publish --max-workers 1 --stacktrace
