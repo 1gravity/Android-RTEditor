@@ -50,12 +50,15 @@ android {
         }
     }
 
+    fun Project.get(name: String, def: String = "$name not found") =
+            properties[name]?.toString() ?: System.getenv(name) ?: def
+
     signingConfigs {
         create("release") {
-            storeFile = file(project.property("ONEGRAVITY_KEYSTORE_FILE").toString())
-            storePassword = project.property("ONEGRAVITY_KEYSTORE_PASSWORD").toString()
-            keyAlias = project.property("ONEGRAVITY_OPENSOURCE_KEY_ALIAS").toString()
-            keyPassword = project.property("ONEGRAVITY_OPENSOURCE_KEY_PASSWORD").toString()
+            storeFile = file(project.get("ONEGRAVITY_KEYSTORE_FILE"))
+            storePassword = project.get("ONEGRAVITY_KEYSTORE_PASSWORD")
+            keyAlias = project.get("ONEGRAVITY_OPENSOURCE_KEY_ALIAS")
+            keyPassword = project.get("ONEGRAVITY_OPENSOURCE_KEY_PASSWORD")
         }
     }
 
