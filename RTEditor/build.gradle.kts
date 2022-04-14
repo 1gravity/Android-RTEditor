@@ -105,8 +105,6 @@ afterEvaluate {
 
     publishing {
         publications {
-            val props = project.properties
-
             // 1. configure repositories
             repositories {
                 maven {
