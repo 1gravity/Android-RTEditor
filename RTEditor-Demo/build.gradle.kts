@@ -17,7 +17,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("com.github.triplet.play") version "3.7.0"
+    id("com.github.triplet.play")
 }
 
 fun Project.get(name: String, def: String = "$name not found") =
@@ -35,7 +35,7 @@ android {
         versionCode = project.properties["BUILD_NUMBER"]
             ?.toString()?.toInt()?.minus(1643908089)
             ?: 12
-        versionName = Build.versionName
+        versionName = get("POM_VERSION_NAME")
     }
 
     compileOptions {
