@@ -47,14 +47,14 @@ Add this to your Gradle build file:
 **Groovy**
 ```
 dependencies {
-    implementation 'com.1gravity:android-rteditor:1.7.6'
+    implementation 'com.1gravity:android-rteditor:1.7.7'
 }
 ```
 
 **Kotlin**
 ```
 dependencies {
-    implementation("com.1gravity:android-rteditor:1.7.6")
+    implementation("com.1gravity:android-rteditor:1.7.7")
 }
 ```
 
