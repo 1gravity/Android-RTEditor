@@ -21,7 +21,7 @@ plugins {
 }
 
 fun Project.get(name: String, def: String = "$name not found") =
-        properties[name]?.toString() ?: System.getenv(name) ?: def
+    properties[name]?.toString() ?: System.getenv(name) ?: def
 
 android {
     compileSdk = Build.compileSdkVersion
@@ -31,11 +31,9 @@ android {
         applicationId = "com.onegravity.rteditor.demo"
         minSdk = Build.minSdkVersion
         targetSdk = Build.targetSdkVersion
-
-        versionCode = project.properties["BUILD_NUMBER"]
-            ?.toString()?.toInt()?.minus(1643908089)
-            ?: 12
-        versionName = get("POM_VERSION_NAME")
+        versionCode = project.get("BUILD_NUMBER", "1643908090")
+            .toInt().minus(1643908089)
+        versionName = project.get("POM_VERSION_NAME")
     }
 
     compileOptions {
