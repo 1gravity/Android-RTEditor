@@ -54,7 +54,7 @@ dependencies {
 **Kotlin**
 ```
 dependencies {
-    implementation("com.1gravity:android-rteditor:1.7.7")
+    implementation("com.1gravity:android-rteditor:1.7.8")
 }
 ```
 
