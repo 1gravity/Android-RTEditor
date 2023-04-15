@@ -643,7 +643,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             }
 
             else if (id == R.id.toolbar_dec_indent) {
-                mListener.onEffectSelected(Effects.INDENTATION, Helper.getLeadingMarging());
+                mListener.onEffectSelected(Effects.INDENTATION, -Helper.getLeadingMarging());
             }
 
             else if (id == R.id.toolbar_link) {
