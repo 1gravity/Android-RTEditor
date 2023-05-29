@@ -26,8 +26,9 @@ fun Project.get(name: String, def: String = "$name not found") =
     properties[name]?.toString() ?: System.getenv(name) ?: def
 
 android {
+    namespace = "com.onegravity.rteditor.demo"
+
     compileSdk = Build.compileSdkVersion
-    buildToolsVersion = Build.buildToolsVersion
 
     defaultConfig {
         applicationId = "com.onegravity.rteditor.demo"

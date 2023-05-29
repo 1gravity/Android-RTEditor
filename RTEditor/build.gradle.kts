@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
+    namespace = "com.onegravity.rteditor"
+
     compileSdk = Build.compileSdkVersion
-    buildToolsVersion = Build.buildToolsVersion
 
     defaultConfig {
         minSdk = Build.minSdkVersion
-        targetSdk = Build.targetSdkVersion
     }
 
     configurations {

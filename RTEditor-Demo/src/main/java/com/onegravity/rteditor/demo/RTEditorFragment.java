@@ -54,19 +54,19 @@ public class RTEditorFragment extends Fragment {
         ViewGroup toolbarContainer = (ViewGroup) view.findViewById(R.id.rte_toolbar_container);
 
         // register toolbar 0 (if it exists)
-        RTToolbar rtToolbar0 = (RTToolbar) view.findViewById(R.id.rte_toolbar);
+        RTToolbar rtToolbar0 = (RTToolbar) view.findViewById(com.onegravity.rteditor.R.id.rte_toolbar);
         if (rtToolbar0 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar0);
         }
 
         // register toolbar 1 (if it exists)
-        RTToolbar rtToolbar1 = (RTToolbar) view.findViewById(R.id.rte_toolbar_character);
+        RTToolbar rtToolbar1 = (RTToolbar) view.findViewById(com.onegravity.rteditor.R.id.rte_toolbar_character);
         if (rtToolbar1 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar1);
         }
 
         // register toolbar 2 (if it exists)
-        RTToolbar rtToolbar2 = (RTToolbar) view.findViewById(R.id.rte_toolbar_paragraph);
+        RTToolbar rtToolbar2 = (RTToolbar) view.findViewById(com.onegravity.rteditor.R.id.rte_toolbar_paragraph);
         if (rtToolbar2 != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar2);
         }
