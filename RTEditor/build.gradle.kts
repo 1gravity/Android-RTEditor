@@ -125,8 +125,11 @@ afterEvaluate {
             val publicationName = project.get("POM_NAME", "publication")
             create<MavenPublication>(publicationName) {
                 from(project.components["release"])
+
                 artifact(tasks.named<Jar>("withJavadocJar"))
-                artifact(tasks.named<Jar>("withSourcesJar"))
+                tasks.named("generateMetadataFileForAndroid-RTEditorPublication") {
+                    dependsOn("withSourcesJar")
+                }
 
                 pom {
                     groupId = project.get("POM_GROUP_ID")
