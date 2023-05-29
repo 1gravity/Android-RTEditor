@@ -303,7 +303,7 @@ If you have an issues with this library, please open a issue here: https://githu
 License
 -------
 
-Copyright 2015-2022 Emanuel Moecklin
+Copyright 2015-2023 Emanuel Moecklin
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
